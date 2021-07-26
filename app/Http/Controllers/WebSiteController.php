@@ -7,6 +7,8 @@ use App\Models\Contact;
 use App\Models\Course;
 use App\Models\Newsletter;
 use App\Models\User;
+use App\Models\CourseReview;
+use Auth;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -77,10 +79,10 @@ class WebSiteController extends Controller
         $inputs["avatar_location"] = $pfilename;
         $inputs["photo_academic_degree"] = $idfilename;
         $inputs["cv"] = $cvfilename;
-        $inputs["roll_id"] = '2';
+        $inputs["roll_id"] = '0';
         $inputs["password"] = Hash::make($inputs['password']);
         User::create($inputs);
-        return redirect()->route('Home');
+        return redirect()->back()->with('message','Trainer Created Successfully');
     }
     public function accreditation_bodies()
     {
@@ -91,9 +93,8 @@ class WebSiteController extends Controller
         $inputs = $request->all();
         $inputs["roll_id"] = '3';
         $inputs["password"] = Hash::make($inputs['password']);
-        //  dd($inputs);
         User::create($inputs);
-        return redirect()->route('Home');
+        return redirect()->back()->with('message','Accreditation Bodies Created Successfully');
     }
     public function singleCourse($slug)
     {
@@ -101,13 +102,16 @@ class WebSiteController extends Controller
             ->join('users', 'courses.teachers', '=', 'users.id')
             ->join('categories', 'courses.category_id', '=', 'categories.id')
             ->where('courses.slug', $slug)
-            ->select('users.title as name', 'users.avatar_location as image', 'courses.title as coursetitle', 'courses.course_image as course_image', 'courses.description as description', 'categories.name as category', 'courses.price as price', 'courses.duration as duration', 'courses.start_date as start_date', 'courses.start_date as start_date', 'courses.level as level', 'courses.voltage as voltage', 'courses.price_certificate as price_certificate', 'courses.slug as slug')
+            ->select('users.title as name', 'users.avatar_location as image', 'courses.title as coursetitle', 'courses.course_image as course_image', 'courses.description as description', 'categories.name as category', 'courses.price as price', 'courses.duration as duration', 'courses.start_date as start_date', 'courses.start_date as start_date', 'courses.level as level', 'courses.voltage as voltage', 'courses.price_certificate as price_certificate','courses.id as id', 'courses.slug as slug')
             ->first();
-        return view('WebSite.singlecourse', compact('course'));
+        $course_reviews = DB::table('course_reviews')
+            ->join('courses', 'course_reviews.course_id', '=', 'courses.id')
+            ->get();
+        return view('WebSite.singlecourse', compact('course','course_reviews'));
     }
-    public function checkout()
+    public function checkout($id)
     {
-        return view('Website.checkout');
+        return view('Website.checkout',compact('id'));
     }
     public function cart(Request $request, $slug)
     {
@@ -123,6 +127,7 @@ class WebSiteController extends Controller
         $percentage =  (15 / 100) * $sum;
         $total = $sum +   $certificate_price +  $percentage;
         $request->session()->put('total',$total);
+        $request->session()->put('certificate',$certificate_price );
         if (Cart::where('course_id', $course->id)->where('ip_address',$request->ip())->exists()) {
             return view('Website.cart',compact('cart_course','percentage','sum','certificate_price','total'));
         } else {
@@ -147,6 +152,34 @@ class WebSiteController extends Controller
             return redirect()->back()->with('error','SomeThing Wrong');
         }
         
+    }
+    public function addReview(Request $request){
+        try {
+           $review = new CourseReview; 
+           $review->course_id = $request->course_id;  
+           $review->user_id = Auth::user()->id;
+           $review->check_list =  $request->check_list;
+           $review->review = $request->review; 
+           $review->name =  $request->name;
+           $review->email = $request->email;
+           $review->save();
+           return redirect()->back()->with('message','Course Review Added');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error','Some Thing Wrong');
+        }
+    }
+    public function trainerJoin()
+    {
+        return view('Website.trainer_join');
+    }
+
+    public function advisoryBoard(){
+        $boards = User::where('roll_id',3)->paginate(2);
+        return view('Website.advisoryBoard',compact('boards'));
+    }
+
+    public function Forum(){
+        return view('Website.forum');
     }
     
 }

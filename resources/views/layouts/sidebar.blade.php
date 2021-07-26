@@ -15,7 +15,7 @@
          {{--  --}}
 
          <!-- Sidebar Menu -->
-         @if(Auth::user()->roll_id == '1')
+         @if(Auth::check() && Auth::user()->roll_id == '1')
 
          <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
@@ -185,7 +185,7 @@
                 </li>
             </ul>
         </nav>
-         @elseif(Auth::user()->roll_id == '2')
+         @elseif(Auth::check() && Auth::user()->roll_id == '2')
 
          <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
@@ -283,7 +283,7 @@
                 </li>
             </ul>
         </nav>
-        @elseif(Auth::user()->roll_id == '3')
+        @elseif(Auth::check() && Auth::user()->roll_id == '3')
 
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
@@ -359,7 +359,7 @@
                 </li>
             </ul>
         </nav>
-        @elseif(Auth::user()->roll_id == '0')
+        @elseif(Auth::check() && Auth::user()->roll_id == 0)
 
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"

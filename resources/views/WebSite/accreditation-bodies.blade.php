@@ -3,98 +3,79 @@
 <main id="main">
 	
 	<!-- contact block -->
-	@if (session('error') || session('message'))
-        <div class="alert alert-success" style=" width: 100%;">
-        <span class="{{ session('error') ? 'error':'success' }}">{{ session('error') ?? session('message') }}</span>
-    </div>
-    @endif
+
 	<section class="contact-block">
-		<div class="container" style="margin-top: 140px;">
+		<div class="container" style="margin-top: 80px;">
 			<header class="seperator-head text-center">
 				<h2>Join Arabic Language Centers and Institutions</h2>
 				<p>Welcome to our Website. We are glad to have you around.</p>
 			</header>
-			<div class="row">
-				
+			<br><br><br>
+			@if (session('error') || session('message'))
+				<div class="alert alert-success" style=" width: 100%;">
+				<span class="{{ session('error') ? 'error':'success' }}">{{ session('error') ?? session('message') }}</span>
 			</div>
-			<hr class="sep-or element-block" data-text="or">
+			@endif
 			<!-- contact form -->
 			<form action="{{route('web_create_accreditation_bodies')}}" method = "POST" class="contact-form">
 			@csrf
-				<h3 class="col-12">Authority data:</h3>
+
                 <hr>
 				<div class="row">
 					<div class="col-xs-12 col-sm-4">
 						<div class="form-group">
-                            <label for="firstName" class="required"> first name </label>
-							<input type="text" class="form-control element-block" name="name"placeholder="first name">
+							<label for="firstName" class="required"> entity name </label>
+							<input id="firstName" class="form-control" type="text" name="name" value=""
+                                                placeholder="entity name" maxlength="191" required="" autofocus="on"
+                                                autocomplete="off">
 						</div>
 					</div>
                     <div class="col-xs-12 col-sm-4">
 						<div class="form-group">
-                            <label for="firstName" class="required"> surname </label>
-							<input type="text" class="form-control element-block" name="title"placeholder="surname">
+							<label for="last_name"> Contact Person </label>
+							<input id="last_name" class="form-control" type="text" name="c_person" value=""
+							placeholder="Contact Person" maxlength="191" required="" autocomplete="off">
 						</div>
 					</div>
 					<div class="col-xs-12 col-sm-4">
                         <div class="form-group">
-                            <label for="academicRank"> academic degree </label>
-                            <select id="academicRank" class="form-control" name="academic_rank" required="" autocomplete="off">
-                                <option value=""> select degree </option>
-                                <option value="b"> bachelor </option>
-                                <option value="m"> master </option>
-                                <option value="d"> doctorate </option>
-                                <option value="cp"> associate professor </option>
-                                <option value="cd"> professor doctor </option>
-                            </select>
+							<label for="email"> Email address </label>
+							<input id="email" class="form-control" type="email" name="email" value=""
+							placeholder="email address" maxlength="191" required="" autocomplete="off">
                         </div>
 					</div>
                 </div>
                 <div class="row"> 
 					<div class="col-xs-12 col-sm-4">
 						<div class="form-group">
-                            <label for="firstName" class="required"> email </label>
-							<input type="email" class="form-control element-block" name="email" placeholder="Email">
+							<label for="password"> password </label>
+							<input id="password" class="form-control" type="password" name="password"
+                                                placeholder="password" maxlength="191" required="" autocomplete="off">
 						</div>
 					</div>
                     <div class="col-xs-12 col-sm-4">
 						<div class="form-group">
-                            <label for="firstName" class="required">password</label>
-							<input type="password" class="form-control element-block" name="password" placeholder="Password">
+							<label for="phone"> phone number </label>
+							<input  id="phone" type="tel"
+							class="form-control element-block @error('telephone') is-invalid @enderror"
+							name="telephone" placeholder="TelPhone" required autocomplete="telephone">
+							@error('telephone')
+							<span class="invalid-feedback" role="alert">
+								<strong>{{ $message }}</strong>
+							</span>
+						   @enderror
 						</div>
 					</div>
                     <div class="col-xs-12 col-sm-4">
 						<div class="form-group">
-                            <label for="firstName" class="required"> email </label>
-							<input type="tel" class="form-control element-block" name="phone" placeholder="Phone">
+							<label for="ibn_number"> country </label>
+							<input id="ibn_number" class="form-control" type="text"
+							name="country_of_residence" value="" placeholder="country" maxlength="191"
+							required="" autocomplete="off">
 						</div>
                         
 					</div>
 				</div>
-                <div class="row">
-					<div class="col-xs-12 col-sm-4">
-						<div class="form-group">
-                            <label for="firstName" class="required"> nationality </label>
-							<input type="text" class="form-control element-block" name="nationality"placeholder="Nationality">
-						</div>
-					</div>
-                    <div class="col-xs-12 col-sm-4">
-						<div class="form-group">
-                            <label for="firstName" class="required"> country_of_residence </label>
-							<input type="text" class="form-control element-block" name="country_of_residence"placeholder="Country Of Residence">
-						</div>
-					</div>
-					<div class="col-xs-12 col-sm-4">
-                        <div class="form-group">
-                            <label for="academicRank"> Gender </label>
-                            <select id="gender" class="form-control" name="sex" autocomplete="off" required="">
-                                <option value=""> select gender </option>
-                                <option value="male"> male </option>
-                                <option value="female"> female </option>
-                            </select>
-                        </div>
-					</div>
-                </div>
                 <hr>
                 <div class="col-12">
                     <h3>Social media accounts:</h3>
@@ -104,25 +85,29 @@
 					<div class="col-xs-12 col-sm-3">
 						<div class="form-group">
                             <label for="firstName" class="required">  facebook account  </label>
-							<input type="text" class="form-control element-block" name="facbook"placeholder="Facebook">
+							<input id="facebook" class="form-control" type="text" name="facbook" value=""
+							placeholder="facebook account" maxlength="191" autocomplete="off">
 						</div>
 					</div>
                     <div class="col-xs-12 col-sm-3">
 						<div class="form-group">
                             <label for="firstName" class="required">  twitter account  </label>
-							<input type="text" class="form-control element-block" name="twitter"placeholder="Twitter">
+							<input id="twitter" class="form-control" type="text" name="twitter" value=""
+							placeholder="twitter account" maxlength="191" autocomplete="off">
 						</div>
 					</div>
                     <div class="col-xs-12 col-sm-3">
 						<div class="form-group">
                             <label for="firstName" class="required">  LinkedIn account  </label>
-							<input type="text" class="form-control element-block" name="linkedin"placeholder="Linkedin">
+							<input id="facebook" class="form-control" type="text" name="linkedin" value=""
+							placeholder="LinkedIn account" maxlength="191" autocomplete="off">
 						</div>
 					</div>
                     <div class="col-xs-12 col-sm-3">
 						<div class="form-group">
                             <label for="firstName" class="required">  Instagram Account  </label>
-							<input type="text" class="form-control element-block" name="instagram"placeholder="Instagram">
+							<input id="instagram" class="form-control" type="text" name="instagram" value=""
+							placeholder="Instagram Account" maxlength="191" autocomplete="off">
 						</div>
 					</div>
                 </div>
@@ -134,19 +119,23 @@
 					<div class="col-8">
 						<div class="form-group">
                             <label for="firstName" class="required">  bank name  </label>
-							<input type="text" class="form-control element-block" name="bank_name"placeholder="bank name">
+							<input id="bank_name" class="form-control" type="text" name="bank_name" value=""
+							placeholder="bank name" maxlength="191" required="" autocomplete="off">
 						</div>
 					</div>
                     <div class="col-8">
 						<div class="form-group">
                             <label for="firstName" class="required">  country  </label>
-							<input type="text" class="form-control element-block" name="bank_country"placeholder="country">
+							<input id="bank_country" class="form-control" type="text" name="bank_country"
+							value="" placeholder="country" maxlength="191" required=""
+							autocomplete="off">
 						</div>
 					</div>
                     <div class="col-8">
 						<div class="form-group">
                             <label for="firstName" class="required"> IBAN  </label>
-							<input type="text" class="form-control element-block" name="ibn_number"placeholder="IBAN">
+							<input id="ibn_number" class="form-control" type="text" name="ibn_number"
+							value="" placeholder="IBAN" maxlength="191" required="" autocomplete="off">
 						</div>
 					</div>
                 </div>
@@ -155,18 +144,7 @@
 				</div>
 			</form>
 		</div>
-		<!-- btn aside block -->
-		<aside class="btn-aside-block container">
-			<div class="row">
-				<div class="col-xs-12 col-sm-8 col">
-					<h3>Have Any Questions?</h3>
-					<p>Various versions years, sometimes by accident, sometimes on purpose</p>
-				</div>
-				<div class="col-xs-12 col-sm-4 text-right col">
-					<a href="#" class="btn btn-warning btn-theme text-capitalize font-lato fw-normal">Ask Question Now</a>
-				</div>
-			</div>
-		</aside>
+	
 	</section>
 </main>
 @endsection

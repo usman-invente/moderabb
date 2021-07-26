@@ -3,26 +3,20 @@
 <main id="main">
 	
 	<!-- contact block -->
-	@if (session('error') || session('message'))
-        <div class="alert alert-success" style=" width: 100%;">
-        <span class="{{ session('error') ? 'error':'success' }}">{{ session('error') ?? session('message') }}</span>
-    </div>
-    @endif
+	
 	<section class="contact-block">
-		<div class="container" style="margin-top: 140px;">
-			<header class="seperator-head text-center">
-				<h2>Trainer Details</h2>
-				<p>Welcome to our Website. We are glad to have you around.</p>
-			</header>
-			<div class="row">
-				
+		<div class="container" style="margin-top: 50px;">
+            <br><br><br>
+			@if (session('error') || session('message'))
+				<div class="alert alert-success" style=" width: 100%;">
+				<span class="{{ session('error') ? 'error':'success' }}">{{ session('error') ?? session('message') }}</span>
 			</div>
-			<hr class="sep-or element-block" data-text="or">
+			@endif
 			<!-- contact form -->
 			<form action="{{route('create_trainers')}}" method = "POST" class="contact-form">
 			@csrf
 				<h3 class="col-12">Trainer data</h3>
-                <hr>
+
 				<div class="row">
 					<div class="col-xs-12 col-sm-4">
 						<div class="form-group">
@@ -185,18 +179,7 @@
 				</div>
 			</form>
 		</div>
-		<!-- btn aside block -->
-		<aside class="btn-aside-block container">
-			<div class="row">
-				<div class="col-xs-12 col-sm-8 col">
-					<h3>Have Any Questions?</h3>
-					<p>Various versions years, sometimes by accident, sometimes on purpose</p>
-				</div>
-				<div class="col-xs-12 col-sm-4 text-right col">
-					<a href="#" class="btn btn-warning btn-theme text-capitalize font-lato fw-normal">Ask Question Now</a>
-				</div>
-			</div>
-		</aside>
+		
 	</section>
 </main>
 @endsection

@@ -336,10 +336,11 @@
                     <div class="bookmarkFoot">
                         <div class="bookmarkCol">
                             <ul class="socail-networks list-unstyled">
-                                <li><a href="#" class="facebook"><span class="fab fa-facebook-f"></span></a></li>
-                                <li><a href="#" class="twitter"><span class="fab fa-twitter"></span></a></li>
-                                <li><a href="#" class="google"><span class="fab fa-google-plus-g"></span></a></li>
-                                <li><a href="#"><span class="fas fa-plus"></span></a></li>
+                                 <li>
+                                    <li><a href="" target="_blank" id="facebook-btn" class="facebook"><span class="fab fa-facebook"></span></a></li>
+                                </li>
+                                <li><a href="#" target="_blank"  class="twitter" id="twitter-btn" ><span class="fab fa-twitter"></span></a></li>
+                                <li><a href="#"  target="_blank"  class="linkedin" id="linkedin-btn"><span class="fa fa-linkedin"></span></a></li>
                             </ul>
                         </div>
                         <div class="bookmarkCol text-right">
@@ -353,17 +354,14 @@
                             <a href="instructor-single.html"><img src="http://placehold.it/80x80" alt="Merry Jhonson"></a>
                         </div>
                         <div class="description-wrap">
-                            <h3 class="fw-normal"><a href="instructor-single.html">Merry Jhonson</a></h3>
-                            <h4 class="fw-normal">Back-end Developer</h4>
-                            <p>Encyclopaedia galactica Orion's sword explorations vanquish the impossible, astonishment
-                                radio telescope with pretty stories for which there's little good.</p>
-                            <a href="#" class="btn btn-default font-lato fw-semi text-uppercase">View Profile</a>
+                            <h3 class="fw-normal"><a href="#">{{$course->name}}</a></h3>
                         </div>
                     </div>
                     <h2>Reviews</h2>
-                    <h3 class="h6 fw-semi">There are 2 reviews on this course</h3>
+                    <h3 class="h6 fw-semi">There are {{count($course_reviews )}} reviews on this course</h3>
                     <!-- reviewsList -->
                     <ul class="list-unstyled reviewsList">
+                        @foreach($course_reviews as $review)
                         <li>
                             <div class="alignleft">
                                 <a href="instructor-single.html"><img src="http://placehold.it/50x50"
@@ -371,40 +369,36 @@
                             </div>
                             <div class="description-wrap">
                                 <div class="descrHead">
-                                    <h3>Lavin Duster – <time datetime="2011-01-12">March 7, 2016</time></h3>
+                                    <h3>{{$review->name}} – <time datetime="2011-01-12">{{date('Y-m-d',strtotime($review->created_at))}}</time></h3>
                                     <ul class="star-rating list-unstyled justify-end">
+                                        @for($i=0;$i<$review->check_list;$i++)
                                         <li><span class="fas fa-star"><span class="sr-only">star</span></span></li>
-                                        <li><span class="fas fa-star"><span class="sr-only">star</span></span></li>
-                                        <li><span class="fas fa-star"><span class="sr-only">star</span></span></li>
-                                        <li><span class="fas fa-star"><span class="sr-only">star</span></span></li>
-                                        <li><span class="fas fa-star"><span class="sr-only">star</span></span></li>
+                                        @endfor
                                     </ul>
                                 </div>
-                                <p>Brunch fap cardigan, gentrify put a bird on it distillery mumblecore you probably haven't
-                                    heard of them asymmetrical bushwick. Put a bird on it schlitz fashion.</p>
+                                <p>{{$review->review}}</p>
                             </div>
                         </li>
-                        <li>
-                            <div class="alignleft">
-                                <a href="instructor-single.html"><img src="http://placehold.it/50x50" alt="Tim Cook"></a>
-                            </div>
-                            <div class="description-wrap">
-                                <div class="descrHead">
-                                    <h3>Tim Cook – <time datetime="2011-01-12">March 5, 2016</time></h3>
-                                    <ul class="star-rating list-unstyled justify-end">
-                                        <li><span class="fas fa-star"><span class="sr-only">star</span></span></li>
-                                        <li><span class="fas fa-star"><span class="sr-only">star</span></span></li>
-                                        <li><span class="fas fa-star"><span class="sr-only">star</span></span></li>
-                                        <li><span class="fas fa-star"><span class="sr-only">star</span></span></li>
-                                        <li><span class="fas fa-star"><span class="sr-only">star</span></span></li>
-                                    </ul>
-                                </div>
-                                <p>Flxie sartorial cray flexitarian pop-up health goth single-origin coffee sriracha</p>
-                            </div>
-                        </li>
+                        @endforeach
+                       
                     </ul>
                     <!-- reviesSubmissionForm -->
-                    <form action="#" class="reviesSubmissionForm">
+                    @if (\Session::has('message'))
+                        <div class="alert alert-success">
+                            <ul>
+                                <li>{!! \Session::get('message') !!}</li>
+                            </ul>
+                        </div>
+                        @elseif(\Session::has('error'))
+                        <div class="alert alert-danger">
+                            <ul>
+                                <li>{!! \Session::get('error') !!}</li>
+                            </ul>
+                        </div>
+                    @endif
+                    <form action="{{route('courseReview')}}"  method="post" class="reviesSubmissionForm">
+                        @csrf
+                        <input type="hidden" value="{{$course->id}}" name="course_id">
                         <h2 class="text-noCase">Add a Review</h2>
                         <p>Your email address will not be published. Required fields are marked <span
                                 class="required">*</span></p>
@@ -412,23 +406,23 @@
                             <span class="formLabel fw-normal font-lato no-shrink">Your Rating</span>
                             <ul class="star-rating list-unstyled">
                                 <li>
-                                    <input type="checkbox" id="rate1" class="customFormReset">
+                                    <input type="checkbox" id="rate1" name="check_list"  value="1" class="customFormReset">
                                     <label for="rate1" class="fas fa-star"><span class="sr-only">star</span></label>
                                 </li>
                                 <li>
-                                    <input type="checkbox" id="rate2" class="customFormReset">
+                                    <input type="checkbox" id="rate2" name="check_list" value="2" class="customFormReset">
                                     <label for="rate2" class="fas fa-star"><span class="sr-only">star</span></label>
                                 </li>
                                 <li>
-                                    <input type="checkbox" id="rate3" class="customFormReset">
+                                    <input type="checkbox" id="rate3" name="check_list"  value="3" class="customFormReset">
                                     <label for="rate3" class="fas fa-star"><span class="sr-only">star</span></label>
                                 </li>
                                 <li>
-                                    <input type="checkbox" id="rate4" class="customFormReset">
+                                    <input type="checkbox" id="rate4"  name="check_list"  value="4" class="customFormReset">
                                     <label for="rate4" class="fas fa-star"><span class="sr-only">star</span></label>
                                 </li>
                                 <li>
-                                    <input type="checkbox" id="rate5" class="customFormReset">
+                                    <input type="checkbox" id="rate5" name="check_list" value="5" class="customFormReset">
                                     <label for="rate5" class="fas fa-star"><span class="sr-only">star</span></label>
                                 </li>
                             </ul>
@@ -436,17 +430,17 @@
                         <div class="form-group">
                             <label for="rview" class="formLabel fw-normal font-lato no-shrink">Your Review <span
                                     class="required">*</span></label>
-                            <textarea id="rview" class="form-control element-block"></textarea>
+                            <textarea id="rview" name="review" class="form-control element-block" required></textarea >
                         </div>
                         <div class="form-group">
                             <label for="name" class="formLabel fw-normal font-lato no-shrink">Name <span
                                     class="required">*</span></label>
-                            <input type="text" id="name" class="form-control element-block">
+                            <input type="text" id="name"  name="name" class="form-control element-block" required>
                         </div>
                         <div class="form-group">
                             <label for="Email" class="formLabel fw-normal font-lato no-shrink">Email <span
                                     class="required">*</span></label>
-                            <input type="email" id="Email" class="form-control element-block">
+                            <input type="email" id="Email"  name="email" class="form-control element-block" required>
                         </div>
                         <button type="submit"
                             class="btn btn-theme btn-warning text-uppercase font-lato fw-bold">Submit</button>
@@ -555,4 +549,30 @@
             </div>
         </div>
     </main>
+@endsection
+@section('script')
+<script>
+    // Social Share links.
+const gmailBtn = document.getElementById('gmail-btn');
+const facebookBtn = document.getElementById('facebook-btn');
+const gplusBtn = document.getElementById('gplus-btn');
+const linkedinBtn = document.getElementById('linkedin-btn');
+const twitterBtn = document.getElementById('twitter-btn');
+const whatsappBtn = document.getElementById('whatsapp-btn');
+const socialLinks = document.getElementById('social-links');
+
+    // posturl posttitle
+    let postUrl = encodeURI(document.location.href);
+    let postTitle = encodeURI('{{$course->coursetitle}}');
+
+    facebookBtn.setAttribute("href",`https://www.facebook.com/sharer.php?u=${postUrl}`);
+    twitterBtn.setAttribute("href", `https://twitter.com/share?url=${postUrl}&text=${postTitle}`);
+    linkedinBtn.setAttribute("href", `https://www.linkedin.com/shareArticle?url=${postUrl}&title=${postTitle}`);
+    whatsappBtn.setAttribute("href",`https://wa.me/?text=${postTitle} ${postUrl}`);
+    gmailBtn.setAttribute("href",`https://mail.google.com/mail/?view=cm&su=${postTitle}&body=${postUrl}`);
+    gplusBtn.setAttribute("href",`https://plus.google.com/share?url=${postUrl}`);
+
+</script>
+
+
 @endsection

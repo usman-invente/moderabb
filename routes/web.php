@@ -35,9 +35,11 @@ Route::post('/create-newsletter', [App\Http\Controllers\WebSiteController::class
 //   regietr by site
 Route::get('/trainers', [App\Http\Controllers\WebSiteController::class, 'trainers'])->name('trainers');
 Route::post('/create-trainers', [App\Http\Controllers\WebSiteController::class, 'create_trainers'])->name('create_trainers');
-Route::get('/Accreditation-bodies', [App\Http\Controllers\WebSiteController::class, 'accreditation_bodies'])->name('web_accreditation_bodies');
+Route::get('Accreditation_bodies', [App\Http\Controllers\WebSiteController::class, 'accreditation_bodies'])->name('web_accreditation_bodies');
 Route::post('/create-Accreditation-bodies', [App\Http\Controllers\WebSiteController::class, 'create_accreditation_bodies'])->name('web_create_accreditation_bodies');
-
+Route::get('advisory-board', [App\Http\Controllers\WebSiteController::class, 'advisoryBoard'])->name('advisory-board');
+Route::get('forum', [App\Http\Controllers\WebSiteController::class, 'Forum'])->name('forum');
+Route::get('discussion/form', [App\Http\Controllers\ForumController::class, 'discussion_form'])->name('discussion-form');
 Route::get('/contact-us', [App\Http\Controllers\WebSiteController::class, 'contact_us'])->name('contact_us');
 Route::post('/create-contact-us', [App\Http\Controllers\WebSiteController::class, 'create_contact_us'])->name('create_contact_us');
 
@@ -126,6 +128,8 @@ Route::get('course/checkout/{id}', [App\Http\Controllers\WebSiteController::clas
 //cart
 Route::get('course/cart/{slug}', [App\Http\Controllers\WebSiteController::class, 'cart'])->name('cart');
 Route::get('delete/cart/product/{id}', [App\Http\Controllers\WebSiteController::class, 'deletecartproduct'])->name('deletecartproduct');
+Route::post('add-review', [App\Http\Controllers\WebSiteController::class, 'addReview'])->name('courseReview');
+Route::get('trainers/join', [App\Http\Controllers\WebSiteController::class, 'trainerJoin'])->name('trainerJoin');
 ////////// Simultaneous Lessons //////////
 Route::get('/live-lessons', [App\Http\Controllers\AdminController::class, 'live_lessons'])->name('live_lessons');
 Route::get('/add-live-lessons', [App\Http\Controllers\AdminController::class, 'add_live_lessons'])->name('add_live_lessons');
@@ -309,4 +313,4 @@ Route::get('/student/courses-teacher_id/{id}', [App\Http\Controllers\StudentCont
 
 });
 
-Route::get('payment/form', [App\Http\Controllers\PaytabsController::class, 'index'])->name('paymentform');
+Route::post('payment/form', [App\Http\Controllers\PaytabsController::class, 'index'])->name('paymentform');

@@ -106,49 +106,10 @@
 	</div>
 	<div class="popup-holder">
 		<div id="popup1" class="lightbox-demo">
-			<form  method="POST" action="{{ route('login') }}" class="user-log-form">
-                @csrf
-				<h2>Login Form</h2>
-				<div class="form-group">
-					<input id="email" type="email" class="form-control element-block @error('email') is-invalid @enderror"
-                                        name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
-
-                                    @error('email')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-				</div>
-				<div class="form-group">
-					<input id="password" type="password"
-                                        class="form-control element-block @error('password') is-invalid @enderror" name="password"
-                                        required autocomplete="current-password">
-
-                                    @error('password')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-				</div>
-				<div class="btns-wrap">
-					<div class="wrap">
-						<label for="rem" class="custom-check-wrap fw-normal font-lato">
-							<input class="form-check-input" type="checkbox" name="remember" id="remember"
-                                            {{ old('remember') ? 'checked' : '' }}>
-							<span class="">Remember me</span>
-						</label>
-						<button type="submit" class="btn btn-theme btn-warning fw-bold font-lato text-uppercase">Login</button>
-					</div>
-					<div class="wrap text-right">
-						<p>
-							{{--  <a href="#" class="forget-link">Lost your Password?</a>  --}}
-						</p>
-					</div>
-				</div>
-			</form>
+		
 		</div>
 		<div id="popup2" class="lightbox-demo">
-			<form method="POST" action="{{ route('register') }}" class="user-log-form">
+			{{-- <form method="POST" action="{{ route('register') }}" class="user-log-form">
                 @csrf
 				<h2>Register Form</h2>
 				<div class="form-group">
@@ -228,7 +189,7 @@
 						<button type="submit" class="btn btn-theme btn-warning fw-bold font-lato text-uppercase">Register</button>
 					</div>
 				</div>
-			</form>
+			</form> --}}
 
 	</div>
 	<!-- include jQuery -->
@@ -303,7 +264,7 @@
         )
 
     </script>
-    </script>
+    @yield('script')
 </body>
 </html>
 

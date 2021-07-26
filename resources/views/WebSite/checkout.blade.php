@@ -22,16 +22,19 @@
     </nav>
     <!-- checkout block -->
     <section class="container checkout-block">
-        <!-- strip note -->
-        <aside class="strip-note font-lato">
-            <p>Returning customer? <a href="#">Click here to login</a></p>
-        </aside>
-        <!-- strip note -->
-        <aside class="strip-note font-lato">
-            <p>Have a coupon? <a href="#">Click here to enter your code</a></p>
-        </aside>
         <!-- checkout form -->
-        <form action="#" class="checkout-form">
+        @if (\Session::has('message'))
+            <div class="alert alert-success">
+                {!! \Session::get('message') !!}
+            </div>
+            @elseif(\Session::has('error'))
+            <div class="alert alert-danger">
+                {!! \Session::get('error') !!}
+            </div>
+        @endif
+        <form action="{{route('paymentform')}}"  method="post" class="checkout-form">
+            <input type="hidden" name="course_id" value="{{$id}}">
+            @csrf
             <div class="row">
                 <div class="col-xs-12 col-md-6">
                     <h2>Billing Details</h2>
@@ -39,19 +42,12 @@
                         <div class="col-xs-12 col-sm-6">
                             <div class="form-group">
                                 <label class="element-block fw-normal font-lato">
-                                    <span class="element-block">First Name <span class="required">*</span></span>
-                                    <input type="text" class="element-block form-control">
+                                    <span class="element-block"> Name <span class="required">*</span></span>
+                                    <input type="text"  name="name" class="element-block form-control"  value="{{Auth::user()->name}}" required>
                                 </label>
                             </div>
                         </div>
-                        <div class="col-xs-12 col-sm-6">
-                            <div class="form-group">
-                                <label class="element-block fw-normal font-lato">
-                                    <span class="element-block">Last Name <span class="required">*</span></span>
-                                    <input type="text" class="element-block form-control">
-                                </label>
-                            </div>
-                        </div>
+                        
                     </div>
                     
                     <div class="row">
@@ -59,7 +55,7 @@
                             <div class="form-group">
                                 <label class="element-block fw-normal font-lato">
                                     <span class="element-block">Email Address <span class="required">*</span></span>
-                                    <input type="email" class="element-block form-control">
+                                    <input type="email" name="email"  value="{{Auth::user()->email}}" class="element-block form-control" required>
                                 </label>
                             </div>
                         </div>
@@ -67,7 +63,7 @@
                             <div class="form-group">
                                 <label class="element-block fw-normal font-lato">
                                     <span class="element-block">Phone <span class="required">*</span></span>
-                                    <input type="tel" class="element-block form-control">
+                                    <input type="tel"  name="phone" class="element-block form-control" required>
                                 </label>
                             </div>
                         </div>
@@ -75,9 +71,8 @@
                   
                     <div class="form-group">
                         <label class="element-block fw-normal font-lato">
-                            <span class="element-block">Address <span class="required">*</span></span>
-                            <input type="text" class="element-block form-control" placeholder="Street address">
-                            <input type="text" class="element-block form-control" placeholder="Apartment, suite, unit etc. (optional)">
+                            <span class="element-block">Address <span class="required"></span></span>
+                            <input  name="address"  type="text" class="element-block form-control" placeholder="Apartment, suite, unit etc. (optional)">
                         </label>
                     </div>
                   
@@ -227,7 +222,7 @@
                 </ul>
                 <hr class="sep">
                 <div class="text-right">
-                    <a href="{{route('paymentform')}}" class="btn btn-warning btn-theme font-lato fw-bold text-uppercase">Place Order</a>
+                    <button type="submit" class="btn btn-warning btn-theme font-lato fw-bold text-uppercase">Place Order</button>
                 </div>
             </div>
         </form>

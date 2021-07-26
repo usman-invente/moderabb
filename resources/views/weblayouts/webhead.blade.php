@@ -27,9 +27,18 @@
                         </div>
                         <div class="col-xs-3 col justify-end">
                             <!-- user links -->
+                            @guest
                             <ul class="list-unstyled user-links fw-bold font-lato">
-                                <li><a href="#popup1" class="lightbox">Login</a> <span class="sep">|</span> <a href="#popup2" class="lightbox">Register</a></li>
+                                <li><a href="{{route('login')}}" >Login</a></li>
+                                <li style="margin: 4px;"><a href="{{route('register')}}" >Register</a></li>
                             </ul>
+                            @else
+                            <ul class="list-unstyled user-links fw-bold font-lato">
+                                <li><a href="{{route('home')}}" >Dashboard</a></li>
+                               
+                            </ul>
+ 
+                            @endguest
                         </div>
                     </div>
                 </div>
@@ -62,13 +71,24 @@
                                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                                     <!-- main navigation -->
                                     <ul class="nav navbar-nav navbar-right main-navigation text-uppercase font-lato">
-                                        <li class="dropdown">
-                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">home</a>
-                                            <ul class="dropdown-menu">
+                                        <li>
+                                            <a href="{{url('/')}}">Home</a>
+                                            {{-- <ul class="dropdown-menu">
                                                 <li><a href="home.html">Home 1</a></li>
                                                 <li><a href="home2.html">Home 2</a></li>
                                                 <li><a href="home3.html">Home 3</a></li>
-                                            </ul>
+                                            </ul> --}}
+                                        </li>
+                                        <li>
+                                            <a href="{{route('advisory-board')}}">Advisory Board</a>
+                                            {{-- <ul class="dropdown-menu">
+                                                <li><a href="home.html">Home 1</a></li>
+                                                <li><a href="home2.html">Home 2</a></li>
+                                                <li><a href="home3.html">Home 3</a></li>
+                                            </ul> --}}
+                                        </li>
+                                        <li>
+                                            <a href="{{route('forum')}}">Forum</a>
                                         </li>
                                         <li class="dropdown">
                                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Courses</a>
@@ -85,15 +105,11 @@
                                             </ul>
                                         </li>
                                         <li class="dropdown">
-                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Pages</a>
+                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Join Us</a>
                                             <ul class="dropdown-menu">
-                                                <li><a href="404.html">404 Page</a></li>
-                                                <li><a href="about-us.html">About us</a></li>
-                                                <li><a href="forum.html">Forum Page</a></li>
-                                                <li><a href="forum-single.html">Forum Single</a></li>
-                                                <li><a href="instructors-list.html">Instructors List</a></li>
-                                                <li><a href="instructor-single.html">Instructors Single</a></li>
-                                                <li><a href="login-register.html">Login &amp; Register</a></li>
+                                                <li><a href="{{route('trainers')}}">Trainers Join</a></li>
+                                                <li><a href="{{route('web_accreditation_bodies')}}">Join Arabic Language Centers And Instituations</a></li>
+                                               
                                             </ul>
                                         </li>
                                         <li class="dropdown">
