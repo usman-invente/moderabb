@@ -35,7 +35,7 @@
                     <a href="{{ route('newsletter') }}" class="nav-link">
                         <i class="nav-icon fas fa-th"></i>
                         <p>
-                          
+
                            {{ __('lang.Newsletter subscribers') }}
 
                         </p>
@@ -107,11 +107,11 @@
                         </li>
                     </ul>
                 </li>
-                {{-- <li class="nav-item">
+                {{--  <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-book"></i>
                         <p>
-                            {{ __('lang.Pages') }}
+                            {{ __('lang.Pages') }}  --}}
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-book"></i>
@@ -134,7 +134,7 @@
                             </a>
                         </li>
                     </ul>
-                </li> --}}
+                </li>
                 <li class="nav-item">
                     <a href="{{route('tests')}}" class="nav-link">
                         <i class="nav-icon far fa-envelope"></i>
@@ -151,13 +151,47 @@
                         </p>
                     </a>
                 </li>
-                    </ul>
                 </li>
                 <li class="nav-item">
                     <a href="{{route('diploma')}}" class="nav-link">
                         <i class="nav-icon far fa-plus-square"></i>
                         <p> {{ __('lang.programs and diploma') }}</p>
                     </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-book"></i>
+                        <p>
+                            Site Management
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('sponsors') }}" class="nav-link">
+
+                                <p>Our Partners</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('pages') }}" class="nav-link">
+
+                                <p>Page Manager</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('advisoryboards') }}" class="nav-link">
+
+                                <p>Advisory Board</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('news') }}" class="nav-link">
+
+                                <p>News</p>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
                 <li class="nav-item">
                     <a href="{{route('tax')}}" class="nav-link">

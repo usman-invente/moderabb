@@ -158,6 +158,41 @@ Route::get('/edit-questions/{id}', [App\Http\Controllers\AdminController::class,
 Route::post('/update-questions/{id}', [App\Http\Controllers\AdminController::class, 'update_question'])->name('update_question');
 Route::get('/delete-questions/{id}', [App\Http\Controllers\AdminController::class, 'destroy_question'])->name('destroy_question');
 
+////////// our-patners //////////
+Route::get('/sponsors', [App\Http\Controllers\AdminController::class, 'sponsors'])->name('sponsors');
+Route::get('/add-sponsors', [App\Http\Controllers\AdminController::class, 'add_sponsors'])->name('add_sponsors');
+Route::post('/create-sponsors', [App\Http\Controllers\AdminController::class, 'create_sponsors'])->name('create_sponsors');
+Route::get('/edit-sponsors/{id}', [App\Http\Controllers\AdminController::class, 'edit_sponsors'])->name('edit_sponsors');
+Route::post('/update-sponsors/{id}', [App\Http\Controllers\AdminController::class, 'update_sponsors'])->name('update_sponsors');
+Route::get('/delete-sponsors/{id}', [App\Http\Controllers\AdminController::class, 'destroy_sponsors'])->name('destroy_sponsors');
+Route::get('/feature-sponsors/{id}', [App\Http\Controllers\AdminController::class, 'feature_sponsor'])->name('feature_sponsor');
+
+////////// advisory-board //////////
+Route::get('/advisoryboards', [App\Http\Controllers\AdminController::class, 'advisoryboards'])->name('advisoryboards');
+Route::get('/add-advisoryboards', [App\Http\Controllers\AdminController::class, 'add_advisoryboards'])->name('add_advisoryboards');
+Route::post('/create-advisoryboards', [App\Http\Controllers\AdminController::class, 'create_advisoryboards'])->name('create_advisoryboards');
+Route::get('/edit-advisoryboards/{id}', [App\Http\Controllers\AdminController::class, 'edit_advisoryboards'])->name('edit_advisoryboards');
+Route::post('/update-advisoryboards/{id}', [App\Http\Controllers\AdminController::class, 'update_advisoryboards'])->name('update_advisoryboards');
+Route::get('/delete-advisoryboards/{id}', [App\Http\Controllers\AdminController::class, 'destroy_advisoryboards'])->name('destroy_advisoryboards');
+Route::get('/feature-advisoryboards/{id}', [App\Http\Controllers\AdminController::class, 'feature_advisoryboards'])->name('feature_advisoryboards');
+
+////////// page-manager //////////
+Route::get('/pages', [App\Http\Controllers\AdminController::class, 'pages'])->name('pages');
+Route::get('/add-pages', [App\Http\Controllers\AdminController::class, 'add_pages'])->name('add_pages');
+Route::post('/create-pages', [App\Http\Controllers\AdminController::class, 'create_pages'])->name('create_pages');
+Route::get('/edit-pages/{id}', [App\Http\Controllers\AdminController::class, 'edit_pages'])->name('edit_pages');
+Route::post('/update-pages/{id}', [App\Http\Controllers\AdminController::class, 'update_pages'])->name('update_pages');
+Route::get('/delete-pages/{id}', [App\Http\Controllers\AdminController::class, 'destroy_pages'])->name('destroy_pages');
+
+////////// news //////////
+Route::get('/news', [App\Http\Controllers\AdminController::class, 'news'])->name('news');
+Route::get('/add-news', [App\Http\Controllers\AdminController::class, 'add_news'])->name('add_news');
+Route::post('/create-news', [App\Http\Controllers\AdminController::class, 'create_news'])->name('create_news');
+Route::get('/edit-news/{id}', [App\Http\Controllers\AdminController::class, 'edit_news'])->name('edit_news');
+Route::post('/update-news/{id}', [App\Http\Controllers\AdminController::class, 'update_news'])->name('update_news');
+Route::get('/delete-news/{id}', [App\Http\Controllers\AdminController::class, 'destroy_news'])->name('destroy_news');
+
+
 ////////// Tax //////////
 Route::get('/tax', [App\Http\Controllers\AdminController::class, 'tax'])->name('tax');
 Route::get('/add-tax', [App\Http\Controllers\AdminController::class, 'add_tax'])->name('add_test');

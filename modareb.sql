@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.0.1
+-- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 18, 2021 at 07:55 PM
--- Server version: 10.3.16-MariaDB
--- PHP Version: 7.3.6
+-- Generation Time: Jul 25, 2021 at 10:15 AM
+-- Server version: 10.4.11-MariaDB
+-- PHP Version: 7.4.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -21,6 +20,32 @@ SET time_zone = "+00:00";
 --
 -- Database: `modareb`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `carts`
+--
+
+CREATE TABLE `carts` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `course_id` int(11) NOT NULL,
+  `course_title` varchar(300) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `course_price` double(8,2) NOT NULL,
+  `start_date` date NOT NULL,
+  `certificate_price` double(8,2) NOT NULL,
+  `course_image` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ip_address` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `carts`
+--
+
+INSERT INTO `carts` (`id`, `course_id`, `course_title`, `course_price`, `start_date`, `certificate_price`, `course_image`, `ip_address`, `created_at`, `updated_at`) VALUES
+(3, 5, 'Et nisi tempore acc', 964.00, '1976-01-16', 698.00, '1626456172.jpg', '127.0.0.1', '2021-07-21 09:31:28', '2021-07-21 09:31:28');
 
 -- --------------------------------------------------------
 
@@ -92,17 +117,10 @@ CREATE TABLE `coupons` (
   `expires_at` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `min_price` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `per_user_limit` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
+  `status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `coupons`
---
-
-INSERT INTO `coupons` (`id`, `user_id`, `name`, `description`, `code`, `type`, `amount`, `advert_perce`, `advert_name`, `expires_at`, `min_price`, `per_user_limit`, `status`, `created_at`, `updated_at`) VALUES
-(1, '12', 'test', 'testtest', 'mdr1', '1', '1500', '10', 'tax', '2021-11-02', '2000', '10', '1', '2021-07-14 01:24:38', '2021-07-14 01:55:26');
 
 -- --------------------------------------------------------
 
@@ -157,10 +175,36 @@ CREATE TABLE `courses` (
 --
 
 INSERT INTO `courses` (`id`, `user_id`, `teachers`, `eccbody_id`, `category_id`, `bag_type`, `title`, `slug`, `description`, `price`, `course_image`, `price_certificate`, `certificate`, `start_date`, `end_date`, `level`, `voltage`, `duration`, `recording_url`, `email`, `published`, `featured`, `trending`, `popular`, `free`, `c_purchase`, `goals`, `requirements`, `outputs`, `target_group`, `sponsor_name`, `media_type`, `video`, `video_file`, `meta_title`, `meta_description`, `meta_keywords`, `created_at`, `updated_at`) VALUES
-(3, 11, 'a:1:{i:0;s:2:\"11\";}', '11', '3', '2', 'Suscipit at aliquip', 'Dolor nesciunt nihi', 'Distinctio Rem enim\"\"\"\"\"\"\"', '27', NULL, '788', NULL, '1993-05-17', '1980-09-18', 'Odio sit in volupta', 'Provident aliquip e', 'Omnis ipsa itaque a', 'Fugiat itaque eius', NULL, '1', '1', '1', '0', '1', '0', NULL, NULL, NULL, NULL, NULL, NULL, 'Do culpa similique', NULL, 'Illo mollit in excep', 'Eum veritatis delect', 'Ut natus eiusmod ear', '2021-07-05 15:12:39', '2021-07-06 02:20:49'),
-(4, 12, 'a:1:{i:0;s:2:\"12\";}', '11', '2', '1', 'test', 'test', 'test', '12', NULL, '12', NULL, '2021-07-06', '2021-07-06', 'pro', 'test123', 'test123', 'test123', NULL, '1', '1', '0', '0', '0', '0', 'vvvv', '<p>vvvv</p>', '<p><b>vvvv</b></p>', '<p><font color=\"#000000\" style=\"background-color: rgb(0, 0, 0);\">sss</font></p>', '<p>xx</p>', 'youtube', 'Porro saepe praesent', NULL, 'test', '33333', '333', '2021-07-06 02:20:36', '2021-07-06 02:20:36'),
-(5, 12, 'a:1:{i:0;s:2:\"12\";}', '12', '2', '1', 'test', 'test', 'rt', '5', NULL, '5', NULL, '2021-07-08', '2021-07-23', 'test', 'test', 'test', 'https://www.google.com', NULL, '1', '0', '0', '0', '0', '0', '<p>test</p>', '<p>test</p>', '<p>test</p>', '<p>test</p>', '<p>test</p>', 'upload', NULL, 'C:\\xampp\\tmp\\phpFB83.tmp', 'test', 'tr', 're', '2021-07-08 00:49:54', '2021-07-18 09:06:23'),
-(6, 12, 'a:1:{i:0;s:2:\"11\";}', '19', '2', '1', 'test', 'test', 'show_courses_accreditation_bodies', '3', NULL, '4', NULL, '2021-07-08', '2021-07-08', 'pro', 'test', 'test123', 'test123', NULL, '1', '0', '0', '0', '0', '0', '<div style=\"color: rgb(212, 212, 212); background-color: rgb(30, 30, 30); font-family: Consolas, &quot;Courier New&quot;, monospace; font-size: 14px; line-height: 19px; white-space: pre;\"><span style=\"color: #ce9178;\">show</span></div><div style=\"color: rgb(212, 212, 212); background-color: rgb(30, 30, 30); font-family: Consolas, &quot;Courier New&quot;, monospace; font-size: 14px; line-height: 19px; white-space: pre;\"><span style=\"color: #ce9178;\">courses</span></div><div style=\"color: rgb(212, 212, 212); background-color: rgb(30, 30, 30); font-family: Consolas, &quot;Courier New&quot;, monospace; font-size: 14px; line-height: 19px; white-space: pre;\"><span style=\"color: #ce9178;\">accreditation</span></div><div style=\"color: rgb(212, 212, 212); background-color: rgb(30, 30, 30); font-family: Consolas, &quot;Courier New&quot;, monospace; font-size: 14px; line-height: 19px; white-space: pre;\"><span style=\"color: #ce9178;\">bodies</span></div>', '<div style=\"color: rgb(212, 212, 212); background-color: rgb(30, 30, 30); font-family: Consolas, &quot;Courier New&quot;, monospace; font-size: 14px; line-height: 19px; white-space: pre;\"><div style=\"line-height: 19px;\"><span style=\"color: rgb(206, 145, 120);\">show</span></div><div style=\"line-height: 19px;\"><span style=\"color: rgb(206, 145, 120);\">courses</span></div><div style=\"line-height: 19px;\"><span style=\"color: rgb(206, 145, 120);\">accreditation</span></div><div style=\"line-height: 19px;\"><span style=\"color: rgb(206, 145, 120);\">bodies</span></div></div>', '<div style=\"color: rgb(212, 212, 212); background-color: rgb(30, 30, 30); font-family: Consolas, &quot;Courier New&quot;, monospace; font-size: 14px; line-height: 19px; white-space: pre;\"><span style=\"color: rgb(206, 145, 120);\">show</span></div><div style=\"color: rgb(212, 212, 212); background-color: rgb(30, 30, 30); font-family: Consolas, &quot;Courier New&quot;, monospace; font-size: 14px; line-height: 19px; white-space: pre;\"><span style=\"color: rgb(206, 145, 120);\">courses</span></div><div style=\"color: rgb(212, 212, 212); background-color: rgb(30, 30, 30); font-family: Consolas, &quot;Courier New&quot;, monospace; font-size: 14px; line-height: 19px; white-space: pre;\"><span style=\"color: rgb(206, 145, 120);\">accreditation</span></div><div style=\"color: rgb(212, 212, 212); background-color: rgb(30, 30, 30); font-family: Consolas, &quot;Courier New&quot;, monospace; font-size: 14px; line-height: 19px; white-space: pre;\"><span style=\"color: rgb(206, 145, 120);\">bodies</span></div>', '<div style=\"color: rgb(212, 212, 212); background-color: rgb(30, 30, 30); font-family: Consolas, &quot;Courier New&quot;, monospace; font-size: 14px; line-height: 19px; white-space: pre;\"><span style=\"color: rgb(206, 145, 120);\">show</span></div><div style=\"color: rgb(212, 212, 212); background-color: rgb(30, 30, 30); font-family: Consolas, &quot;Courier New&quot;, monospace; font-size: 14px; line-height: 19px; white-space: pre;\"><span style=\"color: rgb(206, 145, 120);\">courses</span></div><div style=\"color: rgb(212, 212, 212); background-color: rgb(30, 30, 30); font-family: Consolas, &quot;Courier New&quot;, monospace; font-size: 14px; line-height: 19px; white-space: pre;\"><span style=\"color: rgb(206, 145, 120);\">accreditation</span></div><div style=\"color: rgb(212, 212, 212); background-color: rgb(30, 30, 30); font-family: Consolas, &quot;Courier New&quot;, monospace; font-size: 14px; line-height: 19px; white-space: pre;\"><span style=\"color: rgb(206, 145, 120);\">bodies</span></div>', '<div style=\"color: rgb(212, 212, 212); background-color: rgb(30, 30, 30); font-family: Consolas, &quot;Courier New&quot;, monospace; font-size: 14px; line-height: 19px; white-space: pre;\"><span style=\"color: rgb(206, 145, 120);\">show</span></div><div style=\"color: rgb(212, 212, 212); background-color: rgb(30, 30, 30); font-family: Consolas, &quot;Courier New&quot;, monospace; font-size: 14px; line-height: 19px; white-space: pre;\"><span style=\"color: rgb(206, 145, 120);\">courses</span></div><div style=\"color: rgb(212, 212, 212); background-color: rgb(30, 30, 30); font-family: Consolas, &quot;Courier New&quot;, monospace; font-size: 14px; line-height: 19px; white-space: pre;\"><span style=\"color: rgb(206, 145, 120);\">accreditation</span></div><div style=\"color: rgb(212, 212, 212); background-color: rgb(30, 30, 30); font-family: Consolas, &quot;Courier New&quot;, monospace; font-size: 14px; line-height: 19px; white-space: pre;\"><span style=\"color: rgb(206, 145, 120);\">bodies</span></div>', 'youtube', 'Porro saepe praesent', NULL, 'test', 'test', 'test', '2021-07-08 01:07:05', '2021-07-08 01:07:05');
+(3, 11, '14', '16', '7', '1', 'Explicabo Omnis ist', 'Et at animi volupta', 'Aliquip adipisci err', '268', NULL, '588', NULL, '2011-11-09', '1971-10-16', 'Animi et vel ea dol', 'Recusandae Ratione', 'Dolorem ut quia exce', 'Sed amet doloribus', NULL, '1', '0', '0', '1', '0', '1', 'Tenetur occaecat und.dd', 'Quis ipsa, similique.dd', 'Deserunt proident, m.d', 'Nam irure tempora co.dd', 'Quae error adipisici.d', 'embed', 'dssd', NULL, 'Corrupti commodods op', 'Voluptas sunt qui e', 'Ex unde optio volup', '2021-07-13 12:36:40', '2021-07-13 12:36:40'),
+(4, 11, '15', '16', '7', '1', 'Ab dolorem ut repreh', 'Fugiat dignissimos i', 'Commodo anim esse ac', '82', '1626199538.png', '145', '1626199538.jpg', '2008-08-25', '1980-09-30', 'Deserunt proident q', 'Laudantium est sit', 'Nostrud placeat con', 'Voluptatibus dolor a', NULL, '1', '1', '1', '0', '0', '0', NULL, NULL, NULL, NULL, NULL, 'upload', NULL, 'D:\\xampp\\tmp\\php902.tmp', 'Deserunt ipsum nemo', 'Pariatur Consequunt', 'Ut at similique est', '2021-07-13 13:05:38', '2021-07-13 13:05:38'),
+(5, 11, '15', '16', '7', 'Sync', 'Et nisi tempore acc', 'et-nisi-tempore-acc', 'Quisquam enim nulla', '964', '1626456172.jpg', '698', '1626456172.jpg', '1976-01-16', '1980-01-29', 'Est aliquid volupta', 'Sunt enim in nemo eu', 'Cupiditate animi vo', 'Vel odio sed sint il', NULL, '1', '1', '1', '1', '1', '0', NULL, NULL, NULL, NULL, NULL, 'upload', NULL, 'D:\\xampp\\tmp\\php648F.tmp', 'Velit iusto similiqu', 'Natus est facere pla', 'Tempor commodi aliqu', '2021-07-16 12:22:52', '2021-07-16 12:22:52');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `course_reviews`
+--
+
+CREATE TABLE `course_reviews` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `course_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `check_list` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `review` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `course_reviews`
+--
+
+INSERT INTO `course_reviews` (`id`, `course_id`, `user_id`, `check_list`, `review`, `name`, `email`, `created_at`, `updated_at`) VALUES
+(1, 5, 0, '3', 'ee', 'wewe', 'ewewe@gmail.com', '2021-07-24 07:04:32', '2021-07-24 07:04:32'),
+(2, 5, 11, '2', 'erere', 'rerere', 'usman.traximtech@gmail.com', '2021-07-24 08:55:50', '2021-07-24 08:55:50'),
+(3, 5, 11, '2', 'erere', 'rerere', 'usman.traximtech@gmail.com', '2021-07-24 08:55:50', '2021-07-24 08:55:50');
 
 -- --------------------------------------------------------
 
@@ -240,36 +284,20 @@ CREATE TABLE `failed_jobs` (
 
 CREATE TABLE `lessons` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `user_id` bigint(255) DEFAULT NULL,
-  `course_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `live_lesson` tinyint(3) NOT NULL DEFAULT 0,
-  `url` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `short_text` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `full_text` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `downloadable_files` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `add_audio` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `add_pdf` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `media_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `video` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `video_file` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `published` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `course_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `url` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `short_text` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `full_text` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `downloadable_files` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `add_audio` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `add_pdf` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `media_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `video` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `video_file` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `lessons`
---
-
-INSERT INTO `lessons` (`id`, `user_id`, `course_id`, `title`, `live_lesson`, `url`, `short_text`, `full_text`, `downloadable_files`, `add_audio`, `add_pdf`, `media_type`, `video`, `video_file`, `published`, `created_at`, `updated_at`) VALUES
-(1, 12, '3', 'Nesciunt iure quas', 0, 'Reiciendis do occaec', 'Nesciunt iure quas', 'Nesciunt iure quas', NULL, NULL, NULL, NULL, 'test', NULL, '1', '2021-07-08 03:23:42', '2021-07-12 05:16:06'),
-(2, 12, '3', 'Rerum eius sit ex vo', 0, 'Cupiditate minim sed', 'Rerum eius sit ex vo', 'Rerum eius sit ex vo', NULL, NULL, NULL, NULL, 'dd', NULL, '1', '2021-07-09 01:46:53', '2021-07-09 03:10:23'),
-(3, 12, '3', 'Quos sunt ea quibus', 0, 'Nisi voluptatem id', 'Voluptatibus ratione', NULL, NULL, NULL, NULL, 'vimeo', 'test', NULL, '1', '2021-07-09 02:41:17', '2021-07-09 02:41:17'),
-(5, 12, '3', 'Rerum eius sit ex vo', 0, 'Cupiditate minim sed', 'Rerum eius sit ex vo', 'Rerum eius sit ex vo', NULL, NULL, NULL, NULL, 'dd', NULL, '1', '2021-07-09 03:09:54', '2021-07-09 03:09:54'),
-(6, 12, '3', 'test', 1, NULL, 'test', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-07-11 12:24:36', '2021-07-11 12:24:59'),
-(7, 12, '6', 'test', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '1', '2021-07-13 01:10:27', '2021-07-13 01:10:27'),
-(8, 12, '4', 'Qui laborum Aliquid', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '1', '2021-07-13 01:14:36', '2021-07-13 01:14:36');
 
 -- --------------------------------------------------------
 
@@ -298,11 +326,14 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (15, '2021_07_05_052556_create_courses_table', 5),
 (16, '2021_07_05_113459_create_diplomas_table', 6),
 (17, '2021_07_08_075604_create_lessons_table', 7),
-(18, '2021_07_11_174606_create_schedules_table', 8),
-(19, '2021_07_13_060315_create_tests_table', 9),
-(20, '2021_07_13_080846_create_taxes_table', 10),
-(21, '2021_07_14_054847_create_coupons_table', 11),
-(22, '2021_07_15_101828_create_quesstions_table', 12);
+(18, '2021_07_17_185902_create_carts_table', 7),
+(19, '2021_07_11_174606_create_schedules_table', 8),
+(20, '2021_07_13_060315_create_tests_table', 8),
+(21, '2021_07_13_080846_create_taxes_table', 8),
+(22, '2021_07_14_054847_create_coupons_table', 8),
+(23, '2021_07_15_101828_create_quesstions_table', 8),
+(24, '2021_01_24_205114_create_paytabs_invoices_table', 9),
+(25, '2021_07_24_111455_create_course_reviews_table', 10);
 
 -- --------------------------------------------------------
 
@@ -341,6 +372,28 @@ CREATE TABLE `password_resets` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `paytabs_invoices`
+--
+
+CREATE TABLE `paytabs_invoices` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `order_id` bigint(20) UNSIGNED NOT NULL,
+  `result` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `response_code` int(10) UNSIGNED NOT NULL,
+  `pt_invoice_id` int(10) UNSIGNED DEFAULT NULL,
+  `amount` double(8,2) DEFAULT NULL,
+  `currency` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `transaction_id` int(10) UNSIGNED DEFAULT NULL,
+  `card_brand` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `card_first_six_digits` int(10) UNSIGNED DEFAULT NULL,
+  `card_last_four_digits` int(10) UNSIGNED DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `quesstions`
 --
 
@@ -348,7 +401,7 @@ CREATE TABLE `quesstions` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `user_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `question` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `question_image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `question_image` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `score` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `course_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `lesson_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -369,14 +422,6 @@ CREATE TABLE `quesstions` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `quesstions`
---
-
-INSERT INTO `quesstions` (`id`, `user_id`, `question`, `question_image`, `score`, `course_id`, `lesson_id`, `tests`, `option_text_1`, `explanation_1`, `correct_1`, `option_text_2`, `explanation_2`, `correct_2`, `option_text_3`, `explanation_3`, `correct_3`, `option_text_4`, `explanation_4`, `correct_4`, `created_at`, `updated_at`) VALUES
-(2, '12', 'Laudantium impedit', NULL, '875', '3', '1', 'a:1:{i:0;s:1:\"1\";}', 'Ut labore eum explic', 'Non quis repellendus', '0', 'Aspernatur necessita', 'Officia id libero qu', '0', 'Pariatur Totam proi', 'Placeat enim ex sol', '1', 'Minus labore consect', 'Adipisci labore reru', '1', '2021-07-17 14:35:33', '2021-07-17 14:35:33'),
-(3, '12', 'testest', '1626554160.png', '1486', '3', '1', 'a:1:{i:0;s:1:\"1\";}', 'testest', 'testest', '1', 'testest', 'testest', '1', 'testest', 'testest', '1', 'testest', 'testest', '1', '2021-07-17 14:57:46', '2021-07-17 15:36:00');
-
 -- --------------------------------------------------------
 
 --
@@ -389,20 +434,13 @@ CREATE TABLE `schedules` (
   `lesson_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `short_text` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `date` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `data` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `duration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `trainee_limit` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `schedules`
---
-
-INSERT INTO `schedules` (`id`, `user_id`, `lesson_id`, `title`, `short_text`, `date`, `duration`, `password`, `trainee_limit`, `created_at`, `updated_at`) VALUES
-(8, '12', '6', 'test123', 'test', '2021-07-13', '120', '$2y$10$W0T19L4PPqJCcd3svKFsrOFykRDhFPXeDbQi0Y1FXM7k3QDLCGbBm', '500', '2021-07-13 00:17:49', '2021-07-13 00:18:15');
 
 -- --------------------------------------------------------
 
@@ -415,17 +453,10 @@ CREATE TABLE `taxes` (
   `user_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `rate` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
+  `status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `taxes`
---
-
-INSERT INTO `taxes` (`id`, `user_id`, `name`, `rate`, `status`, `created_at`, `updated_at`) VALUES
-(1, '12', 'test123', '10', '1', '2021-07-13 03:22:01', '2021-07-14 00:41:48');
 
 -- --------------------------------------------------------
 
@@ -445,14 +476,6 @@ CREATE TABLE `tests` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `tests`
---
-
-INSERT INTO `tests` (`id`, `user_id`, `lesson_id`, `course_id`, `title`, `repeat_count`, `description`, `published`, `created_at`, `updated_at`) VALUES
-(1, '12', '1', '4', 'Est laborum quia ad', 'Est laborum quia ad', 'Quia id in deserunt', '1', '2021-07-13 02:32:43', '2021-07-13 02:32:43'),
-(2, '12', '8', '6', 'test', 'test', 'test', '1', '2021-07-13 02:48:35', '2021-07-13 02:48:35');
 
 -- --------------------------------------------------------
 
@@ -477,8 +500,7 @@ CREATE TABLE `training_needs` (
 --
 
 INSERT INTO `training_needs` (`id`, `user_id`, `title`, `categorie_id`, `course_field`, `axes`, `idea`, `created_at`, `updated_at`) VALUES
-(2, '1', 'test123', '6', 'test123', 'test123', 'test123', '2021-07-03 10:27:58', '2021-07-18 12:23:11'),
-(3, '22', 'test', '5', 'test', 'test', 'test', '2021-07-18 12:26:40', '2021-07-18 12:26:40');
+(2, '1', 'test', '8', 'test', 'test', 'test', '2021-07-03 10:27:58', '2021-07-03 11:15:30');
 
 -- --------------------------------------------------------
 
@@ -503,6 +525,7 @@ CREATE TABLE `users` (
   `facbook` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `twitter` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `linkedin` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `roll_id` int(11) DEFAULT NULL,
   `instagram` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `passport` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `photo_academic_degree` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -510,8 +533,7 @@ CREATE TABLE `users` (
   `bank_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `bank_country` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `ibn_number` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `status` tinyint(3) NOT NULL DEFAULT 0,
-  `roll_id` int(11) NOT NULL DEFAULT 0,
+  `status` tinyint(3) NOT NULL DEFAULT 1,
   `email_verified_at` timestamp NULL DEFAULT NULL,
   `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -523,24 +545,22 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `title`, `c_person`, `telephone`, `dob`, `sex`, `country`, `email`, `avatar_location`, `academic_rank`, `nationality`, `country_of_residence`, `facbook`, `twitter`, `linkedin`, `instagram`, `passport`, `photo_academic_degree`, `cv`, `bank_name`, `bank_country`, `ibn_number`, `status`, `roll_id`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(10, 'Caleb', NULL, 'Dorsey', '+1 (608) 462-2783', NULL, NULL, NULL, 'bubezaro@mailinator.com', '1625341018.jpg', NULL, NULL, 'Qui dolore asperiores quis autem', 'Laboriosam temporibus ipsum veniam sint quam porro', 'Sed soluta aute ex officiis molestias qui proident eum nisi qui nisi magna consequatur iure officiis', 'Maiores pariatur Ullamco velit voluptatem praesentium magni at sed autem sunt aut nemo labore eius', 'Eum fugiat et quae consectetur id ut consequatur nemo quia quaerat', NULL, NULL, NULL, 'Iona Shaw', 'Optio magni eius libero ex consequuntur molestias provident quia tempora', '927', 1, 4, NULL, '$2y$10$cJoCzEe6uDJ6wUXP1K5WzOKHIZDyBlRigc4y8g.jgnPhPLvmVwcJ2', NULL, '2021-07-03 14:10:38', '2021-07-03 14:40:08'),
-(11, 'Adele Murphy', 'Sequi totam fuga No', NULL, '+1 (738) 344-7852', '1997-05-01', 'male', 'Sed porro ullam ut u', 'gyvoconi@mailinator.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 4, NULL, '$2y$10$6UGhR2ou5d/O/fogxmHjPuvablzUUzV07GJiUO.89OdObr2mM5HyG', NULL, '2021-07-05 13:15:30', '2021-07-05 13:15:30'),
-(12, 'Muhammad', 'Abu Bakar', NULL, '+923029231486', '2021-07-06', 'male', 'pk', 'mabubakar9231@gmail.com', '1626248221.png', 'b', 'pakistan', 'pakistan', 'facebook', 'twitter', 'linkedin', 'instagram', '1626248306.png', '1626248221.png', '1626248221.pdf', 'HMBL', 'pakistan', '1486', 0, 1, NULL, '$2y$10$.QXbE68/l00qB1IEj.JCvuf.boghAll95Z6DHJlGG4W3JmSBzlfj.', NULL, '2021-07-06 02:13:32', '2021-07-14 02:39:47'),
-(13, 'Shellie Clark', 'Vitae assumenda erro', NULL, NULL, NULL, 'male', NULL, 'nymufefym@mailinator.com', '', 'm', 'Ea veniam ullam qui', 'Perferendis nihil ut', 'Sit do omnis est ess', 'Qui et ratione rerum', 'Voluptas temporibus', 'Quae voluptas sit u', '', '', '', 'Sonya Copeland', 'Esse ipsa neque vo', '94', 0, 4, NULL, '$2y$10$.dE4WJO/SnCovfoOfVzbdecH0MJUXmW8CjThwaKAKvxE685fRzB8u', NULL, '2021-07-07 04:53:28', '2021-07-07 04:53:28'),
-(14, 'Chantale Albert', 'Ut nihil labore sit', NULL, NULL, NULL, 'female', NULL, 'sanu@mailinator.com', '', 'b', 'Et deleniti aut aut', 'Neque aliqua Atque', 'Id veritatis deserun', 'Voluptates et ea eum', 'Aute alias delectus', 'Tempora laudantium', '', '', '', 'Pandora Barber', 'Est fuga Consequat', '367', 0, 4, NULL, '$2y$10$e4k19Q/8S23PjOzeWnMXsewsMs972jIevTe5Ocm2mlImyzAAOpnsG', NULL, '2021-07-07 04:59:08', '2021-07-07 04:59:08'),
-(15, 'Brenna Roach', 'Maxime magni magna a', NULL, NULL, NULL, 'female', NULL, 'zakigybu@mailinator.com', '', 'b', 'Sequi quos fugiat qu', 'Officia omnis harum', 'Cillum proident nem', 'Qui ad doloribus cul', 'Ut quaerat perspicia', 'Fugiat natus blandi', '', '', '', 'Chaim Sosa', 'Irure fugiat aut con', '192', 0, 4, NULL, '$2y$10$4xRVL3e4zTexP4QW/MSHNObj.evkiMvGHyM1DlQ98n77sqQQTAOZ.', NULL, '2021-07-07 05:00:00', '2021-07-07 05:00:00'),
-(16, 'Gavin Mullen', 'Libero facilis dolor', NULL, NULL, NULL, 'male', NULL, 'ryviwisula@mailinator.com', '', 'cd', 'Nihil minima et mole', 'Voluptatem Perspici', 'Alias beatae et mole', 'Enim rerum sint per', 'Iste lorem est quo s', 'Id rem cupidatat fug', '', '', '', 'Stone Hendricks', 'Quasi aut laborum I', '479', 0, 4, NULL, '$2y$10$xLHvUnMKV.PBH7AOdhAvvuUcL9sGLkouq5YO9.2SPXtcK.xobixoO', NULL, '2021-07-07 05:01:36', '2021-07-07 05:01:36'),
-(17, 'Hayden Fulton', 'Voluptates ut et eiu', NULL, NULL, NULL, 'male', NULL, 'naqabosery@mailinator.com', '', 'b', 'Doloremque repudiand', 'Rerum non mollit vol', 'Ea obcaecati quibusd', 'Laudantium et nostr', 'Est quo ad molestia', 'Illum magni molesti', '', '', '', 'Yoko Kramer', 'Voluptas qui ratione', '725', 0, 4, NULL, '$2y$10$0NuDgzwKRTrJgmtwRUUEoeJ86bUl7h6m6klEKDuEK/e4JCKKp/VMa', NULL, '2021-07-07 05:04:12', '2021-07-07 05:04:12'),
-(18, 'Autumn Donaldson', 'Corrupti quo molest', NULL, NULL, NULL, 'female', NULL, 'helu@mailinator.com', '1625341018.jpg', 'b', 'Tempora nihil nisi i', 'Omnis ad commodo par', 'Esse voluptatem fa', 'Enim at cupidatat el', 'Aperiam atque a maio', 'Dolorem laudantium', '1625341018.jpg', '1625341018.jpg', '1625341018.jpg', 'Berk Mccoy', 'Do a dolorem eligend', '699', 0, 2, NULL, '$2y$10$XsKKfIXRfHQ5Xj3hTwFECOVdg9ofQZ7L9HtECqVpMb9ZvqOW2FMhS', NULL, '2021-07-07 05:06:28', '2021-07-07 05:06:28'),
-(19, 'Hoyt Morrow', 'Sit dolorum veniam', 'test', '3456789', NULL, 'female', NULL, 'timaq@mailinator.com', NULL, 'cp', 'Atque quia aspernatu', 'Occaecat non proiden', 'Molestiae facilis qu', 'Architecto magna sap', 'Eveniet dolorem est', 'Dolores est accusan', NULL, NULL, NULL, 'Slade Monroe', 'Aut ea voluptatem A', '697', 0, 3, NULL, '$2y$10$pTyJC8074SOtl0FYAgvty.sTiN5u.sihDAbgyhVRwShtFr6YlunRa', NULL, '2021-07-07 05:22:37', '2021-07-09 01:27:59'),
-(20, 'tranier', 'tranier', NULL, '0000', NULL, 'male', NULL, 'usman@arco.com', '', 'cd', 'Quibusdam id sed mod', 'Libero maxime debiti', 'Laboris omnis minima', 'Omnis vel maiores qu', 'Sint elit aut mole', 'Minim consequatur si', '', '', '', 'Micah Mckay', 'Aute voluptas accusa', '430', 0, 2, NULL, '$2y$10$lSJEAhSk8n2G3NrOa62phu7CBPAZlkWQmdXPHIlSPwRCGmtTupVam', NULL, '2021-07-07 05:31:47', '2021-07-18 08:22:57'),
-(21, 'Jennifer Holden', 'Optio excepteur tot', 'test', '12345678', NULL, 'female', NULL, 'abdulrazak@arco.com', NULL, 'cd', 'Nulla est harum offi', 'Libero quia aliquip', 'Quisquam in fuga In', 'Sed impedit delectu', 'Cupidatat mollit nos', 'Non et dolor consect', NULL, NULL, NULL, 'Odessa Moody', 'Minus eos omnis nequ', '561', 0, 3, NULL, '$2y$10$Clul5oO06.92.9270GHkX.Vqt8hpgL9fb2BPB2a6Xnv5iXVlXiCMy', NULL, '2021-07-07 05:32:54', '2021-07-09 01:28:24'),
-(22, 'Diana Colon', 'Reprehenderit omnis', NULL, '+1 (873) 616-8245', '1985-10-16', 'male', 'Voluptates nesciunt', 'xymebyqyle@mailinator.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, '$2y$10$aYLDAM0QH7lmX1cKH.lbO.9VVrg89VBw4rlcjDQDZsBGb2Rfqrb4q', NULL, '2021-07-18 12:18:28', '2021-07-18 12:18:28');
+INSERT INTO `users` (`id`, `name`, `title`, `c_person`, `telephone`, `dob`, `sex`, `country`, `email`, `avatar_location`, `academic_rank`, `nationality`, `country_of_residence`, `facbook`, `twitter`, `linkedin`, `roll_id`, `instagram`, `passport`, `photo_academic_degree`, `cv`, `bank_name`, `bank_country`, `ibn_number`, `status`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
+(10, 'Caleb', NULL, 'Dorsey', '+1 (608) 462-2783', NULL, NULL, NULL, 'bubezaro@mailinator.com', '1625341018.jpg', NULL, NULL, 'Qui dolore asperiores quis autem', 'Laboriosam temporibus ipsum veniam sint quam porro', 'Sed soluta aute ex officiis molestias qui proident eum nisi qui nisi magna consequatur iure officiis', 'Maiores pariatur Ullamco velit voluptatem praesentium magni at sed autem sunt aut nemo labore eius', NULL, 'Eum fugiat et quae consectetur id ut consequatur nemo quia quaerat', NULL, NULL, NULL, 'Iona Shaw', 'Optio magni eius libero ex consequuntur molestias provident quia tempora', '927', 1, NULL, '$2y$10$cJoCzEe6uDJ6wUXP1K5WzOKHIZDyBlRigc4y8g.jgnPhPLvmVwcJ2', NULL, '2021-07-03 14:10:38', '2021-07-03 14:40:08'),
+(11, 'Muhammad Usmna', 'Muhammad Usmna', NULL, '+1', '2021-07-18', 'male', 'PK', 'usman.traximtech@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, '$2y$10$ukp7OTZwoa4Vis/BZks8XetJ0HapSeEg0Z71EeqMs.n.pcEG32WFG', NULL, '2021-07-05 13:02:38', '2021-07-05 13:02:38'),
+(14, 'Eden', 'Marshall', NULL, '+1 (298) 749-1701', NULL, 'male', NULL, 'buzajiz@mailinator.com', '', 'b', 'Illum harum ipsam molestiae ex ea mollit dolore qui reprehenderit officia', 'Culpa dicta iure qui commodi ab', 'Itaque cupiditate pariatur Velit optio quod voluptas', 'Eaque nihil distinctio Sed perferendis sit non', 'Quae non est rerum provident placeat', 2, 'Voluptates id eaque non ea qui facilis vel ipsam mollit cum fugiat obcaecati', '1626021793.png', '1626021793.png', '1626021793.pdf', 'Robin Conley', 'Est reprehenderit voluptates laudantium officiis est ex quam velit ut similique qui impedit', '25', 1, NULL, '$2y$10$8FnaBNlf2dWOMsH2sZJQb.CvG9YyCj1MOjlHYKcm/dIMktp4/.5re', NULL, '2021-07-11 11:43:14', '2021-07-11 11:43:14'),
+(15, 'Amir', 'Harvey', NULL, '+1 (701) 577-8017', NULL, 'male', NULL, 'poxigyx@mailinator.com', '', 'm', 'Obcaecati enim facilis dolores ut optio adipisci debitis sint', 'Consectetur illum in itaque eos nostrum assumenda id proident quod vel sint quaerat dolor voluptates cupidatat', 'Proident repudiandae nesciunt adipisicing enim rem officia enim', 'Sit sed at voluptatem numquam', 'Velit et amet corporis praesentium necessitatibus aliqua Explicabo Sint delectus impedit', 2, 'Vel voluptates sunt ad consectetur porro perspiciatis rerum', '1626021888.png', '1626021888.png', '1626021888.pdf', 'Evan Burt', 'Itaque doloribus tempora quis eum laboriosam alias aute adipisci aliqua', '873', 1, NULL, '$2y$10$cH595UvbmFL4YMqaVlHA3eqLb6yDqrM5gO39WDSTq2.1EZUrysZH.', NULL, '2021-07-11 11:44:48', '2021-07-11 11:44:48'),
+(16, 'Quail', NULL, 'Hickman', '+1 (595) 826-4946', NULL, NULL, NULL, 'poso@mailinator.com', NULL, NULL, NULL, '144', 'Voluptate aut quisquam ipsum molestiae molestiae repudiandae', 'In aute eos ipsam quo corporis natus quia qui sit itaque suscipit eum odit repudiandae qui quia ea quo dolorum', 'Exercitation cillum architecto sed doloremque corrupti amet quaerat', 3, 'Ea asperiores dicta eum alias aut deserunt reiciendis ea dolorum ducimus', NULL, NULL, NULL, 'Geraldine Maldonado', 'Ex fugit enim culpa eiusmod minima corrupti ea officiis aliquid ut tempor labore reiciendis qui voluptatem', '195', 1, NULL, '$2y$10$K6LdG7exlQoI1LV3gyDs.OwSw76gs.ech30.KiMLxZIde8pT6Zl0m', NULL, '2021-07-13 12:34:47', '2021-07-13 12:34:47');
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `carts`
+--
+ALTER TABLE `carts`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `categories`
@@ -564,6 +584,12 @@ ALTER TABLE `coupons`
 -- Indexes for table `courses`
 --
 ALTER TABLE `courses`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `course_reviews`
+--
+ALTER TABLE `course_reviews`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -603,6 +629,12 @@ ALTER TABLE `newsletters`
 --
 ALTER TABLE `password_resets`
   ADD KEY `password_resets_email_index` (`email`);
+
+--
+-- Indexes for table `paytabs_invoices`
+--
+ALTER TABLE `paytabs_invoices`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `quesstions`
@@ -646,6 +678,12 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT for table `carts`
+--
+ALTER TABLE `carts`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
@@ -661,13 +699,19 @@ ALTER TABLE `contacts`
 -- AUTO_INCREMENT for table `coupons`
 --
 ALTER TABLE `coupons`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `courses`
 --
 ALTER TABLE `courses`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `course_reviews`
+--
+ALTER TABLE `course_reviews`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `diplomas`
@@ -685,13 +729,13 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `lessons`
 --
 ALTER TABLE `lessons`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `newsletters`
@@ -700,40 +744,46 @@ ALTER TABLE `newsletters`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT for table `paytabs_invoices`
+--
+ALTER TABLE `paytabs_invoices`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `quesstions`
 --
 ALTER TABLE `quesstions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `schedules`
 --
 ALTER TABLE `schedules`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `taxes`
 --
 ALTER TABLE `taxes`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tests`
 --
 ALTER TABLE `tests`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `training_needs`
 --
 ALTER TABLE `training_needs`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
