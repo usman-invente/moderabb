@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Advisory;
 use App\Models\Category;
 use App\Models\Contact;
 use App\Models\Coupon;
 use App\Models\Course;
 use App\Models\Diploma;
 use App\Models\Lesson;
+use App\Models\News;
+use App\Models\Ourpartner;
+use App\Models\Pagemanager;
 use App\Models\Quesstion;
 use App\Models\Schedule;
 use App\Models\Tax;
@@ -523,16 +527,16 @@ class AdminController extends Controller
             $destinationPath = public_path('/image/courses');
             $image->move($destinationPath, $name);
             $inputs['course_image'] = $name;
-    
-        } 
+
+        }
         if ($request->hasFile('certificate')) {
             $image = $request->file('certificate');
             $name = time().'.'.$image->getClientOriginalExtension();
             $destinationPath = public_path('/image/certificate');
             $image->move($destinationPath, $name);
             $inputs['certificate'] = $name;
-    
-        }      
+
+        }
         $user = Auth::user()->id;
         $inputs["user_id"]=$user;
         // $teacher = serialize($inputs['teachers']);
@@ -559,16 +563,16 @@ class AdminController extends Controller
             $destinationPath = public_path('/image/courses');
             $image->move($destinationPath, $name);
             $inputs['course_image'] = $name;
-    
-        } 
+
+        }
         if ($request->hasFile('certificate')) {
             $image = $request->file('certificate');
             $name = time().'.'.$image->getClientOriginalExtension();
             $destinationPath = public_path('/image/certificate');
             $image->move($destinationPath, $name);
             $inputs['certificate'] = $name;
-    
-        } 
+
+        }
         $teacher = serialize($inputs['teachers']);
         $inputs["teachers"] = $teacher;
         Course::where('id', $id)->update($inputs);
@@ -592,7 +596,7 @@ class AdminController extends Controller
     }
     public function diploma()
     {
-        
+
         $data = Diploma::join('categories', 'diplomas.category_id', '=', 'categories.id')
         ->get();
         return view ('admin.diploma.index',compact('data'));
@@ -1206,6 +1210,310 @@ class AdminController extends Controller
     public function destroy_question($id)
     {
         Quesstion::find($id)->delete();
+        return response()->json(array('success' => true));
+    }
+
+    public function sponsors(Request $request)
+    {
+        $sponsor = Ourpartner::all();
+        return view ('admin.our-partners.index',compact('sponsor'));
+    }
+//     public function add_questions(Request $request)
+//     {
+//           //  if(isset($request))
+//    //  {
+//         // dd($request->all());
+//    // }
+//    if(isset($request->course_id))
+//    {
+//     $lesson = Lesson::join('courses', 'lessons.course_id', '=', 'courses.id')
+//    ->where('lessons.course_id',$request->course_id)
+//    ->select('lessons.title','lessons.id')
+//    ->get();
+
+//    return response()->json($lesson) ;
+//    }
+//    elseif(isset($request->lesson_id))
+//    {
+//    $test = Test::join('lessons', 'tests.lesson_id', '=', 'lessons.id')
+//    ->where('tests.lesson_id',$request->lesson_id)
+//    ->select('tests.title','tests.id')
+//    ->get();
+
+//    return response()->json($test) ;
+//    }
+//    $course = Course::all();
+//    return view ('admin.question.add',compact('course'));
+//     }
+    public function create_sponsors (Request $request)
+    {
+
+        $filename = "";
+
+        if( $request->hasFile('logo'))
+                {
+                    $image = $request->file('logo');
+                    $path = public_path(). '/upload/partner/';
+                    $filename = time() . '.' . $image->getClientOriginalExtension();
+                    $image->move($path, $filename);
+                    $request->logo = $filename ;
+                }
+        $inputs = $request->all();
+        $inputs["logo"] = $filename;
+        $user = Auth::user()->id;
+        $inputs["user_id"] = $user;
+        // dd($inputs);
+        Ourpartner::create($inputs);
+
+        return redirect()->route('sponsors')->with('message','Data created successfully!');
+    }
+    public function edit_sponsors(Request $request ,$id)
+    {
+   $data = Ourpartner::find($id);
+//    dd($data);
+   $sponsor = Ourpartner::all();
+   return view ('admin.our-partners.edit',compact('sponsor','data'));
+    }
+    public function update_sponsors(Request $request , $id)
+    {
+        $filename = "";
+
+        if( $request->hasFile('logo'))
+                {
+                    $image = $request->file('logo');
+                    $path = public_path(). '/upload/partner/';
+                    $filename = time() . '.' . $image->getClientOriginalExtension();
+                    $image->move($path, $filename);
+                    $request->logo = $filename ;
+                    $inputs = $request->except(['_token']);
+                    $inputs["logo"] = $filename;
+                    Ourpartner::where('id', $id)->update($inputs);
+                }
+                else{
+                    $inputs = $request->except(['_token']);
+                    // dd($inputs);
+                    Ourpartner::where('id', $id)->update($inputs);
+                }
+        return redirect()->route('sponsors')->with('message', 'Data Updated Successfully!');
+    }
+    public function destroy_sponsors($id)
+    {
+        Ourpartner::find($id)->delete();
+        return response()->json(array('success' => true));
+    }
+    public function feature_sponsor($id)
+    {
+        $data = Ourpartner::where('id', $id)->first();
+        // dd($data);
+        if (isset($data) && $data->status == 0) {
+            Ourpartner::where('id', $id)->update(['status' => 1]);
+        } else {
+            Ourpartner::where('id', $id)->update(['status' => 0]);
+        }
+        return response()->json(array('success' => true));
+    }
+
+    public function advisoryboards(Request $request)
+    {
+        $sponsor = Advisory::all();
+        return view ('admin.advisory-board.index',compact('sponsor'));
+    }
+    public function create_advisoryboards (Request $request)
+    {
+
+        $filename = "";
+
+        if( $request->hasFile('logo'))
+                {
+                    $image = $request->file('logo');
+                    $path = public_path(). '/upload/advisory/';
+                    $filename = time() . '.' . $image->getClientOriginalExtension();
+                    $image->move($path, $filename);
+                    $request->logo = $filename ;
+                }
+        $inputs = $request->all();
+        $inputs["logo"] = $filename;
+        $user = Auth::user()->id;
+        $inputs["user_id"] = $user;
+        // dd($inputs);
+        Advisory::create($inputs);
+
+        return redirect()->route('advisoryboards')->with('message','Data created successfully!');
+    }
+    public function edit_advisoryboards(Request $request ,$id)
+    {
+   $data = Advisory::find($id);
+//    dd($data);
+   $sponsor = Advisory::all();
+   return view ('admin.advisory-board.edit',compact('sponsor','data'));
+    }
+    public function update_advisoryboards(Request $request , $id)
+    {
+        $filename = "";
+
+        if( $request->hasFile('logo'))
+                {
+                    $image = $request->file('logo');
+                    $path = public_path(). '/upload/advisory/';
+                    $filename = time() . '.' . $image->getClientOriginalExtension();
+                    $image->move($path, $filename);
+                    $request->logo = $filename ;
+                    $inputs = $request->except(['_token']);
+                    $inputs["logo"] = $filename;
+                    Advisory::where('id', $id)->update($inputs);
+                }
+                else{
+                    $inputs = $request->except(['_token']);
+                    // dd($inputs);
+                    Advisory::where('id', $id)->update($inputs);
+                }
+        return redirect()->route('advisoryboards')->with('message', 'Data Updated Successfully!');
+    }
+    public function destroy_advisoryboards($id)
+    {
+        Advisory::find($id)->delete();
+        return response()->json(array('success' => true));
+    }
+    public function feature_advisoryboards($id)
+    {
+        $data = Advisory::where('id', $id)->first();
+        // dd($data);
+        if (isset($data) && $data->status == 0) {
+            Advisory::where('id', $id)->update(['status' => 1]);
+        } else {
+            Advisory::where('id', $id)->update(['status' => 0]);
+        }
+        return response()->json(array('success' => true));
+    }
+
+    public function pages(Request $request)
+    {
+        $sponsor = Pagemanager::all();
+        return view ('admin.page-manager.index',compact('sponsor'));
+    }
+    public function add_pages(Request $request)
+    {
+        return view ('admin.page-manager.add');
+    }
+    public function create_pages (Request $request)
+    {
+
+        $filename = "";
+
+        if( $request->hasFile('page_image'))
+                {
+                    $image = $request->file('page_image');
+                    $path = public_path(). '/upload/pages/';
+                    $filename = time() . '.' . $image->getClientOriginalExtension();
+                    $image->move($path, $filename);
+                    $request->page_image = $filename ;
+                }
+        $inputs = $request->all();
+        $inputs["page_image"] = $filename;
+        $user = Auth::user()->id;
+        $inputs["user_id"] = $user;
+        // dd($inputs);
+        Pagemanager::create($inputs);
+
+        return redirect()->route('pages')->with('message','Data created successfully!');
+    }
+    public function edit_pages(Request $request ,$id)
+    {
+   $data = Pagemanager::find($id);
+//    dd($data);
+   return view ('admin.page-manager.edit',compact('data'));
+    }
+    public function update_pages(Request $request , $id)
+    {
+        $filename = "";
+
+        if( $request->hasFile('page_image'))
+                {
+                    $image = $request->file('page_image');
+                    $path = public_path(). '/upload/pages/';
+                    $filename = time() . '.' . $image->getClientOriginalExtension();
+                    $image->move($path, $filename);
+                    $request->page_image = $filename ;
+        $inputs = $request->except(['_token']);
+        $inputs["page_image"] = $filename;
+        Pagemanager::where('id', $id)->update($inputs);
+        }
+        else{
+            $inputs = $request->except(['_token']);
+            // dd($inputs);
+            Pagemanager::where('id', $id)->update($inputs);
+        }
+        return redirect()->route('pages')->with('message', 'Data Updated Successfully!');
+    }
+    public function destroy_pages($id)
+    {
+        Pagemanager::find($id)->delete();
+        return response()->json(array('success' => true));
+    }
+
+    public function news(Request $request)
+    {
+        $sponsor = News::all();
+        return view ('admin.news.index',compact('sponsor'));
+    }
+    public function add_news(Request $request)
+    {
+        $catagory = Category::all();
+        return view ('admin.news.add',compact('catagory'));
+    }
+    public function create_news (Request $request)
+    {
+
+        $filename = "";
+
+        if( $request->hasFile('featured_image'))
+                {
+                    $image = $request->file('featured_image');
+                    $path = public_path(). '/upload/news/';
+                    $filename = time() . '.' . $image->getClientOriginalExtension();
+                    $image->move($path, $filename);
+                    $request->featured_image = $filename ;
+                }
+        $inputs = $request->all();
+        $inputs["featured_image"] = $filename;
+        $user = Auth::user()->id;
+        $inputs["user_id"] = $user;
+        // dd($inputs);
+        News::create($inputs);
+
+        return redirect()->route('news')->with('message','Data created successfully!');
+    }
+    public function edit_news(Request $request ,$id)
+    {
+   $data = News::find($id);
+//    dd($data);
+   return view ('admin.news.edit',compact('data'));
+    }
+    public function update_news(Request $request , $id)
+    {
+        $filename = "";
+
+        if( $request->hasFile('featured_image'))
+                {
+                    $image = $request->file('featured_image');
+                    $path = public_path(). '/upload/news/';
+                    $filename = time() . '.' . $image->getClientOriginalExtension();
+                    $image->move($path, $filename);
+                    $request->featured_image = $filename ;
+        $inputs = $request->except(['_token']);
+        $inputs["featured_image"] = $filename;
+        News::where('id', $id)->update($inputs);
+        }
+        else{
+            $inputs = $request->except(['_token']);
+            // dd($inputs);
+            News::where('id', $id)->update($inputs);
+        }
+        return redirect()->route('news')->with('message', 'Data Updated Successfully!');
+    }
+    public function destroy_news($id)
+    {
+        News::find($id)->delete();
         return response()->json(array('success' => true));
     }
 }

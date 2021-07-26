@@ -42,7 +42,7 @@ class TrainerController extends Controller
 
     public function tedit_courses($id)
     {
-        
+
         $catagory = Category::all();
         $data = Course::find($id);
         // dd($data);
@@ -342,7 +342,7 @@ class TrainerController extends Controller
         Test::find($id)->delete();
         return response()->json(array('success' => true));
     }
-    
+
     public function taccount()
     {
         $data = User::where('id',Auth::user()->id)
@@ -527,8 +527,8 @@ class TrainerController extends Controller
 
         $data = $request->all();
         // dd($data);
-        $quest = Quesstion::join('tests', 'tests.id', '=', 'quesstions.test')
-        ->where('quesstions.test',$data)
+        $quest = Quesstion::join('tests', 'tests.id', '=', 'quesstions.tests')
+        ->where('quesstions.tests',$data)
         ->orwhere('quesstions.user_id',Auth::user()->id)
         ->get();
         //  dd($lesson);
