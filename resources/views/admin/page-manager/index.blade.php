@@ -9,8 +9,13 @@
             <div class="content-header">
                                         </div><!--content-header-->
 
-
-<div class="card">
+        <div class="row">
+            @if (session('error') || session('message'))
+            <div class="alert alert-success" style=" width: 100%;">
+            <span class="{{ session('error') ? 'error':'success' }}">{{ session('error') ?? session('message') }}</span>
+        </div>
+        @endif
+<div class="card" style="width: 100%">
     <div class="card-header">
         <h3 class="page-title float-left d-inline">Pages</h3>
                     <div class="float-right">
@@ -19,6 +24,8 @@
         </div>
             </div>
 <div class="card-body">
+    
+
 <div class="row">
     <div class="col-12">
         <div class="table-responsive">

@@ -2,14 +2,18 @@
 
 @section('content')
 <main class="main">
-                                
-
+    
     <div class="container-fluid" style="padding-top: 30px">
         <div class="animated fadeIn">
             <div class="content-header">
                                         </div><!--content-header-->
 
-                                    
+<div class="row">
+    @if (session('error') || session('message'))
+    <div class="alert alert-success" style=" width: 100%;">
+    <span class="{{ session('error') ? 'error':'success' }}">{{ session('error') ?? session('message') }}</span>
+</div>
+@endif                                  
 <div class="card">
 <div class="card-header">
                 <h3 class="page-title d-inline">create advisory body</h3>
@@ -20,6 +24,7 @@
 
 </div>
 <div class="card-body">
+    
 <div class="row collapse" id="createCat" style="">
     <div class="col-12">
     <form method="POST" action="{{ route('create_advisoryboards') }}" accept-charset="UTF-8" enctype="multipart/form-data">

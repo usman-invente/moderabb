@@ -79,8 +79,8 @@
                 <tr class="row-{{$val->id}}" id="row-{{$val->id}}">
                     <td>{{ $val->id }}</td>
                     <td>{{ $val->name }}</td>
-                    <td><img src="{{asset('upload/partner/'.$val->logo)}}" height="80" width="180" style="margin-top: 10px"></td>
-                    <td>{{ $val->link }}</td>
+                    <td><img src="{{asset('upload/advisory/'.$val->logo)}}" height="80" width="180" style="margin-top: 10px"></td>
+                    <td>{{ $val->web_link }}</td>
                     <td>@if($val->status == 0)
                         <p class="text-white mb-1 font-weight-bold text-center bg-dark p-1 mr-1">Disabled</p>
                         @endif

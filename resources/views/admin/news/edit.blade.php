@@ -1,6 +1,24 @@
 @extends('layouts.app')
 
 @section('content')
+<style>
+    .select2-container .select2-selection--single {
+        box-sizing: border-box;
+        cursor: pointer;
+        display: block;
+        height: 39px !important;
+        user-select: none;
+        -webkit-user-select: none;
+    }
+    .select2-selection--multiple .select2-selection__rendered {
+        box-sizing: border-box;
+        list-style: none;
+        margin: 0;
+        padding: 0 5px;
+        width: 100%;
+        height: 38px !important;
+    }
+</style>
 <main class="main">
 
 
@@ -8,69 +26,72 @@
         <div class="animated fadeIn">
             <div class="content-header">
                                         </div><!--content-header-->
-<form method="POST" action="{{ route('update_pages',$data->id) }}" accept-charset="UTF-8" enctype="multipart/form-data">
+<form method="POST" action="{{ route('update_news',$data->id) }}" accept-charset="UTF-8" enctype="multipart/form-data">
 @csrf
     <div class="card">
 <div class="card-header">
-<h3 class="page-title float-left mb-0">create page</h3>
+<h3 class="page-title float-left mb-0">update News</h3>
 <div class="float-right">
-    <a href="{{ route('pages') }}" class="btn btn-success">view pages</a>
+    <a href="{{ route('news') }}" class="btn btn-success">view News</a>
 </div>
 </div>
 
 <div class="card-body">
 <div class="row">
-    <div class="col-12 form-group">
+    <div class="col-6 form-group">
         <label for="title" class="control-label">title</label>
-        <input class="form-control" placeholder="title" value="{{ $data->title }}" name="title" type="text" id="title">
+        <input class="form-control" placeholder="title" value="{{ $data->title}}" name="title" type="text" id="title">
     </div>
+    <div class="col-6 form-group">
+            <label for="category_id" class="control-label">Category *</label>
+            <select class="form-control select2 js-example-placeholder-single select2bs4" required=""
+                id="category" name="category" tabindex="-1" aria-hidden="true">
 
+                @foreach ($catagory as $cata)
+                    {{--  <option value="{{ $cata->id }}">{{ $cata->name }}</option>  --}}
+                    <option value="{{ $cata->id }}" @if($data->category == $cata->id) ? selected : null @endif >{{ $cata->name }}</option>
+                @endforeach
+            </select>
+    </div>
 </div>
 
 <div class="row">
     <div class="col-12 col-lg-6 form-group">
         <label for="slug" class="control-label">Url</label>
-        <input class="form-control" placeholder="Url will be created automatically" value="{{ $data->slug }}" name="slug" type="text" id="slug">
+        <input class="form-control" placeholder="Url will be created automatically" value="{{ $data->slug}}" name="slug" type="text" id="slug">
 
     </div>
     <div class="col-12 col-lg-6 form-group">
         <label for="page_image" class="control-label">Featured Image (Maximum file size 10MB)</label>
-        <input class="form-control" accept="image/jpeg,image/gif,image/png" name="page_image" type="file" id="page_image">
-        <img src="{{asset('upload/pages/'.$data->page_image)}}" height="80" width="180" style="margin-top: 10px">
+        <input class="form-control" accept="image/jpeg,image/gif,image/png" name="featured_image" type="file" id="page_image">
+        <img src="{{asset('upload/news/'.$data->featured_image)}}" height="80" width="180" style="margin-top: 10px">
     </div>
 </div>
 <div class="row">
     <div class="col-12 form-group">
         <label for="content" class="control-label">content</label>
-        <textarea class="form-control summernote" placeholder=""  name="content" cols="50" rows="40" id="goals">{{ $data->content }}</textarea>
+        <textarea class="form-control summernote" placeholder="" name="content" cols="50" rows="40" id="goals">{{ $data->content}}</textarea>
     </div>
 </div>
 
 <div class="row">
     <div class="col-12 form-group">
+        <label for="meta_title" class="control-label">tags</label>
+        <input class="form-control" placeholder="tags here" value="{{ $data->tags}}" name="tags" type="text" id="tags">
+
+    </div>
+    <div class="col-12 form-group">
         <label for="meta_title" class="control-label">meta title</label>
-        <input class="form-control" placeholder="meta title" name="meta_title" value="{{ $data->meta_title }}" type="text" id="meta_title">
+        <input class="form-control" placeholder="meta title" name="meta_title" value="{{ $data->meta_title}}" type="text" id="meta_title">
 
     </div>
     <div class="col-12 form-group">
         <label for="meta_description" class="control-label">meta description</label>
-        <textarea class="form-control" placeholder="meta description"  name="meta_description" cols="50" rows="10" id="meta_description">{{ $data->meta_description }}</textarea>
+        <textarea class="form-control" placeholder="meta description" name="meta_description" cols="50" rows="10" id="meta_description">{{ $data->meta_description}}</textarea>
     </div>
     <div class="col-12 form-group">
         <label for="meta_keywords" class="control-label">Tags</label>
         <textarea class="form-control" placeholder="Tags" name="meta_keywords" cols="50" rows="10" id="meta_keywords">{{ $data->meta_keywords}}</textarea>
-    </div>
-    <div class="col-12 form-group">
-        <div class="checkbox d-inline mr-3">
-            <input name="published" type="hidden" value="0"{{$data->published==1 ? 'checked' : ''}}>
-            <input name="published" type="checkbox" value="1" {{$data->published==1 ? 'checked' : ''}}>
-            <label for="published" class="checkbox control-label font-weight-bold">published</label>
-        </div>
-        <div class="checkbox d-inline mr-3">
-            <input name="sidebar" type="hidden" value="0" {{$data->sidebar==1 ? 'checked' : ''}}>
-            <input name="sidebar" type="checkbox" value="1" {{$data->sidebar==1 ? 'checked' : ''}}>
-            <label for="sidebar" class="checkbox control-label font-weight-bold">add sidebar</label>
-        </div>
     </div>
 </div>
 <div class="row">

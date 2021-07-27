@@ -120,7 +120,6 @@ Route::get('/edit-lessons/{id}', [App\Http\Controllers\AdminController::class, '
 Route::post('/update-lessons/{id}', [App\Http\Controllers\AdminController::class, 'update_lessons'])->name('update_lessons');
 Route::get('/delete-lessons/{id}', [App\Http\Controllers\AdminController::class, 'destroy_lessons'])->name('destroy_lessons');
 
-
 //front end routes
 Route::get('course/{slug}', [App\Http\Controllers\WebSiteController::class, 'singleCourse'])->name('singlecourse');
 //checkout
@@ -196,10 +195,36 @@ Route::get('/edit-news/{id}', [App\Http\Controllers\AdminController::class, 'edi
 Route::post('/update-news/{id}', [App\Http\Controllers\AdminController::class, 'update_news'])->name('update_news');
 Route::get('/delete-news/{id}', [App\Http\Controllers\AdminController::class, 'destroy_news'])->name('destroy_news');
 
+////////// Faqs //////////
+Route::get('/faqs', [App\Http\Controllers\AdminController::class, 'faqs'])->name('faqs');
+Route::get('/add-faqs', [App\Http\Controllers\AdminController::class, 'add_faqs'])->name('add_faqs');
+Route::post('/create-faqs', [App\Http\Controllers\AdminController::class, 'create_faqs'])->name('create_faqs');
+Route::get('/edit-faqs/{id}', [App\Http\Controllers\AdminController::class, 'edit_faqs'])->name('edit_faqs');
+Route::post('/update-faqs/{id}', [App\Http\Controllers\AdminController::class, 'update_faqs'])->name('update_faqs');
+Route::get('/delete-faqs/{id}', [App\Http\Controllers\AdminController::class, 'destroy_faqs'])->name('destroy_faqs');
+Route::get('/feature-faqs/{id}', [App\Http\Controllers\AdminController::class, 'feature_faqs'])->name('feature_faqs');
+
+////////// testimonials //////////
+Route::get('/testimonials', [App\Http\Controllers\AdminController::class, 'testimonials'])->name('testimonials');
+Route::get('/add-testimonials', [App\Http\Controllers\AdminController::class, 'add_testimonials'])->name('add_testimonials');
+Route::post('/create-testimonials', [App\Http\Controllers\AdminController::class, 'create_testimonials'])->name('create_testimonials');
+Route::get('/edit-testimonials/{id}', [App\Http\Controllers\AdminController::class, 'edit_testimonials'])->name('edit_testimonials');
+Route::post('/update-testimonials/{id}', [App\Http\Controllers\AdminController::class, 'update_testimonials'])->name('update_testimonials');
+Route::get('/delete-testimonials/{id}', [App\Http\Controllers\AdminController::class, 'destroy_testimonials'])->name('destroy_testimonials');
+Route::get('/feature-testimonials/{id}', [App\Http\Controllers\AdminController::class, 'feature_testimonials'])->name('feature_testimonials');
+
+////////// Why a language trainer //////////
+Route::get('/reasons', [App\Http\Controllers\AdminController::class, 'reasons'])->name('reasons');
+Route::get('/add-reasons', [App\Http\Controllers\AdminController::class, 'add_reasons'])->name('add_reasons');
+Route::post('/create-reasons', [App\Http\Controllers\AdminController::class, 'create_reasons'])->name('create_reasons');
+Route::get('/edit-reasons/{id}', [App\Http\Controllers\AdminController::class, 'edit_reasons'])->name('edit_reasons');
+Route::post('/update-reasons/{id}', [App\Http\Controllers\AdminController::class, 'update_reasons'])->name('update_reasons');
+Route::get('/delete-reasons/{id}', [App\Http\Controllers\AdminController::class, 'destroy_reasons'])->name('destroy_reasons');
+Route::get('/feature-reasons/{id}', [App\Http\Controllers\AdminController::class, 'feature_reasons'])->name('feature_reasons');
 
 ////////// Tax //////////
 Route::get('/tax', [App\Http\Controllers\AdminController::class, 'tax'])->name('tax');
-Route::get('/add-tax', [App\Http\Controllers\AdminController::class, 'add_tax'])->name('add_test');
+Route::get('/add-tax', [App\Http\Controllers\AdminController::class, 'add_tax'])->name('add_tax');
 Route::post('/create-tax', [App\Http\Controllers\AdminController::class, 'create_tax'])->name('create_tax');
 Route::get('/edit-tax/{id}', [App\Http\Controllers\AdminController::class, 'edit_tax'])->name('edit_tax');
 Route::post('/update-tax/{id}', [App\Http\Controllers\AdminController::class, 'update_tax'])->name('update_tax');
@@ -214,7 +239,6 @@ Route::get('/edit-coupon/{id}', [App\Http\Controllers\AdminController::class, 'e
 Route::post('/update-coupon/{id}', [App\Http\Controllers\AdminController::class, 'update_coupon'])->name('update_coupon');
 Route::get('/delete-coupon/{id}', [App\Http\Controllers\AdminController::class, 'destroy_coupon'])->name('destroy_coupon');
 Route::get('/coupon-status/{id}', [App\Http\Controllers\AdminController::class, 'coupon_status'])->name('coupon_status');
-
 
 ////////// Account //////////
 Route::get('/account', [App\Http\Controllers\AdminController::class, 'account'])->name('account');

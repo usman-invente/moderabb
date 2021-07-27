@@ -1,62 +1,46 @@
 @extends('layouts.app')
 
 @section('content')
-<main class="main">
-    
-    <div class="container-fluid" style="padding-top: 30px">
-        <div class="animated fadeIn">
-            <div class="content-header">
-                                        </div><!--content-header-->
-    <div class="row">
+<style>
+    .select2-container .select2-selection--single {
+        box-sizing: border-box;
+        cursor: pointer;
+        display: block;
+        height: 39px !important;
+        user-select: none;
+        -webkit-user-select: none;
+    }
+    .select2-selection--multiple .select2-selection__rendered {
+        box-sizing: border-box;
+        list-style: none;
+        margin: 0;
+        padding: 0 5px;
+        width: 100%;
+        height: 38px !important;
+    }
+</style>
+<div class="container-fluid" style="padding-top: 30px">
+    <div class="animated fadeIn">
+        <div class="content-header">
+                                    </div><!--content-header-->
+
+                                    <div class="card">
+<div class="card-header">
+<h3 class="page-title float-left d-inline">They said about the language trainer platform</h3>
+            <div class="float-right">
+    <a href="{{ route('add_testimonials') }}" class="btn btn-success">Add new</a>
+
+</div>
+    </div>
+<div class="card-body">
+<div class="row">
     @if (session('error') || session('message'))
     <div class="alert alert-success" style=" width: 100%;">
     <span class="{{ session('error') ? 'error':'success' }}">{{ session('error') ?? session('message') }}</span>
-    </div>
-    @endif                                           
-<div class="card" style="width: 100%">
-<div class="card-header">
-                <h3 class="page-title d-inline">create our partners</h3>
-    <div class="float-right">
-        <a data-toggle="collapse" id="createCatBtn" data-target="#createCat" href="#" class="btn btn-success collapsed" aria-expanded="false">Add new</a>
-
-    </div>
-
 </div>
-<div class="card-body">
-<div class="row collapse" id="createCat" style="">
-    <div class="col-12">
-    <form method="POST" action="{{ route('create_sponsors') }}" accept-charset="UTF-8" enctype="multipart/form-data">
-        @csrf
-        <div class="row">
-            <div class="col-lg-4 col-12 form-group mb-0">
-                <label for="name" class="control-label">name *</label>
-                <input class="form-control" placeholder="name" name="name" type="text" id="name">
-
-            </div>
-            <div class="col-lg-4 col-12 form-group mb-0">
-                <label for="link" class="control-label">link</label>
-                <input class="form-control" placeholder="link" name="link" type="text" id="link">
-            </div>
-
-            <div class="col-lg-4 col-12 form-group mb-0">
-
-                <label for="logo" class="control-label d-block">logo</label>
-                <input class="form-control d-inline-block" placeholder="" name="logo" type="file" id="logo">
-            </div>
-            <div class="col-12 form-group mt-3 text-center  mb-0 ">
-
-                <input class="btn mt-auto  btn-danger" type="submit" value="Save">
-            </div>
-        </div>
-
-        </form>
-            <hr>
-
-
-    </div>
-
+@endif
 </div>
-<div class="row">
+<div class="d-block">
     <div class="col-12">
         <div class="table-responsive">
             <div id="myTable_wrapper" class="dataTables_wrapper no-footer">
@@ -65,44 +49,44 @@
                 <tr role="row">
                     <th >Number</th>
                     <th >Name</th>
-                    <th >Logo</th>
-                    <th >Link</th>
+                    <th >Title</th>
+                    <th >Content</th>
                     <th >Status</th>
                     <th >Actions</th>
                 </tr>
             </thead>
                 <tbody>
-                @foreach ($sponsor as $val)
+                @foreach ($testi as $val)
                 <tr class="row-{{$val->id}}" id="row-{{$val->id}}">
                     <td>{{ $val->id }}</td>
                     <td>{{ $val->name }}</td>
-                    <td><img src="{{asset('upload/partner/'.$val->logo)}}" height="80" width="180" style="margin-top: 10px"></td>
-                    <td>{{ $val->link }}</td>
-                    <td>@if($val->status == 0)
-                        <p class="text-white mb-1 font-weight-bold text-center bg-dark p-1 mr-1">Disabled</p>
-                        @endif
-                        @if($val->status == 1)
-                        <p class="text-white mb-1 font-weight-bold text-center bg-warning p-1 mr-1">Enabled</p>
+                    <td>{{ $val->title }}</td>
+                    <td>{{ $val->content }}</td>
+                    <td>@if($val->status == 1)
+                        <p class="text-white mb-1 font-weight-bold text-center bg-dark p-1 mr-1">Enable</p>
+                        @elseif($val->status == 0)
+                        <p class="text-white mb-1 font-weight-bold text-center bg-info p-1 mr-1">Disable</p>
                         @endif
                     </td>
                     <td>
-                        <a class="btn mb-1 mr-1 btn-danger" href="javascript:void(0);"data-id="{{ $val->id }}" data-action="{{ route('feature_sponsor',$val->id) }}" onclick="featureConfirmation({{$val->id}})"><i class="fa fa-power-off"></i><a>
-                        <a href="{{route('edit_sponsors',$val->id)}}" class="btn btn-info mb-1" ><i class="fas fa-edit"></i></a>
-                        <a class="btn btn-danger mb-1" href="javascript:void(0);"data-id="{{ $val->id }}" data-action="{{ route('destroy_sponsors',$val->id) }}" onclick="deleteConfirmation({{$val->id}})"><i class="fa fa-trash"></i><a>
-                    </td>
+                        <a class="btn mb-1 mr-1 btn-danger" href="javascript:void(0);" data-id="1" data-action="{{ route('feature_testimonials',$val->id) }}" onclick="featureConfirmation(1)"><i class="fa fa-power-off"></i></a>
+                        <a href="{{route('edit_testimonials',$val->id)}}" class="btn btn-info mb-1" ><i class="fas fa-edit"></i></a>
+                        <a class="btn btn-danger mb-1" href="javascript:void(0);"data-id="{{ $val->id }}" data-action="{{ route('destroy_testimonials',$val->id) }}" onclick="deleteConfirmation({{$val->id}})"><i class="fa fa-trash"></i><a>
+
                 </tr>
                 @endforeach
                 </tbody>
             </table></div>
     </div>
-    </div>
 </div>
+
+
 </div>
 </div>
 
-        </div><!--animated-->
-    </div><!--container-fluid-->
-</main>
+    </div><!--animated-->
+</div>
+
 <script type="text/javascript">
 
     function deleteConfirmation(id) {
@@ -121,7 +105,7 @@
 
                 $.ajax({
                     type: 'GET',
-                    url: "{{url('/delete-sponsors')}}/" + id,
+                    url: "{{url('/delete-testimonials')}}/" + id,
                     data: {_token: CSRF_TOKEN},
                     dataType: 'JSON',
                     success: function (results) {
@@ -162,7 +146,7 @@
 
                 $.ajax({
                     type: 'GET',
-                    url: "{{url('/feature-sponsors')}}/" + id,
+                    url: "{{url('/feature-testimonials')}}/" + id,
                     data: {_token: CSRF_TOKEN},
                     dataType: 'JSON',
                     success: function (results) {

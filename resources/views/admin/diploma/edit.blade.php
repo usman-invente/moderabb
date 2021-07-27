@@ -24,7 +24,7 @@
         <div class="content-header">
                                     </div><!--content-header-->
 
-                                
+
 <form method="POST" action="{{route('update_diploma',$data->id)}}" accept-charset="UTF-8" enctype="multipart/form-data">
 @csrf
 <div class="card">
@@ -39,19 +39,19 @@
             <div class="row">
     <div class="col-10 form-group">
         <label for="teachers" class="control-label">courses *</label>
-         <?php 
+         <?php
                   $courses=array();
                   $newdata = unserialize($data->courses);
-                  
+
               if ($newdata == true) {
                 $courses=unserialize($data->courses);
                 {{--  print_r($courses);  --}}
               } else {
                 array_push($courses,$data->courses);
-              //  $loan_type=$data->loan_type;
+
               }
         ?>
-        
+
         <select class="form-control select2 js-example-placeholder-multiple select2bs4" required multiple="multiple" name="courses[]">
             @foreach ($cour as $tran)
             <option value="{{ $tran->id }}" <?php if (isset($courses) && in_array($tran->id , $courses)) echo 'selected'; ?>>{{ $tran->title }}</option>
@@ -66,7 +66,7 @@
     <div class="col-10 form-group">
         <label for="e3tmad_id" class="control-label">accreditation body *</label>
         <select class="form-control select2 js-example-placeholder-single select2bs4" required="" id="e3tmad_id" name="eccbody_id" tabindex="-1" aria-hidden="true">
-            
+
             @foreach ($abody as $accer)
             {{--  <option value="{{ $accer->id }}">{{ $accer->name }}</option>  --}}
             <option value="{{ $accer->id }}" @if($data->eccbody_id == $accer->id) ? selected : null @endif >{{ $accer->name }}</option>
@@ -79,7 +79,7 @@
 <div class="col-10 form-group">
     <label for="category_id" class="control-label">Category *</label>
     <select class="form-control select2 js-example-placeholder-single select2bs4" required="" id="category_id" name="category_id" tabindex="-1" aria-hidden="true">
-        
+
         @foreach ($catagory as $cata)
             {{--  <option value="{{ $cata->id }}">{{ $cata->name }}</option>  --}}
             <option value="{{ $cata->id }}" @if($data->category_id == $cata->id) ? selected : null @endif >{{ $cata->name }}</option>
@@ -201,7 +201,7 @@
         <input name="free" type="checkbox" value="1" {{$data->free==1 ? 'checked' : ''}}>
         <label for="free" class="checkbox control-label font-weight-bold">free</label>
     </div>
-    
+
     <div class="checkbox d-inline mr-3">
         <input name="c_purchase" type="hidden" value="0">
         <input name="c_purchase" type="checkbox" value="1" {{$data->c_purchase==1 ? 'checked' : ''}}>

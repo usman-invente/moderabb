@@ -1,22 +1,25 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\TrainingNeed;
 use App\Models\Advisory;
 use App\Models\Category;
 use App\Models\Contact;
 use App\Models\Coupon;
 use App\Models\Course;
 use App\Models\Diploma;
+use App\Models\Faq;
 use App\Models\Lesson;
 use App\Models\News;
 use App\Models\Ourpartner;
 use App\Models\Pagemanager;
 use App\Models\Quesstion;
+use App\Models\Reason;
 use App\Models\Schedule;
 use App\Models\Tax;
 use App\Models\User;
 use App\Models\Test;
+use App\Models\Testimonial;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -1486,8 +1489,9 @@ class AdminController extends Controller
     public function edit_news(Request $request ,$id)
     {
    $data = News::find($id);
+   $catagory = Category::all();
 //    dd($data);
-   return view ('admin.news.edit',compact('data'));
+   return view ('admin.news.edit',compact('data','catagory'));
     }
     public function update_news(Request $request , $id)
     {
@@ -1514,6 +1518,183 @@ class AdminController extends Controller
     public function destroy_news($id)
     {
         News::find($id)->delete();
+        return response()->json(array('success' => true));
+    }
+
+    public function faqs(Request $request)
+    {
+        $faq = Faq::all();
+        return view ('admin.Faqs.index',compact('faq'));
+    }
+    public function add_faqs(Request $request)
+    {
+        $catagory = Category::all();
+        return view ('admin.Faqs.add',compact('catagory'));
+    }
+    public function create_faqs(Request $request)
+    {
+        $inputs = $request->all();
+        $user = Auth::user()->id;
+        $inputs["user_id"] = $user;
+        // dd($inputs);
+        Faq::create($inputs);
+
+        return redirect()->route('faqs')->with('message','Data created successfully!');
+    }
+    public function edit_faqs(Request $request ,$id)
+    {
+   $data = Faq::find($id);
+   $catagory = Category::all();
+//    dd($data);
+   return view ('admin.Faqs.edit',compact('data','catagory'));
+    }
+    public function update_faqs(Request $request , $id)
+    {
+            $inputs = $request->except(['_token']);
+            // dd($inputs);
+            Faq::where('id', $id)->update($inputs);
+        return redirect()->route('faqs')->with('message', 'Data Updated Successfully!');
+    }
+    public function destroy_faqs($id)
+    {
+        Faq::find($id)->delete();
+        return response()->json(array('success' => true));
+    }
+    public function feature_faqs($id)
+    {
+        $data = Faq::where('id', $id)->first();
+        // dd($data);
+        if (isset($data) && $data->status == 0) {
+            Faq::where('id', $id)->update(['status' => 1]);
+        } else {
+            Faq::where('id', $id)->update(['status' => 0]);
+        }
+        return response()->json(array('success' => true));
+    }
+
+    public function testimonials(Request $request)
+    {
+        $testi = Testimonial::all();
+        return view ('admin.testimonials.index',compact('testi'));
+    }
+    public function add_testimonials(Request $request)
+    {
+        $catagory = Category::all();
+        return view ('admin.testimonials.add',compact('catagory'));
+    }
+    public function create_testimonials(Request $request)
+    {
+
+        $filename = "";
+
+        if( $request->hasFile('image'))
+                {
+                    $image = $request->file('image');
+                    $path = public_path(). '/upload/testimonials/';
+                    $filename = time() . '.' . $image->getClientOriginalExtension();
+                    $image->move($path, $filename);
+                    $request->image = $filename ;
+                }
+        $inputs = $request->all();
+        $inputs["image"] = $filename;
+        $user = Auth::user()->id;
+        $inputs["user_id"] = $user;
+        //  dd($inputs);
+        Testimonial::create($inputs);
+
+        return redirect()->route('testimonials')->with('message','Data created successfully!');
+    }
+    public function edit_testimonials(Request $request ,$id)
+    {
+   $data = Testimonial::findOrFail($id);
+//    dd($data);
+   return view ('admin.testimonials.edit',compact('data'));
+    }
+    public function update_testimonials(Request $request , $id)
+    {
+        $filename = "";
+
+        if( $request->hasFile('image'))
+                {
+                    $image = $request->file('image');
+                    $path = public_path(). '/upload/testimonials/';
+                    $filename = time() . '.' . $image->getClientOriginalExtension();
+                    $image->move($path, $filename);
+                    $request->image = $filename ;
+        $inputs = $request->except(['_token']);
+        $inputs["image"] = $filename;
+        Testimonial::where('id', $id)->update($inputs);
+        }
+        else{
+            $inputs = $request->except(['_token']);
+            // dd($inputs);
+            Testimonial::where('id', $id)->update($inputs);
+        }
+        return redirect()->route('testimonials')->with('message', 'Data Updated Successfully!');
+    }
+    public function destroy_testimonials($id)
+    {
+        Testimonial::find($id)->delete();
+        return response()->json(array('success' => true));
+    }
+    public function feature_testimonials($id)
+    {
+        $data = Testimonial::where('id', $id)->first();
+        // dd($data);
+        if (isset($data) && $data->status == 0) {
+            Testimonial::where('id', $id)->update(['status' => 1]);
+        } else {
+            Testimonial::where('id', $id)->update(['status' => 0]);
+        }
+        return response()->json(array('success' => true));
+    }
+
+    public function reasons(Request $request)
+    {
+        $reason = Reason::all();
+        return view ('admin.Why-a-language-trainer.index',compact('reason'));
+    }
+    public function add_reasons(Request $request)
+    {
+        return view ('admin.Why-a-language-trainer.add');
+    }
+    public function create_reasons(Request $request)
+    {
+        $inputs = $request->all();
+        $user = Auth::user()->id;
+        $inputs["user_id"] = $user;
+        // dd($inputs);
+        Reason::create($inputs);
+
+        return redirect()->route('reasons')->with('message','Data created successfully!');
+    }
+    public function edit_reasons(Request $request ,$id)
+    {
+   $data = Reason::find($id);
+//    dd($data);
+   return view ('admin.Why-a-language-trainer.edit',compact('data'));
+    }
+    public function update_reasons(Request $request , $id)
+    {
+            $inputs = $request->except(['_token']);
+            // dd($inputs);
+            Reason::where('id', $id)->update($inputs);
+        return redirect()->route('reasons')->with('message', 'Data Updated Successfully!');
+    }
+    public function destroy_reasons($id)
+    {
+        Reason::find($id)->delete();
+        return response()->json(array('success' => true));
+    }
+    public function feature_reasons($id)
+    {
+        $data = Reason::where('id', $id)->first();
+        // dd($data);
+        if (isset($data) && $data->status == 0) {
+            Reason::where('id', $id)->update(['status' => 1]);
+        } else {
+            Reason::where('id', $id)->update(['status' => 0]);
+        }
         return response()->json(array('success' => true));
     }
 }

@@ -182,13 +182,31 @@
                         <li class="nav-item">
                             <a href="{{ route('advisoryboards') }}" class="nav-link">
 
-                                <p>Advisory Board</p>
+                                <p>Advisory Body</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('news') }}" class="nav-link">
 
                                 <p>News</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('faqs') }}" class="nav-link">
+
+                                <p>Frequently Asked Questions</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('testimonials') }}" class="nav-link">
+
+                                <p>They said about the language trainer platform</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('reasons') }}" class="nav-link">
+
+                                <p>Why a language trainer</p>
                             </a>
                         </li>
                     </ul>
