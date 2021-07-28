@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\TrainingNeed;
+
 use App\Models\Advisory;
 use App\Models\Category;
 use App\Models\Contact;
@@ -11,19 +11,20 @@ use App\Models\Diploma;
 use App\Models\Faq;
 use App\Models\Lesson;
 use App\Models\News;
+use App\Models\Newsletter;
 use App\Models\Ourpartner;
 use App\Models\Pagemanager;
 use App\Models\Quesstion;
 use App\Models\Reason;
 use App\Models\Schedule;
 use App\Models\Tax;
-use App\Models\User;
 use App\Models\Test;
 use App\Models\Testimonial;
+use App\Models\TrainingNeed;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 class AdminController extends Controller
 {
@@ -342,20 +343,21 @@ class AdminController extends Controller
     }
     public function create_categories(Request $request)
     {
-        $filename = "";
+    
+        $name='';
         if ($request->hasFile('image')) {
             $image = $request->file('image');
+            $name = time().'.'.$image->getClientOriginalExtension();
             $path = public_path() . '/upload/courseimage/';
-            $filename = time() . '.' . $image->getClientOriginalExtension();
-            $image->move($path, $filename);
-            $request->image = $filename;
+            $image->move($destinationPath, $name);
         }
-        $inputs = $request->all();
-        $inputs["image"] = $filename;
-        $user = Auth::user()->id;
-        $inputs["user_id"] = $user;
-        // dd($inputs);
-        Category::create($inputs);
+ 
+        $category = new Category;
+        $category->name = $request->name; 
+        $category->image = $name; 
+        $category->icon = $request->icon?$request->icon:NULL; 
+        $category->user_id = Auth::user()->id;
+        $category->save();
         return redirect()->route('categories')->with('message', 'Data Created Successfully!');
     }
     public function edit_categories(Request $request, $id)
@@ -506,13 +508,13 @@ class AdminController extends Controller
     public function courses()
     {
         $data = User::join('courses', 'users.id', '=', 'courses.teachers')
-        ->get();
+            ->get();
         // $data = Course::join('users', 'courses.teachers', '=', 'users.id')
         // ->join('categories', 'courses.category_id', '=', 'categories.id')
         // ->select('courses.*', 'users.name', 'users.title','categories.name')
         // ->get();
         $catagory = Category::all();
-        return view ('admin.courses.index',compact('data','catagory'));
+        return view('admin.courses.index', compact('data', 'catagory'));
     }
     public function add_courses()
     {
@@ -526,7 +528,7 @@ class AdminController extends Controller
         $inputs = $request->all();
         if ($request->hasFile('course_image')) {
             $image = $request->file('course_image');
-            $name = time().'.'.$image->getClientOriginalExtension();
+            $name = time() . '.' . $image->getClientOriginalExtension();
             $destinationPath = public_path('/image/courses');
             $image->move($destinationPath, $name);
             $inputs['course_image'] = $name;
@@ -534,14 +536,14 @@ class AdminController extends Controller
         }
         if ($request->hasFile('certificate')) {
             $image = $request->file('certificate');
-            $name = time().'.'.$image->getClientOriginalExtension();
+            $name = time() . '.' . $image->getClientOriginalExtension();
             $destinationPath = public_path('/image/certificate');
             $image->move($destinationPath, $name);
             $inputs['certificate'] = $name;
 
         }
         $user = Auth::user()->id;
-        $inputs["user_id"]=$user;
+        $inputs["user_id"] = $user;
         // $teacher = serialize($inputs['teachers']);
         // $inputs["teachers"] = $teacher;
         Course::create($inputs);
@@ -562,7 +564,7 @@ class AdminController extends Controller
         $inputs = $request->except(['_token']);
         if ($request->hasFile('course_image')) {
             $image = $request->file('course_image');
-            $name = time().'.'.$image->getClientOriginalExtension();
+            $name = time() . '.' . $image->getClientOriginalExtension();
             $destinationPath = public_path('/image/courses');
             $image->move($destinationPath, $name);
             $inputs['course_image'] = $name;
@@ -570,7 +572,7 @@ class AdminController extends Controller
         }
         if ($request->hasFile('certificate')) {
             $image = $request->file('certificate');
-            $name = time().'.'.$image->getClientOriginalExtension();
+            $name = time() . '.' . $image->getClientOriginalExtension();
             $destinationPath = public_path('/image/certificate');
             $image->move($destinationPath, $name);
             $inputs['certificate'] = $name;
@@ -601,8 +603,8 @@ class AdminController extends Controller
     {
 
         $data = Diploma::join('categories', 'diplomas.category_id', '=', 'categories.id')
-        ->get();
-        return view ('admin.diploma.index',compact('data'));
+            ->get();
+        return view('admin.diploma.index', compact('data'));
     }
     public function add_diploma()
     {
@@ -616,7 +618,7 @@ class AdminController extends Controller
         $inputs = $request->all();
         // dd($inputs);
         $user = Auth::user()->id;
-        $inputs["user_id"]=$user;
+        $inputs["user_id"] = $user;
         // $teacher = serialize($inputs['courses']);
         // $inputs["courses"] = $teacher;
         Diploma::create($inputs);
@@ -651,9 +653,9 @@ class AdminController extends Controller
         $data = $request->all();
         // dd($data);
         $lesson = Course::join('lessons', 'courses.id', '=', 'lessons.course_id')
-        ->where('courses.id',$data)
-        ->where('lessons.live_lesson', 0)
-        ->get();
+            ->where('courses.id', $data)
+            ->where('lessons.live_lesson', 0)
+            ->get();
         //  dd($lesson);
         $course = Course::all();
         return view('admin.lesson.index', compact('course', 'lesson'));
@@ -695,35 +697,35 @@ class AdminController extends Controller
         $data = $request->all();
         // dd($data);
         $lesson = Course::join('lessons', 'courses.id', '=', 'lessons.course_id')
-        ->where('courses.id',$data)
-        ->where('lessons.live_lesson', 1)
-        ->get();
+            ->where('courses.id', $data)
+            ->where('lessons.live_lesson', 1)
+            ->get();
         //  dd($lesson);
         $course = Course::all();
-        return view ('admin.livelesson.index',compact('course','lesson'));
+        return view('admin.livelesson.index', compact('course', 'lesson'));
     }
     public function add_live_lessons()
     {
         $course = Course::all();
-        return view ('admin.livelesson.add',compact('course'));
+        return view('admin.livelesson.add', compact('course'));
     }
-    public function create_live_lessons (Request $request)
+    public function create_live_lessons(Request $request)
     {
         $inputs = $request->all();
         $user = Auth::user()->id;
         $inputs["user_id"] = $user;
         $inputs["live_lesson"] = 1;
         Lesson::create($inputs);
-        return redirect()->route('live_lessons')->with('message','Data created successfully!');
+        return redirect()->route('live_lessons')->with('message', 'Data created successfully!');
     }
     public function edit_live_lessons($id)
     {
         $course = Course::all();
         $data = Lesson::find($id);
         // dd($data);
-        return view ('admin.livelesson.edit',compact('data','course'));
+        return view('admin.livelesson.edit', compact('data', 'course'));
     }
-    public function update_live_lessons(Request $request , $id)
+    public function update_live_lessons(Request $request, $id)
     {
         $inputs = $request->except(['_token']);
         Lesson::where('id', $id)->update($inputs);
@@ -740,25 +742,25 @@ class AdminController extends Controller
         $data = $request->all();
         // dd($data);
         $lesson = Lesson::join('schedules', 'lessons.id', '=', 'schedules.lesson_id')
-        ->where('lessons.id',$data)
-        ->get();
+            ->where('lessons.id', $data)
+            ->get();
         //  dd($lesson);
         $getlesson = Lesson::all();
-        return view ('admin.schedulelesson.index',compact('getlesson','lesson'));
+        return view('admin.schedulelesson.index', compact('getlesson', 'lesson'));
     }
     public function add_live_lesson_slots()
     {
         $course = Lesson::all();
-        return view ('admin.schedulelesson.add',compact('course'));
+        return view('admin.schedulelesson.add', compact('course'));
     }
-    public function create_live_lesson_slots (Request $request)
+    public function create_live_lesson_slots(Request $request)
     {
         $inputs = $request->all();
         $user = Auth::user()->id;
         $inputs["user_id"] = $user;
-        $inputs["password"]=Hash::make($inputs['password']);
+        $inputs["password"] = Hash::make($inputs['password']);
         Schedule::create($inputs);
-        return redirect()->route('live_lesson_slots')->with('message','Data created successfully!');
+        return redirect()->route('live_lesson_slots')->with('message', 'Data created successfully!');
     }
     public function edit_live_lesson_slots($id)
     {
@@ -766,9 +768,9 @@ class AdminController extends Controller
         $getlesson = Lesson::all();
         $data = Schedule::find($id);
         // dd($data);
-        return view ('admin.schedulelesson.edit',compact('data','getlesson'));
+        return view('admin.schedulelesson.edit', compact('data', 'getlesson'));
     }
-    public function update_live_lesson_slots(Request $request , $id)
+    public function update_live_lesson_slots(Request $request, $id)
     {
         $inputs = $request->except(['_token']);
         Schedule::where('id', $id)->update($inputs);
@@ -785,26 +787,26 @@ class AdminController extends Controller
         $data = $request->all();
         // dd($data);
         $test = Course::join('tests', 'courses.id', '=', 'tests.course_id')
-        ->where('courses.id',$data)
-        ->get();
+            ->where('courses.id', $data)
+            ->get();
         //  dd($lesson);
         $course = Course::all();
-        return view ('admin.test.index',compact('course','test'));
+        return view('admin.test.index', compact('course', 'test'));
     }
     public function add_test()
     {
         $course = Course::all();
         $lesson = Lesson::all();
-        return view ('admin.test.add',compact('course','lesson'));
+        return view('admin.test.add', compact('course', 'lesson'));
     }
-    public function create_test (Request $request)
+    public function create_test(Request $request)
     {
         $inputs = $request->all();
         $user = Auth::user()->id;
         $inputs["user_id"] = $user;
         // dd($inputs);
         Test::create($inputs);
-        return redirect()->route('tests')->with('message','Data created successfully!');
+        return redirect()->route('tests')->with('message', 'Data created successfully!');
     }
     public function edit_test($id)
     {
@@ -812,9 +814,9 @@ class AdminController extends Controller
         $lesson = Lesson::all();
         $data = Test::find($id);
         // dd($data);
-        return view ('admin.test.edit',compact('data','course','lesson'));
+        return view('admin.test.edit', compact('data', 'course', 'lesson'));
     }
-    public function update_test(Request $request , $id)
+    public function update_test(Request $request, $id)
     {
         $inputs = $request->except(['_token']);
         Test::where('id', $id)->update($inputs);
@@ -828,11 +830,11 @@ class AdminController extends Controller
     public function tax(Request $request)
     {
         $tax = Tax::all();
-        return view ('admin.tax.index',compact('tax'));
+        return view('admin.tax.index', compact('tax'));
     }
     public function add_tax()
     {
-        return view ('admin.tax.add');
+        return view('admin.tax.add');
     }
     public function create_tax(Request $request)
     {
@@ -841,15 +843,15 @@ class AdminController extends Controller
         $inputs["user_id"] = $user;
         // dd($inputs);
         Tax::create($inputs);
-        return redirect()->route('tax')->with('message','Data created successfully!');
+        return redirect()->route('tax')->with('message', 'Data created successfully!');
     }
     public function edit_tax($id)
     {
         $data = Tax::find($id);
         // dd($data);
-        return view ('admin.tax.edit',compact('data'));
+        return view('admin.tax.edit', compact('data'));
     }
-    public function update_tax(Request $request , $id)
+    public function update_tax(Request $request, $id)
     {
         $inputs = $request->except(['_token']);
         Tax::where('id', $id)->update($inputs);
@@ -862,25 +864,23 @@ class AdminController extends Controller
     }
     public function tax_status($id)
     {
-        $data = Tax:: where('id',$id)->first();
+        $data = Tax::where('id', $id)->first();
         // dd($data);
-        if(isset($data) && $data->status == 0)
-        {
+        if (isset($data) && $data->status == 0) {
             Tax::where('id', $id)->update(['status' => 1]);
-        }
-        else{
+        } else {
             Tax::where('id', $id)->update(['status' => 0]);
-    }
+        }
         return response()->json(array('success' => true));
     }
     public function coupon(Request $request)
     {
         $tax = Coupon::all();
-        return view ('admin.coupon.index',compact('tax'));
+        return view('admin.coupon.index', compact('tax'));
     }
     public function add_coupon()
     {
-        return view ('admin.coupon.add');
+        return view('admin.coupon.add');
     }
     public function create_coupon(Request $request)
     {
@@ -890,15 +890,15 @@ class AdminController extends Controller
         $inputs["user_id"] = $user;
         // dd($inputs);
         Coupon::create($inputs);
-        return redirect()->route('coupon')->with('message','Data created successfully!');
+        return redirect()->route('coupon')->with('message', 'Data created successfully!');
     }
     public function edit_coupon($id)
     {
         $data = Coupon::find($id);
         // dd($data);
-        return view ('admin.coupon.edit',compact('data'));
+        return view('admin.coupon.edit', compact('data'));
     }
-    public function update_coupon(Request $request , $id)
+    public function update_coupon(Request $request, $id)
     {
         $inputs = $request->except(['_token']);
         Coupon::where('id', $id)->update($inputs);
@@ -911,193 +911,174 @@ class AdminController extends Controller
     }
     public function coupon_status($id)
     {
-        $data = Coupon:: where('id',$id)->first();
+        $data = Coupon::where('id', $id)->first();
         // dd($data);
-        if(isset($data) && $data->status == 0)
-        {
+        if (isset($data) && $data->status == 0) {
             Coupon::where('id', $id)->update(['status' => 1]);
-        }
-        else{
+        } else {
             Coupon::where('id', $id)->update(['status' => 0]);
-    }
+        }
         return response()->json(array('success' => true));
     }
     public function account()
     {
-        $data = User::where('id',Auth::user()->id)
-        ->first();
-        return view ('admin.account.account',compact('data'));
+        $data = User::where('id', Auth::user()->id)
+            ->first();
+        return view('admin.account.account', compact('data'));
     }
-    public function update_account(Request $request , $id)
+    public function update_account(Request $request, $id)
     {
         $pfilename = "";
         $pasfilename = "";
         $idfilename = "";
         $cvfilename = "";
-        if( $request->hasFile('avatar_location') && $request->hasFile('passport') && $request->hasFile('photo_academic_degree') && $request->hasFile('cv'))
-                {
-                    $image = $request->file('avatar_location');
-                    $path = public_path(). '/upload/personal/';
-                    $pfilename = time() . '.' . $image->getClientOriginalExtension();
-                    $image->move($path, $pfilename);
-                    $request->avatar_location = $pfilename ;
-                    // dd($pfilename);
+        if ($request->hasFile('avatar_location') && $request->hasFile('passport') && $request->hasFile('photo_academic_degree') && $request->hasFile('cv')) {
+            $image = $request->file('avatar_location');
+            $path = public_path() . '/upload/personal/';
+            $pfilename = time() . '.' . $image->getClientOriginalExtension();
+            $image->move($path, $pfilename);
+            $request->avatar_location = $pfilename;
+            // dd($pfilename);
 
-                    $image = $request->file('passport');
-                    $path = public_path(). '/upload/passport/';
-                    $pasfilename = time() . '.' . $image->getClientOriginalExtension();
-                    $image->move($path, $pasfilename);
-                    $request->passport = $pasfilename ;
-                    // dd($pasfilename);
+            $image = $request->file('passport');
+            $path = public_path() . '/upload/passport/';
+            $pasfilename = time() . '.' . $image->getClientOriginalExtension();
+            $image->move($path, $pasfilename);
+            $request->passport = $pasfilename;
+            // dd($pasfilename);
 
-                    $image = $request->file('photo_academic_degree');
-                    $path = public_path(). '/upload/acadamic/';
-                    $idfilename = time() . '.' . $image->getClientOriginalExtension();
-                    $image->move($path, $idfilename);
-                    $request->photo_academic_degree = $idfilename ;
+            $image = $request->file('photo_academic_degree');
+            $path = public_path() . '/upload/acadamic/';
+            $idfilename = time() . '.' . $image->getClientOriginalExtension();
+            $image->move($path, $idfilename);
+            $request->photo_academic_degree = $idfilename;
 
-                    $image = $request->file('cv');
-                    $path = public_path(). '/upload/cv/';
-                    $cvfilename = time() . '.' . $image->getClientOriginalExtension();
-                    $image->move($path, $cvfilename);
-                    $request->cv = $cvfilename ;
+            $image = $request->file('cv');
+            $path = public_path() . '/upload/cv/';
+            $cvfilename = time() . '.' . $image->getClientOriginalExtension();
+            $image->move($path, $cvfilename);
+            $request->cv = $cvfilename;
 
-                    $inputs = $request->except(['_token']);
-                    $inputs["passport"] = $pasfilename;
-                    $inputs["avatar_location"] = $pfilename;
-                    $inputs["photo_academic_degree"] = $idfilename;
-                    $inputs["cv"] = $cvfilename;
-                    // dd($inputs);
-                    User::where('id',$id)->update($inputs);
-                }
-        elseif( $request->hasFile('passport') && $request->hasFile('photo_academic_degree') && $request->hasFile('cv') )
-                {
-                    $image = $request->file('passport');
-                    $path = public_path(). '/upload/passport/';
-                    $pasfilename = time() . '.' . $image->getClientOriginalExtension();
-                    $image->move($path, $pasfilename);
-                    $request->passport = $pasfilename ;
-                    // dd($pfilename);
+            $inputs = $request->except(['_token']);
+            $inputs["passport"] = $pasfilename;
+            $inputs["avatar_location"] = $pfilename;
+            $inputs["photo_academic_degree"] = $idfilename;
+            $inputs["cv"] = $cvfilename;
+            // dd($inputs);
+            User::where('id', $id)->update($inputs);
+        } elseif ($request->hasFile('passport') && $request->hasFile('photo_academic_degree') && $request->hasFile('cv')) {
+            $image = $request->file('passport');
+            $path = public_path() . '/upload/passport/';
+            $pasfilename = time() . '.' . $image->getClientOriginalExtension();
+            $image->move($path, $pasfilename);
+            $request->passport = $pasfilename;
+            // dd($pfilename);
 
-                    $image = $request->file('photo_academic_degree');
-                    $path = public_path(). '/upload/acadamic/';
-                    $idfilename = time() . '.' . $image->getClientOriginalExtension();
-                    $image->move($path, $idfilename);
-                    $request->photo_academic_degree = $idfilename ;
-                    // dd($pasfilename);
+            $image = $request->file('photo_academic_degree');
+            $path = public_path() . '/upload/acadamic/';
+            $idfilename = time() . '.' . $image->getClientOriginalExtension();
+            $image->move($path, $idfilename);
+            $request->photo_academic_degree = $idfilename;
+            // dd($pasfilename);
 
-                    $image = $request->file('cv');
-                    $path = public_path(). '/upload/id/';
-                    $cvfilename = time() . '.' . $image->getClientOriginalExtension();
-                    $image->move($path, $cvfilename);
-                    $request->cv = $cvfilename ;
+            $image = $request->file('cv');
+            $path = public_path() . '/upload/id/';
+            $cvfilename = time() . '.' . $image->getClientOriginalExtension();
+            $image->move($path, $cvfilename);
+            $request->cv = $cvfilename;
 
-                    $inputs = $request->except(['_token']);
-                    $inputs["passport"] = $pasfilename;
-                    $inputs["photo_academic_degree"] = $idfilename;
-                    $inputs["cv"] = $cvfilename;
-                    // dd($inputs);
-                    User::where('id',$id)->update($inputs);
-                }
-        elseif( $request->hasFile('photo_academic_degree') && $request->hasFile('passport'))
-                {
-                    $image = $request->file('photo_academic_degree');
-                    $path = public_path(). '/upload/acadamic/';
-                    $idfilename = time() . '.' . $image->getClientOriginalExtension();
-                    $image->move($path, $idfilename);
-                    $request->photo_academic_degree = $idfilename ;
-                    // dd($pfilename);
+            $inputs = $request->except(['_token']);
+            $inputs["passport"] = $pasfilename;
+            $inputs["photo_academic_degree"] = $idfilename;
+            $inputs["cv"] = $cvfilename;
+            // dd($inputs);
+            User::where('id', $id)->update($inputs);
+        } elseif ($request->hasFile('photo_academic_degree') && $request->hasFile('passport')) {
+            $image = $request->file('photo_academic_degree');
+            $path = public_path() . '/upload/acadamic/';
+            $idfilename = time() . '.' . $image->getClientOriginalExtension();
+            $image->move($path, $idfilename);
+            $request->photo_academic_degree = $idfilename;
+            // dd($pfilename);
 
-                    $image = $request->file('passport');
-                    $path = public_path(). '/upload/passport/';
-                    $pasfilename = time() . '.' . $image->getClientOriginalExtension();
-                    $image->move($path, $pasfilename);
-                    $request->passport = $pasfilename ;
-                    // dd($pasfilename);
+            $image = $request->file('passport');
+            $path = public_path() . '/upload/passport/';
+            $pasfilename = time() . '.' . $image->getClientOriginalExtension();
+            $image->move($path, $pasfilename);
+            $request->passport = $pasfilename;
+            // dd($pasfilename);
 
-                    $inputs = $request->except(['_token']);
-                    $inputs["passport"] = $pasfilename;
-                    $inputs["photo_academic_degree"] = $pfilename;
-                    // dd($inputs);
-                    User::where('id',$id)->update($inputs);
-                }
-        elseif( $request->hasFile('passport') && $request->hasFile('cv'))
-                {
-                    $image = $request->file('passport');
-                    $path = public_path(). '/upload/passport/';
-                    $pasfilename = time() . '.' . $image->getClientOriginalExtension();
-                    $image->move($path, $pasfilename);
-                    $request->passport = $pasfilename ;
+            $inputs = $request->except(['_token']);
+            $inputs["passport"] = $pasfilename;
+            $inputs["photo_academic_degree"] = $pfilename;
+            // dd($inputs);
+            User::where('id', $id)->update($inputs);
+        } elseif ($request->hasFile('passport') && $request->hasFile('cv')) {
+            $image = $request->file('passport');
+            $path = public_path() . '/upload/passport/';
+            $pasfilename = time() . '.' . $image->getClientOriginalExtension();
+            $image->move($path, $pasfilename);
+            $request->passport = $pasfilename;
 
-                    $image = $request->file('cv');
-                    $path = public_path(). '/upload/cv/';
-                    $cvfilename = time() . '.' . $image->getClientOriginalExtension();
-                    $image->move($path, $cvfilename);
-                    $request->cv = $cvfilename ;
+            $image = $request->file('cv');
+            $path = public_path() . '/upload/cv/';
+            $cvfilename = time() . '.' . $image->getClientOriginalExtension();
+            $image->move($path, $cvfilename);
+            $request->cv = $cvfilename;
 
-                    $inputs = $request->except(['_token']);
-                    $inputs["passport"] = $pasfilename;
-                    $inputs["cv"] = $cvfilename;
-                    // dd($inputs);
-                    User::where('id',$id)->update($inputs);
-                }
-        elseif( $request->hasFile('passport'))
-                {
-                    $image = $request->file('passport');
-                    $path = public_path(). '/upload/passport/';
-                    $pasfilename = time() . '.' . $image->getClientOriginalExtension();
-                    $image->move($path, $pasfilename);
-                    $request->passport = $pasfilename ;
-                    // dd($pasfilename);
-                    $inputs = $request->except(['_token']);
-                    $inputs["passport"] = $pasfilename;
-        //  dd($inputs);
-        User::where('id',$id)->update($inputs);
-                }
-        elseif( $request->hasFile('avatar_location'))
-                {
-                    $image = $request->file('avatar_location');
-                    $path = public_path(). '/upload/personal/';
-                    $pfilename = time() . '.' . $image->getClientOriginalExtension();
-                    $image->move($path, $pfilename);
-                    $request->avatar_location = $pfilename ;
-                    // dd($pfilename);
-                    $inputs = $request->except(['_token']);
-                    $inputs["avatar_location"] = $pfilename;
-        //  dd($inputs);
-                    User::where('id',$id)->update($inputs);
-                }
-        elseif( $request->hasFile('photo_academic_degree'))
-                {
-                    $image = $request->file('photo_academic_degree');
-                    $path = public_path(). '/upload/acadamic/';
-                    $idfilename = time() . '.' . $image->getClientOriginalExtension();
-                    $image->move($path, $idfilename);
-                    $request->photo_academic_degree = $idfilename ;
-                    // dd($idfilename);
-                    $inputs = $request->except(['_token']);
-                    $inputs["photo_academic_degree"] = $idfilename;
-        //  dd($inputs);
-                    User::where('id',$id)->update($inputs);
-                }
-        elseif( $request->hasFile('cv'))
-                {
-                    $image = $request->file('cv');
-                    $path = public_path(). '/upload/cv/';
-                    $cvfilename = time() . '.' . $image->getClientOriginalExtension();
-                    $image->move($path, $cvfilename);
-                    $request->cv = $cvfilename ;
-                    // dd($cvfilename);
-                    $inputs = $request->except(['_token']);
-                    $inputs["cv"] = $cvfilename;
-        //  dd($inputs);
-                     User::where('id',$id)->update($inputs);
-                }
-        else
-                {
-                    $inputs = $request->except(['_token']);
-                    User::where('id',$id)->update($inputs);
-                }
+            $inputs = $request->except(['_token']);
+            $inputs["passport"] = $pasfilename;
+            $inputs["cv"] = $cvfilename;
+            // dd($inputs);
+            User::where('id', $id)->update($inputs);
+        } elseif ($request->hasFile('passport')) {
+            $image = $request->file('passport');
+            $path = public_path() . '/upload/passport/';
+            $pasfilename = time() . '.' . $image->getClientOriginalExtension();
+            $image->move($path, $pasfilename);
+            $request->passport = $pasfilename;
+            // dd($pasfilename);
+            $inputs = $request->except(['_token']);
+            $inputs["passport"] = $pasfilename;
+            //  dd($inputs);
+            User::where('id', $id)->update($inputs);
+        } elseif ($request->hasFile('avatar_location')) {
+            $image = $request->file('avatar_location');
+            $path = public_path() . '/upload/personal/';
+            $pfilename = time() . '.' . $image->getClientOriginalExtension();
+            $image->move($path, $pfilename);
+            $request->avatar_location = $pfilename;
+            // dd($pfilename);
+            $inputs = $request->except(['_token']);
+            $inputs["avatar_location"] = $pfilename;
+            //  dd($inputs);
+            User::where('id', $id)->update($inputs);
+        } elseif ($request->hasFile('photo_academic_degree')) {
+            $image = $request->file('photo_academic_degree');
+            $path = public_path() . '/upload/acadamic/';
+            $idfilename = time() . '.' . $image->getClientOriginalExtension();
+            $image->move($path, $idfilename);
+            $request->photo_academic_degree = $idfilename;
+            // dd($idfilename);
+            $inputs = $request->except(['_token']);
+            $inputs["photo_academic_degree"] = $idfilename;
+            //  dd($inputs);
+            User::where('id', $id)->update($inputs);
+        } elseif ($request->hasFile('cv')) {
+            $image = $request->file('cv');
+            $path = public_path() . '/upload/cv/';
+            $cvfilename = time() . '.' . $image->getClientOriginalExtension();
+            $image->move($path, $cvfilename);
+            $request->cv = $cvfilename;
+            // dd($cvfilename);
+            $inputs = $request->except(['_token']);
+            $inputs["cv"] = $cvfilename;
+            //  dd($inputs);
+            User::where('id', $id)->update($inputs);
+        } else {
+            $inputs = $request->except(['_token']);
+            User::where('id', $id)->update($inputs);
+        }
 
         return redirect()->route('account')->with('message', 'Data Updated Successfully!');
     }
@@ -1112,48 +1093,44 @@ class AdminController extends Controller
         //  dd($lesson);
         $quest = Quesstion::all();
         $gettest = Test::all();
-        return view ('admin.question.index',compact('gettest','quest'));
+        return view('admin.question.index', compact('gettest', 'quest'));
     }
     public function add_question(Request $request)
     {
-          //  if(isset($request))
-   //  {
+        //  if(isset($request))
+        //  {
         // dd($request->all());
-   // }
-   if(isset($request->course_id))
-   {
-    $lesson = Lesson::join('courses', 'lessons.course_id', '=', 'courses.id')
-   ->where('lessons.course_id',$request->course_id)
-   ->select('lessons.title','lessons.id')
-   ->get();
+        // }
+        if (isset($request->course_id)) {
+            $lesson = Lesson::join('courses', 'lessons.course_id', '=', 'courses.id')
+                ->where('lessons.course_id', $request->course_id)
+                ->select('lessons.title', 'lessons.id')
+                ->get();
 
-   return response()->json($lesson) ;
-   }
-   elseif(isset($request->lesson_id))
-   {
-   $test = Test::join('lessons', 'tests.lesson_id', '=', 'lessons.id')
-   ->where('tests.lesson_id',$request->lesson_id)
-   ->select('tests.title','tests.id')
-   ->get();
+            return response()->json($lesson);
+        } elseif (isset($request->lesson_id)) {
+            $test = Test::join('lessons', 'tests.lesson_id', '=', 'lessons.id')
+                ->where('tests.lesson_id', $request->lesson_id)
+                ->select('tests.title', 'tests.id')
+                ->get();
 
-   return response()->json($test) ;
-   }
-   $course = Course::all();
-   return view ('admin.question.add',compact('course'));
+            return response()->json($test);
+        }
+        $course = Course::all();
+        return view('admin.question.add', compact('course'));
     }
-    public function create_question (Request $request)
+    public function create_question(Request $request)
     {
 
         $filename = "";
 
-        if( $request->hasFile('question_image'))
-                {
-                    $image = $request->file('question_image');
-                    $path = public_path(). '/upload/qimage/';
-                    $filename = time() . '.' . $image->getClientOriginalExtension();
-                    $image->move($path, $filename);
-                    $request->question_image = $filename ;
-                }
+        if ($request->hasFile('question_image')) {
+            $image = $request->file('question_image');
+            $path = public_path() . '/upload/qimage/';
+            $filename = time() . '.' . $image->getClientOriginalExtension();
+            $image->move($path, $filename);
+            $request->question_image = $filename;
+        }
         $inputs = $request->all();
         $inputs["question_image"] = $filename;
         $user = Auth::user()->id;
@@ -1163,45 +1140,41 @@ class AdminController extends Controller
         // dd($inputs);
         Quesstion::create($inputs);
 
-        return redirect()->route('questions')->with('message','Data created successfully!');
+        return redirect()->route('questions')->with('message', 'Data created successfully!');
     }
-    public function edit_question(Request $request ,$id)
+    public function edit_question(Request $request, $id)
     {
-        if(isset($request->course_id))
-   {
-    $lesson = Lesson::join('courses', 'lessons.course_id', '=', 'courses.id')
-   ->where('lessons.course_id',$request->course_id)
-   ->select('lessons.title','lessons.id')
-   ->get();
+        if (isset($request->course_id)) {
+            $lesson = Lesson::join('courses', 'lessons.course_id', '=', 'courses.id')
+                ->where('lessons.course_id', $request->course_id)
+                ->select('lessons.title', 'lessons.id')
+                ->get();
 
-   return response()->json($lesson) ;
-   }
-   elseif(isset($request->lesson_id))
-   {
-   $test = Test::join('lessons', 'tests.lesson_id', '=', 'lessons.id')
-   ->where('tests.lesson_id',$request->lesson_id)
-   ->select('tests.title','tests.id')
-   ->get();
+            return response()->json($lesson);
+        } elseif (isset($request->lesson_id)) {
+            $test = Test::join('lessons', 'tests.lesson_id', '=', 'lessons.id')
+                ->where('tests.lesson_id', $request->lesson_id)
+                ->select('tests.title', 'tests.id')
+                ->get();
 
-   return response()->json($test) ;
-   }
-   $quest = Quesstion::find($id);
+            return response()->json($test);
+        }
+        $quest = Quesstion::find($id);
 //    dd($quest);
-   $course = Course::all();
-   return view ('admin.question.edit',compact('course','quest'));
+        $course = Course::all();
+        return view('admin.question.edit', compact('course', 'quest'));
     }
-    public function update_question(Request $request , $id)
+    public function update_question(Request $request, $id)
     {
         $filename = "";
 
-        if( $request->hasFile('question_image'))
-                {
-                    $image = $request->file('question_image');
-                    $path = public_path(). '/upload/qimage/';
-                    $filename = time() . '.' . $image->getClientOriginalExtension();
-                    $image->move($path, $filename);
-                    $request->question_image = $filename ;
-                }
+        if ($request->hasFile('question_image')) {
+            $image = $request->file('question_image');
+            $path = public_path() . '/upload/qimage/';
+            $filename = time() . '.' . $image->getClientOriginalExtension();
+            $image->move($path, $filename);
+            $request->question_image = $filename;
+        }
         $inputs = $request->except(['_token']);
         $inputs["question_image"] = $filename;
         // $test = serialize($inputs['tests']);
@@ -1219,48 +1192,47 @@ class AdminController extends Controller
     public function sponsors(Request $request)
     {
         $sponsor = Ourpartner::all();
-        return view ('admin.our-partners.index',compact('sponsor'));
+        return view('admin.our-partners.index', compact('sponsor'));
     }
 //     public function add_questions(Request $request)
-//     {
-//           //  if(isset($request))
-//    //  {
-//         // dd($request->all());
-//    // }
-//    if(isset($request->course_id))
-//    {
-//     $lesson = Lesson::join('courses', 'lessons.course_id', '=', 'courses.id')
-//    ->where('lessons.course_id',$request->course_id)
-//    ->select('lessons.title','lessons.id')
-//    ->get();
+    //     {
+    //           //  if(isset($request))
+    //    //  {
+    //         // dd($request->all());
+    //    // }
+    //    if(isset($request->course_id))
+    //    {
+    //     $lesson = Lesson::join('courses', 'lessons.course_id', '=', 'courses.id')
+    //    ->where('lessons.course_id',$request->course_id)
+    //    ->select('lessons.title','lessons.id')
+    //    ->get();
 
 //    return response()->json($lesson) ;
-//    }
-//    elseif(isset($request->lesson_id))
-//    {
-//    $test = Test::join('lessons', 'tests.lesson_id', '=', 'lessons.id')
-//    ->where('tests.lesson_id',$request->lesson_id)
-//    ->select('tests.title','tests.id')
-//    ->get();
+    //    }
+    //    elseif(isset($request->lesson_id))
+    //    {
+    //    $test = Test::join('lessons', 'tests.lesson_id', '=', 'lessons.id')
+    //    ->where('tests.lesson_id',$request->lesson_id)
+    //    ->select('tests.title','tests.id')
+    //    ->get();
 
 //    return response()->json($test) ;
-//    }
-//    $course = Course::all();
-//    return view ('admin.question.add',compact('course'));
-//     }
-    public function create_sponsors (Request $request)
+    //    }
+    //    $course = Course::all();
+    //    return view ('admin.question.add',compact('course'));
+    //     }
+    public function create_sponsors(Request $request)
     {
 
         $filename = "";
 
-        if( $request->hasFile('logo'))
-                {
-                    $image = $request->file('logo');
-                    $path = public_path(). '/upload/partner/';
-                    $filename = time() . '.' . $image->getClientOriginalExtension();
-                    $image->move($path, $filename);
-                    $request->logo = $filename ;
-                }
+        if ($request->hasFile('logo')) {
+            $image = $request->file('logo');
+            $path = public_path() . '/upload/partner/';
+            $filename = time() . '.' . $image->getClientOriginalExtension();
+            $image->move($path, $filename);
+            $request->logo = $filename;
+        }
         $inputs = $request->all();
         $inputs["logo"] = $filename;
         $user = Auth::user()->id;
@@ -1268,35 +1240,33 @@ class AdminController extends Controller
         // dd($inputs);
         Ourpartner::create($inputs);
 
-        return redirect()->route('sponsors')->with('message','Data created successfully!');
+        return redirect()->route('sponsors')->with('message', 'Data created successfully!');
     }
-    public function edit_sponsors(Request $request ,$id)
+    public function edit_sponsors(Request $request, $id)
     {
-   $data = Ourpartner::find($id);
+        $data = Ourpartner::find($id);
 //    dd($data);
-   $sponsor = Ourpartner::all();
-   return view ('admin.our-partners.edit',compact('sponsor','data'));
+        $sponsor = Ourpartner::all();
+        return view('admin.our-partners.edit', compact('sponsor', 'data'));
     }
-    public function update_sponsors(Request $request , $id)
+    public function update_sponsors(Request $request, $id)
     {
         $filename = "";
 
-        if( $request->hasFile('logo'))
-                {
-                    $image = $request->file('logo');
-                    $path = public_path(). '/upload/partner/';
-                    $filename = time() . '.' . $image->getClientOriginalExtension();
-                    $image->move($path, $filename);
-                    $request->logo = $filename ;
-                    $inputs = $request->except(['_token']);
-                    $inputs["logo"] = $filename;
-                    Ourpartner::where('id', $id)->update($inputs);
-                }
-                else{
-                    $inputs = $request->except(['_token']);
-                    // dd($inputs);
-                    Ourpartner::where('id', $id)->update($inputs);
-                }
+        if ($request->hasFile('logo')) {
+            $image = $request->file('logo');
+            $path = public_path() . '/upload/partner/';
+            $filename = time() . '.' . $image->getClientOriginalExtension();
+            $image->move($path, $filename);
+            $request->logo = $filename;
+            $inputs = $request->except(['_token']);
+            $inputs["logo"] = $filename;
+            Ourpartner::where('id', $id)->update($inputs);
+        } else {
+            $inputs = $request->except(['_token']);
+            // dd($inputs);
+            Ourpartner::where('id', $id)->update($inputs);
+        }
         return redirect()->route('sponsors')->with('message', 'Data Updated Successfully!');
     }
     public function destroy_sponsors($id)
@@ -1319,21 +1289,20 @@ class AdminController extends Controller
     public function advisoryboards(Request $request)
     {
         $sponsor = Advisory::all();
-        return view ('admin.advisory-board.index',compact('sponsor'));
+        return view('admin.advisory-board.index', compact('sponsor'));
     }
-    public function create_advisoryboards (Request $request)
+    public function create_advisoryboards(Request $request)
     {
 
         $filename = "";
 
-        if( $request->hasFile('logo'))
-                {
-                    $image = $request->file('logo');
-                    $path = public_path(). '/upload/advisory/';
-                    $filename = time() . '.' . $image->getClientOriginalExtension();
-                    $image->move($path, $filename);
-                    $request->logo = $filename ;
-                }
+        if ($request->hasFile('logo')) {
+            $image = $request->file('logo');
+            $path = public_path() . '/upload/advisory/';
+            $filename = time() . '.' . $image->getClientOriginalExtension();
+            $image->move($path, $filename);
+            $request->logo = $filename;
+        }
         $inputs = $request->all();
         $inputs["logo"] = $filename;
         $user = Auth::user()->id;
@@ -1341,35 +1310,33 @@ class AdminController extends Controller
         // dd($inputs);
         Advisory::create($inputs);
 
-        return redirect()->route('advisoryboards')->with('message','Data created successfully!');
+        return redirect()->route('advisoryboards')->with('message', 'Data created successfully!');
     }
-    public function edit_advisoryboards(Request $request ,$id)
+    public function edit_advisoryboards(Request $request, $id)
     {
-   $data = Advisory::find($id);
+        $data = Advisory::find($id);
 //    dd($data);
-   $sponsor = Advisory::all();
-   return view ('admin.advisory-board.edit',compact('sponsor','data'));
+        $sponsor = Advisory::all();
+        return view('admin.advisory-board.edit', compact('sponsor', 'data'));
     }
-    public function update_advisoryboards(Request $request , $id)
+    public function update_advisoryboards(Request $request, $id)
     {
         $filename = "";
 
-        if( $request->hasFile('logo'))
-                {
-                    $image = $request->file('logo');
-                    $path = public_path(). '/upload/advisory/';
-                    $filename = time() . '.' . $image->getClientOriginalExtension();
-                    $image->move($path, $filename);
-                    $request->logo = $filename ;
-                    $inputs = $request->except(['_token']);
-                    $inputs["logo"] = $filename;
-                    Advisory::where('id', $id)->update($inputs);
-                }
-                else{
-                    $inputs = $request->except(['_token']);
-                    // dd($inputs);
-                    Advisory::where('id', $id)->update($inputs);
-                }
+        if ($request->hasFile('logo')) {
+            $image = $request->file('logo');
+            $path = public_path() . '/upload/advisory/';
+            $filename = time() . '.' . $image->getClientOriginalExtension();
+            $image->move($path, $filename);
+            $request->logo = $filename;
+            $inputs = $request->except(['_token']);
+            $inputs["logo"] = $filename;
+            Advisory::where('id', $id)->update($inputs);
+        } else {
+            $inputs = $request->except(['_token']);
+            // dd($inputs);
+            Advisory::where('id', $id)->update($inputs);
+        }
         return redirect()->route('advisoryboards')->with('message', 'Data Updated Successfully!');
     }
     public function destroy_advisoryboards($id)
@@ -1392,25 +1359,24 @@ class AdminController extends Controller
     public function pages(Request $request)
     {
         $sponsor = Pagemanager::all();
-        return view ('admin.page-manager.index',compact('sponsor'));
+        return view('admin.page-manager.index', compact('sponsor'));
     }
     public function add_pages(Request $request)
     {
-        return view ('admin.page-manager.add');
+        return view('admin.page-manager.add');
     }
-    public function create_pages (Request $request)
+    public function create_pages(Request $request)
     {
 
         $filename = "";
 
-        if( $request->hasFile('page_image'))
-                {
-                    $image = $request->file('page_image');
-                    $path = public_path(). '/upload/pages/';
-                    $filename = time() . '.' . $image->getClientOriginalExtension();
-                    $image->move($path, $filename);
-                    $request->page_image = $filename ;
-                }
+        if ($request->hasFile('page_image')) {
+            $image = $request->file('page_image');
+            $path = public_path() . '/upload/pages/';
+            $filename = time() . '.' . $image->getClientOriginalExtension();
+            $image->move($path, $filename);
+            $request->page_image = $filename;
+        }
         $inputs = $request->all();
         $inputs["page_image"] = $filename;
         $user = Auth::user()->id;
@@ -1418,30 +1384,28 @@ class AdminController extends Controller
         // dd($inputs);
         Pagemanager::create($inputs);
 
-        return redirect()->route('pages')->with('message','Data created successfully!');
+        return redirect()->route('pages')->with('message', 'Data created successfully!');
     }
-    public function edit_pages(Request $request ,$id)
+    public function edit_pages(Request $request, $id)
     {
-   $data = Pagemanager::find($id);
+        $data = Pagemanager::find($id);
 //    dd($data);
-   return view ('admin.page-manager.edit',compact('data'));
+        return view('admin.page-manager.edit', compact('data'));
     }
-    public function update_pages(Request $request , $id)
+    public function update_pages(Request $request, $id)
     {
         $filename = "";
 
-        if( $request->hasFile('page_image'))
-                {
-                    $image = $request->file('page_image');
-                    $path = public_path(). '/upload/pages/';
-                    $filename = time() . '.' . $image->getClientOriginalExtension();
-                    $image->move($path, $filename);
-                    $request->page_image = $filename ;
-        $inputs = $request->except(['_token']);
-        $inputs["page_image"] = $filename;
-        Pagemanager::where('id', $id)->update($inputs);
-        }
-        else{
+        if ($request->hasFile('page_image')) {
+            $image = $request->file('page_image');
+            $path = public_path() . '/upload/pages/';
+            $filename = time() . '.' . $image->getClientOriginalExtension();
+            $image->move($path, $filename);
+            $request->page_image = $filename;
+            $inputs = $request->except(['_token']);
+            $inputs["page_image"] = $filename;
+            Pagemanager::where('id', $id)->update($inputs);
+        } else {
             $inputs = $request->except(['_token']);
             // dd($inputs);
             Pagemanager::where('id', $id)->update($inputs);
@@ -1457,26 +1421,25 @@ class AdminController extends Controller
     public function news(Request $request)
     {
         $sponsor = News::all();
-        return view ('admin.news.index',compact('sponsor'));
+        return view('admin.news.index', compact('sponsor'));
     }
     public function add_news(Request $request)
     {
         $catagory = Category::all();
-        return view ('admin.news.add',compact('catagory'));
+        return view('admin.news.add', compact('catagory'));
     }
-    public function create_news (Request $request)
+    public function create_news(Request $request)
     {
 
         $filename = "";
 
-        if( $request->hasFile('featured_image'))
-                {
-                    $image = $request->file('featured_image');
-                    $path = public_path(). '/upload/news/';
-                    $filename = time() . '.' . $image->getClientOriginalExtension();
-                    $image->move($path, $filename);
-                    $request->featured_image = $filename ;
-                }
+        if ($request->hasFile('featured_image')) {
+            $image = $request->file('featured_image');
+            $path = public_path() . '/upload/news/';
+            $filename = time() . '.' . $image->getClientOriginalExtension();
+            $image->move($path, $filename);
+            $request->featured_image = $filename;
+        }
         $inputs = $request->all();
         $inputs["featured_image"] = $filename;
         $user = Auth::user()->id;
@@ -1484,31 +1447,29 @@ class AdminController extends Controller
         // dd($inputs);
         News::create($inputs);
 
-        return redirect()->route('news')->with('message','Data created successfully!');
+        return redirect()->route('news')->with('message', 'Data created successfully!');
     }
-    public function edit_news(Request $request ,$id)
+    public function edit_news(Request $request, $id)
     {
-   $data = News::find($id);
-   $catagory = Category::all();
+        $data = News::find($id);
+        $catagory = Category::all();
 //    dd($data);
-   return view ('admin.news.edit',compact('data','catagory'));
+        return view('admin.news.edit', compact('data', 'catagory'));
     }
-    public function update_news(Request $request , $id)
+    public function update_news(Request $request, $id)
     {
         $filename = "";
 
-        if( $request->hasFile('featured_image'))
-                {
-                    $image = $request->file('featured_image');
-                    $path = public_path(). '/upload/news/';
-                    $filename = time() . '.' . $image->getClientOriginalExtension();
-                    $image->move($path, $filename);
-                    $request->featured_image = $filename ;
-        $inputs = $request->except(['_token']);
-        $inputs["featured_image"] = $filename;
-        News::where('id', $id)->update($inputs);
-        }
-        else{
+        if ($request->hasFile('featured_image')) {
+            $image = $request->file('featured_image');
+            $path = public_path() . '/upload/news/';
+            $filename = time() . '.' . $image->getClientOriginalExtension();
+            $image->move($path, $filename);
+            $request->featured_image = $filename;
+            $inputs = $request->except(['_token']);
+            $inputs["featured_image"] = $filename;
+            News::where('id', $id)->update($inputs);
+        } else {
             $inputs = $request->except(['_token']);
             // dd($inputs);
             News::where('id', $id)->update($inputs);
@@ -1524,12 +1485,12 @@ class AdminController extends Controller
     public function faqs(Request $request)
     {
         $faq = Faq::all();
-        return view ('admin.Faqs.index',compact('faq'));
+        return view('admin.Faqs.index', compact('faq'));
     }
     public function add_faqs(Request $request)
     {
         $catagory = Category::all();
-        return view ('admin.Faqs.add',compact('catagory'));
+        return view('admin.Faqs.add', compact('catagory'));
     }
     public function create_faqs(Request $request)
     {
@@ -1539,20 +1500,20 @@ class AdminController extends Controller
         // dd($inputs);
         Faq::create($inputs);
 
-        return redirect()->route('faqs')->with('message','Data created successfully!');
+        return redirect()->route('faqs')->with('message', 'Data created successfully!');
     }
-    public function edit_faqs(Request $request ,$id)
+    public function edit_faqs(Request $request, $id)
     {
-   $data = Faq::find($id);
-   $catagory = Category::all();
+        $data = Faq::find($id);
+        $catagory = Category::all();
 //    dd($data);
-   return view ('admin.Faqs.edit',compact('data','catagory'));
+        return view('admin.Faqs.edit', compact('data', 'catagory'));
     }
-    public function update_faqs(Request $request , $id)
+    public function update_faqs(Request $request, $id)
     {
-            $inputs = $request->except(['_token']);
-            // dd($inputs);
-            Faq::where('id', $id)->update($inputs);
+        $inputs = $request->except(['_token']);
+        // dd($inputs);
+        Faq::where('id', $id)->update($inputs);
         return redirect()->route('faqs')->with('message', 'Data Updated Successfully!');
     }
     public function destroy_faqs($id)
@@ -1575,26 +1536,25 @@ class AdminController extends Controller
     public function testimonials(Request $request)
     {
         $testi = Testimonial::all();
-        return view ('admin.testimonials.index',compact('testi'));
+        return view('admin.testimonials.index', compact('testi'));
     }
     public function add_testimonials(Request $request)
     {
         $catagory = Category::all();
-        return view ('admin.testimonials.add',compact('catagory'));
+        return view('admin.testimonials.add', compact('catagory'));
     }
     public function create_testimonials(Request $request)
     {
 
         $filename = "";
 
-        if( $request->hasFile('image'))
-                {
-                    $image = $request->file('image');
-                    $path = public_path(). '/upload/testimonials/';
-                    $filename = time() . '.' . $image->getClientOriginalExtension();
-                    $image->move($path, $filename);
-                    $request->image = $filename ;
-                }
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $path = public_path() . '/upload/testimonials/';
+            $filename = time() . '.' . $image->getClientOriginalExtension();
+            $image->move($path, $filename);
+            $request->image = $filename;
+        }
         $inputs = $request->all();
         $inputs["image"] = $filename;
         $user = Auth::user()->id;
@@ -1602,30 +1562,28 @@ class AdminController extends Controller
         //  dd($inputs);
         Testimonial::create($inputs);
 
-        return redirect()->route('testimonials')->with('message','Data created successfully!');
+        return redirect()->route('testimonials')->with('message', 'Data created successfully!');
     }
-    public function edit_testimonials(Request $request ,$id)
+    public function edit_testimonials(Request $request, $id)
     {
-   $data = Testimonial::findOrFail($id);
+        $data = Testimonial::findOrFail($id);
 //    dd($data);
-   return view ('admin.testimonials.edit',compact('data'));
+        return view('admin.testimonials.edit', compact('data'));
     }
-    public function update_testimonials(Request $request , $id)
+    public function update_testimonials(Request $request, $id)
     {
         $filename = "";
 
-        if( $request->hasFile('image'))
-                {
-                    $image = $request->file('image');
-                    $path = public_path(). '/upload/testimonials/';
-                    $filename = time() . '.' . $image->getClientOriginalExtension();
-                    $image->move($path, $filename);
-                    $request->image = $filename ;
-        $inputs = $request->except(['_token']);
-        $inputs["image"] = $filename;
-        Testimonial::where('id', $id)->update($inputs);
-        }
-        else{
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $path = public_path() . '/upload/testimonials/';
+            $filename = time() . '.' . $image->getClientOriginalExtension();
+            $image->move($path, $filename);
+            $request->image = $filename;
+            $inputs = $request->except(['_token']);
+            $inputs["image"] = $filename;
+            Testimonial::where('id', $id)->update($inputs);
+        } else {
             $inputs = $request->except(['_token']);
             // dd($inputs);
             Testimonial::where('id', $id)->update($inputs);
@@ -1652,11 +1610,11 @@ class AdminController extends Controller
     public function reasons(Request $request)
     {
         $reason = Reason::all();
-        return view ('admin.Why-a-language-trainer.index',compact('reason'));
+        return view('admin.Why-a-language-trainer.index', compact('reason'));
     }
     public function add_reasons(Request $request)
     {
-        return view ('admin.Why-a-language-trainer.add');
+        return view('admin.Why-a-language-trainer.add');
     }
     public function create_reasons(Request $request)
     {
@@ -1666,19 +1624,19 @@ class AdminController extends Controller
         // dd($inputs);
         Reason::create($inputs);
 
-        return redirect()->route('reasons')->with('message','Data created successfully!');
+        return redirect()->route('reasons')->with('message', 'Data created successfully!');
     }
-    public function edit_reasons(Request $request ,$id)
+    public function edit_reasons(Request $request, $id)
     {
-   $data = Reason::find($id);
+        $data = Reason::find($id);
 //    dd($data);
-   return view ('admin.Why-a-language-trainer.edit',compact('data'));
+        return view('admin.Why-a-language-trainer.edit', compact('data'));
     }
-    public function update_reasons(Request $request , $id)
+    public function update_reasons(Request $request, $id)
     {
-            $inputs = $request->except(['_token']);
-            // dd($inputs);
-            Reason::where('id', $id)->update($inputs);
+        $inputs = $request->except(['_token']);
+        // dd($inputs);
+        Reason::where('id', $id)->update($inputs);
         return redirect()->route('reasons')->with('message', 'Data Updated Successfully!');
     }
     public function destroy_reasons($id)
@@ -1696,5 +1654,89 @@ class AdminController extends Controller
             Reason::where('id', $id)->update(['status' => 0]);
         }
         return response()->json(array('success' => true));
+    }
+
+    public function getTeacher(Request $request)
+    {
+        $columns = array(
+            0 => 'name',
+            1 => 'title',
+            2 => 'email',
+        );
+
+        $totalData = User::where('roll_id', 2)->count();
+
+        $totalFiltered = $totalData;
+
+        $limit = $request->input('length');
+        $start = $request->input('start');
+        $order = $columns[$request->input('order.0.column')];
+        $dir = $request->input('order.0.dir');
+
+        if (empty($request->input('search.value'))) {
+            $posts = User::where('roll_id', 2)->offset($start)
+                ->limit($limit)
+                ->orderBy($order, $dir)
+                ->get();
+        } else {
+            $search = $request->input('search.value');
+
+            $posts = User::where('roll_id', 2)->where('name', 'LIKE', "%{$search}%")
+                ->orWhere('title', 'LIKE', "%{$search}%")
+                ->orWhere('email', 'LIKE', "%{$search}%")
+                ->offset($start)
+                ->limit($limit)
+                ->orderBy($order, $dir)
+                ->get();
+
+            $totalFiltered = User::where('roll_id', 2)->where('name', 'LIKE', "%{$search}%")
+                ->orWhere('email', 'LIKE', "%{$search}%")
+                ->orWhere('title', 'LIKE', "%{$search}%")
+                ->count();
+        }
+
+        $data = array();
+        if (!empty($posts)) {
+            foreach ($posts as $post) {
+                //$show =  route('posts.show',$post->id);
+                //$edit =  route('posts.edit',$post->id);
+                //$enable = route('enable', $post->id);
+                //$disable = route('disable', $post->id);
+                $nestedData['number'] = $post->id;
+                $nestedData['name'] = $post->name;
+                $nestedData['title'] = $post->email;
+                $nestedData['email'] = $post->email;
+                if ($post->status == 1) {
+                    $nestedData['status'] = '<p><span class="right badge badge-success">Enabled</span></p>';
+                } else {
+                    $nestedData['status'] = '<p><span class="right badge badge-danger">Disable</span></p>';
+                }
+
+                if ($post->status == 0) {
+                    $nestedData['actions'] = "&emsp;
+                    <a href='#'><i  data-id='{$post->id}' class='fa fa-trash delete fa-fw'></i></a>
+                    <a   ><i class='fa fa-check' style='color:green' data-tooltip='tooltip' title='allow publish content' aria-hidden='true'></i></a>
+
+                    ";
+                } else {
+                    $nestedData['actions'] = "&emsp;
+                    <a href='#'><i  data-id='{$post->id}' class='fa fa-trash delete fa-fw'></i></a>
+                    <a  ><i  style='color:red' class='fa fa-ban' data-tooltip='tooltip' title='disable publish content'  aria-hidden='true'></i></a>
+                    ";
+                }
+
+                $data[] = $nestedData;
+
+            }
+        }
+
+        $json_data = array(
+            "draw" => intval($request->input('draw')),
+            "recordsTotal" => intval($totalData),
+            "recordsFiltered" => intval($totalFiltered),
+            "data" => $data,
+        );
+
+        echo json_encode($json_data);
     }
 }

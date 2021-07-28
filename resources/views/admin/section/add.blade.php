@@ -22,6 +22,11 @@
             <label for="title" class="control-label">section *</label>
             <input class="form-control" placeholder="section" name="name" type="text">
         </div>
+        <div class="col-12 col-lg-4 form-group" style="margin-top: 32px;">
+            <label for="title" class="control-label">section *</label>
+            <button  id="target" class="btn btn-secondary"  name="icon" data-iconset="fontawesome5" data-icon="fas fa-wifi" role="iconpicker"></button>
+        </div>
+        
         <div class="col-12 col-lg-4 form-group">             
                 <label for="color" class="control-label">course image</label>
                 <input class="form-control" accept="image/jpeg,image/gif,image/png" name="image" type="file" id="color">

@@ -33,6 +33,7 @@
                                                 <tr role="row">
                                                     <th> {{ __('lang.number') }}</th>
                                                     <th> {{ __('lang.Section') }}</th>
+                                                    <th>  {{ __('lang.icon') }}</th>
                                                     <th>  {{ __('lang.Courses') }}</th>
                                                     <th>  {{ __('lang.Actions') }}</th>
                                                 </tr>
@@ -42,7 +43,8 @@
                                                     <tr class="row-{{ $val->id }}" id="row-{{ $val->id }}">
                                                         <td>{{ $val->id }}</td>
                                                         <td>{{ $val->name }}</td>
-                                                        <td>{{ $val->name }}</td>
+                                                        <td>{{ $val->icon }}</td>
+                                                        <td><i class="<?php echo  $val->icon;?>"></i></td>
                                                         <td>
                                                             <a href="{{ route('edit_categories', $val->id) }}"
                                                                 class="btn btn-info mb-1"><i class="fas fa-edit"></i></a>

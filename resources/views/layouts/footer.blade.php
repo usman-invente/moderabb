@@ -65,10 +65,17 @@
 <script src="{{ asset('asset/plugins/select2/js/select2.full.min.js') }}"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/js/intlTelInput.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-iconpicker/1.10.0/js/bootstrap-iconpicker.bundle.min.js">
+</script>
+
 @yield('script')
 @section('script')
     <script type="text/javascript">
         jQuery(document).ready(function() {
+
+            // Default options
+            $('#target').iconpicker();
+
             var input = document.querySelector("#phone");
             window.intlTelInput(input, {
                 // any initialisation options go here

@@ -57,49 +57,7 @@
             <!--container-fluid-->
     </main>
 
-    <script type="text/javascript">
-        function deleteConfirmation(id) {
-            swal({
-                title: "Are you sure?",
-                text: "Please ensure and then confirm!",
-                type: "warning",
-                showCancelButton: !0,
-                confirmButtonText: "Yes, delete it!",
-                cancelButtonText: "No, cancel!",
-                reverseButtons: !0
-            }).then(function(e) {
-
-                if (e.value === true) {
-                    var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-
-                    $.ajax({
-                        type: 'GET',
-                        url: "{{ url('/delete-teachers') }}/" + id,
-                        data: {
-                            _token: CSRF_TOKEN
-                        },
-                        dataType: 'JSON',
-                        success: function(results) {
-                            if (results.success === true) {
-                                swal("Done!", results.message, "success");
-                                // toastr.success('Success!', 'Comp deleted successfully');
-                                $(".row-" + id.toString()).remove();
-                            } else {
-                                swal("Error!", results.message, "error");
-                            }
-                        }
-                    });
-
-                } else {
-                    e.dismiss;
-                }
-
-            }, function(dismiss) {
-                return false;
-            })
-        }
-    </script>
-
+   
 @endsection
 @section('script')
     <script>
@@ -175,9 +133,7 @@
                             success: function(data) {
                                 // alert(data);
                                 swal("Updated", "", "success");
-                                parent.fadeOut('slow', function() {
-                                    $(this).remove();
-                                });
+                               window.location.href="";
                             }
                         }); // submitting the form when user press yes
                     } else {
