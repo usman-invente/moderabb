@@ -129,6 +129,7 @@ Route::get('course/cart/{slug}', [App\Http\Controllers\WebSiteController::class,
 Route::get('delete/cart/product/{id}', [App\Http\Controllers\WebSiteController::class, 'deletecartproduct'])->name('deletecartproduct');
 Route::post('add-review', [App\Http\Controllers\WebSiteController::class, 'addReview'])->name('courseReview');
 Route::get('trainers/join', [App\Http\Controllers\WebSiteController::class, 'trainerJoin'])->name('trainerJoin');
+
 ////////// Simultaneous Lessons //////////
 Route::get('/live-lessons', [App\Http\Controllers\AdminController::class, 'live_lessons'])->name('live_lessons');
 Route::get('/add-live-lessons', [App\Http\Controllers\AdminController::class, 'add_live_lessons'])->name('add_live_lessons');
@@ -221,6 +222,17 @@ Route::get('/edit-reasons/{id}', [App\Http\Controllers\AdminController::class, '
 Route::post('/update-reasons/{id}', [App\Http\Controllers\AdminController::class, 'update_reasons'])->name('update_reasons');
 Route::get('/delete-reasons/{id}', [App\Http\Controllers\AdminController::class, 'destroy_reasons'])->name('destroy_reasons');
 Route::get('/feature-reasons/{id}', [App\Http\Controllers\AdminController::class, 'feature_reasons'])->name('feature_reasons');
+
+////////// Animated-Sider //////////
+Route::get('/sliders', [App\Http\Controllers\AdminController::class, 'sliders'])->name('sliders');
+Route::get('/add-sliders', [App\Http\Controllers\AdminController::class, 'add_sliders'])->name('add_sliders');
+Route::post('/create-sliders', [App\Http\Controllers\AdminController::class, 'create_sliders'])->name('create_sliders');
+Route::get('/edit-sliders/{id}', [App\Http\Controllers\AdminController::class, 'edit_sliders'])->name('edit_sliders');
+Route::post('/update-sliders/{id}', [App\Http\Controllers\AdminController::class, 'update_sliders'])->name('update_sliders');
+Route::post('/delete-sliders', [App\Http\Controllers\AdminController::class, 'destroy_sliders'])->name('destroy_sliders');
+Route::post('/status-slider', [App\Http\Controllers\AdminController::class, 'status_slider'])->name('status_slider');
+Route::post('/slider', [App\Http\Controllers\AdminController::class, 'getSlider'])->name('admin.getSlider');
+
 
 ////////// Tax //////////
 Route::get('/tax', [App\Http\Controllers\AdminController::class, 'tax'])->name('tax');

@@ -17,6 +17,7 @@ use App\Models\Pagemanager;
 use App\Models\Quesstion;
 use App\Models\Reason;
 use App\Models\Schedule;
+use App\Models\Slider;
 use App\Models\Tax;
 use App\Models\Test;
 use App\Models\Testimonial;
@@ -343,7 +344,7 @@ class AdminController extends Controller
     }
     public function create_categories(Request $request)
     {
-    
+
         $name='';
         if ($request->hasFile('image')) {
             $image = $request->file('image');
@@ -351,11 +352,11 @@ class AdminController extends Controller
             $path = public_path() . '/upload/courseimage/';
             $image->move($destinationPath, $name);
         }
- 
+
         $category = new Category;
-        $category->name = $request->name; 
-        $category->image = $name; 
-        $category->icon = $request->icon?$request->icon:NULL; 
+        $category->name = $request->name;
+        $category->image = $name;
+        $category->icon = $request->icon?$request->icon:NULL;
         $category->user_id = Auth::user()->id;
         $category->save();
         return redirect()->route('categories')->with('message', 'Data Created Successfully!');
@@ -1656,6 +1657,246 @@ class AdminController extends Controller
         return response()->json(array('success' => true));
     }
 
+    public function sliders(Request $request)
+    {
+        $testi = Slider::all();
+        return view('admin.animated-slide.index', compact('testi'));
+    }
+
+    public function getSlider(Request $request)
+    {
+        $columns = array(
+            0 => 'name',
+            // 1 => 'title',
+            // 2 => 'email',
+        );
+
+        $totalData = Slider::all()->count();
+
+        $totalFiltered = $totalData;
+
+        $limit = $request->input('length');
+        $start = $request->input('start');
+        $order = $columns[$request->input('order.0.column')];
+        $dir = $request->input('order.0.dir');
+
+        if (empty($request->input('search.value'))) {
+            $posts = Slider::offset($start)
+                ->limit($limit)
+                ->orderBy($order, $dir)
+                ->get();
+        } else {
+            $search = $request->input('search.value');
+
+            $posts = Slider::
+                where('name', 'LIKE', "%{$search}%")
+                // ->orWhere('title', 'LIKE', "%{$search}%")
+                // ->orWhere('email', 'LIKE', "%{$search}%")
+                ->offset($start)
+                ->limit($limit)
+                ->orderBy($order, $dir)
+                ->get();
+
+            $totalFiltered = Slider::
+                where('name', 'LIKE', "%{$search}%")
+                // ->orWhere('email', 'LIKE', "%{$search}%")
+                // ->orWhere('title', 'LIKE', "%{$search}%")
+                ->count();
+        }
+
+        $data = array();
+        if (!empty($posts)) {
+            foreach ($posts as $post) {
+                $edit =  route('edit_sliders',$post->id);
+                $picture = '/upload/slider/'.$post->image;
+                $nestedData['number'] = $post->id;
+                $nestedData['name'] = $post->name;
+                $nestedData['image'] = "<img src='{$picture}' height='30' width='60' style='margin-top: 10px'>";
+                if ($post->status == 1) {
+                    $nestedData['status'] = '<p><span class="right badge badge-success">Enabled</span></p>';
+                } else {
+                    $nestedData['status'] = '<p><span class="right badge badge-danger">Disable</span></p>';
+                }
+                    $nestedData['actions'] = "&emsp;
+                    <a href= '#'class='btn mb-1 btn-success'><i data-id='{$post->id}' class='fa fa-power-off status'></i></a>
+                    <a href='#' class='btn btn-xs btn-danger text-white mb-1'><i  data-id='{$post->id}' class='fa fa-trash delete fa-fw'></i></a>
+                    <a href='{$edit}' class='btn btn-xs btn-info mb-1'><i class='fas fa-edit'></i></a>
+
+                    ";
+
+                $data[] = $nestedData;
+
+            }
+        }
+
+        $json_data = array(
+            "draw" => intval($request->input('draw')),
+            "recordsTotal" => intval($totalData),
+            "recordsFiltered" => intval($totalFiltered),
+            "data" => $data,
+        );
+
+        echo json_encode($json_data);
+    }
+
+    public function add_sliders(Request $request)
+    {
+        return view('admin.animated-slide.add');
+    }
+    public function create_sliders(Request $request)
+    {
+
+        $filename = "";
+
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $path = public_path() . '/upload/slider/';
+            $filename = time() . '.' . $image->getClientOriginalExtension();
+            $image->move($path, $filename);
+            $request->image = $filename;
+        }
+        $inputs = $request->all();
+        $inputs["image"] = $filename;
+        $user = Auth::user()->id;
+        $inputs["user_id"] = $user;
+        //  dd($inputs);
+        Slider::create($inputs);
+
+        return redirect()->route('sliders')->with('message', 'Data created successfully!');
+    }
+    public function edit_sliders(Request $request, $id)
+    {
+        $data = Slider::findOrFail($id);
+//    dd($data);
+        return view('admin.animated-slide.edit', compact('data'));
+    }
+    public function update_sliders(Request $request, $id)
+    {
+        $filename = "";
+
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $path = public_path() . '/upload/slider/';
+            $filename = time() . '.' . $image->getClientOriginalExtension();
+            $image->move($path, $filename);
+            $request->image = $filename;
+            $inputs = $request->except(['_token']);
+            $inputs["image"] = $filename;
+            Slider::where('id', $id)->update($inputs);
+        } else {
+            $inputs = $request->except(['_token']);
+            // dd($inputs);
+            Slider::where('id', $id)->update($inputs);
+        }
+        return redirect()->route('sliders')->with('message', 'Data Updated Successfully!');
+    }
+    public function destroy_sliders(Request $request)
+    {
+        Slider::find($request->id)->delete();
+        return response()->json(array('success' => true));
+    }
+    public function status_slider(Request $request)
+    {
+        $data = Slider::where('id', $request->id)->first();
+        // dd($data);
+        if (isset($data) && $data->status == 0) {
+            Slider::where('id', $request->id)->update(['status' => 1]);
+        } else {
+            Slider::where('id', $request->id)->update(['status' => 0]);
+        }
+        return response()->json(array('success' => true));
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public function getTeacher(Request $request)
     {
         $columns = array(
@@ -1712,7 +1953,7 @@ class AdminController extends Controller
                     $nestedData['status'] = '<p><span class="right badge badge-danger">Disable</span></p>';
                 }
 
-                if ($post->status == 0) {
+                if ($post->status ==   0) {
                     $nestedData['actions'] = "&emsp;
                     <a href='#'><i  data-id='{$post->id}' class='fa fa-trash delete fa-fw'></i></a>
                     <a   ><i class='fa fa-check' style='color:green' data-tooltip='tooltip' title='allow publish content' aria-hidden='true'></i></a>
