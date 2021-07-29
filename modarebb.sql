@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 27, 2021 at 11:52 AM
+-- Generation Time: Jul 29, 2021 at 12:05 PM
 -- Server version: 10.3.16-MariaDB
 -- PHP Version: 7.3.6
 
@@ -46,9 +46,8 @@ CREATE TABLE `advisories` (
 
 INSERT INTO `advisories` (`id`, `user_id`, `name`, `position`, `logo`, `web_link`, `status`, `created_at`, `updated_at`) VALUES
 (1, '11', 'test123', 'test1230', '1627221290.jpg', 'test123', '0', '2021-07-25 08:49:14', '2021-07-27 01:05:14'),
-(2, '11', 'Wang Haney', 'Recusandae Omnis au', '1627365592.jpg', 'Nulla sequi est non', '0', '2021-07-27 00:59:52', '2021-07-27 00:59:52'),
-(3, '11', 'Fiona Roberts', 'Expedita praesentium', '1627365624.jpg', 'Enim sunt sed repreh', '0', '2021-07-27 01:00:24', '2021-07-27 01:00:24'),
-(4, '11', 'Lillith Crane', 'Quaerat facilis comm', '1627365661.jpg', 'Aliquip deleniti eiu', '0', '2021-07-27 01:01:01', '2021-07-27 01:01:01'),
+(2, '11', 'Wang Haney', 'Recusandae Omnis au', '1627365592.jpg', 'Nulla sequi est non', '1', '2021-07-27 00:59:52', '2021-07-29 04:25:32'),
+(3, '11', 'Fiona Roberts', 'Expedita praesentium', '1627365624.jpg', 'Enim sunt sed repreh', '1', '2021-07-27 01:00:24', '2021-07-29 04:25:22'),
 (5, '11', 'Hamish Molina', 'Ea quo mollit conseq', '1627365845.jpg', 'Sint sed non in sint', '0', '2021-07-27 01:04:05', '2021-07-27 01:04:05');
 
 -- --------------------------------------------------------
@@ -147,10 +146,17 @@ CREATE TABLE `coupons` (
   `expires_at` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `min_price` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `per_user_limit` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `coupons`
+--
+
+INSERT INTO `coupons` (`id`, `user_id`, `name`, `description`, `code`, `type`, `amount`, `advert_perce`, `advert_name`, `expires_at`, `min_price`, `per_user_limit`, `status`, `created_at`, `updated_at`) VALUES
+(1, '11', 'test', 'test', '12bcA', '2', '888', '23', 'Daniel Paul', '1994-04-16', '349', '50', '0', '2021-07-29 04:45:49', '2021-07-29 05:03:32');
 
 -- --------------------------------------------------------
 
@@ -317,7 +323,7 @@ CREATE TABLE `faqs` (
   `user_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `category` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `question` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `answer` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `answer` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -328,7 +334,7 @@ CREATE TABLE `faqs` (
 --
 
 INSERT INTO `faqs` (`id`, `user_id`, `category`, `question`, `answer`, `status`, `created_at`, `updated_at`) VALUES
-(1, '11', '2', 'test123', '<p><font style=\"vertical-align: inherit;\"><font style=\"vertical-align: inherit;\"><font style=\"vertical-align: inherit;\"><font style=\"vertical-align: inherit;\">test</font></font></font></font></p>', '0', '2021-07-27 03:13:51', '2021-07-27 03:30:34');
+(1, '11', '2', 'test1486', '<p><font style=\"vertical-align: inherit;\"><font style=\"vertical-align: inherit;\"><font style=\"vertical-align: inherit;\"><font style=\"vertical-align: inherit;\"><font style=\"vertical-align: inherit;\"><font style=\"vertical-align: inherit;\">test test test test&nbsp;</font></font></font></font></font></font></p>', '1', '2021-07-27 03:13:51', '2021-07-29 03:01:00');
 
 -- --------------------------------------------------------
 
@@ -394,7 +400,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (29, '2021_07_26_102245_create_news_table', 14),
 (30, '2021_07_27_075120_create_faqs_table', 15),
 (31, '2021_07_27_084534_create_testimonials_table', 16),
-(32, '2021_07_27_092625_create_reasons_table', 17);
+(32, '2021_07_27_092625_create_reasons_table', 17),
+(33, '2021_07_28_070436_create_sliders_table', 18);
 
 -- --------------------------------------------------------
 
@@ -427,8 +434,7 @@ INSERT INTO `news` (`id`, `user_id`, `category`, `title`, `slug`, `tags`, `featu
 (2, '11', '7', 'Quos a hic possimus', 'Accusamus magna ipsa', 'In ex ut nostrum et', '1627365189.jpg', '<p>awesdrtfygh</p>', 'Dolorem repudiandae', 'Qui tenetur vel obca', 'Voluptatum blanditii', '2021-07-27 00:53:09', '2021-07-27 00:53:09'),
 (3, '11', '6', 'Quis qui laboris ten', 'Perspiciatis sequi', 'Nam commodi maiores', '1627365308.jpg', '<p>asdfgh</p>', 'Qui aut reiciendis q', 'Qui qui non non exer', 'Eos sint cupiditate', '2021-07-27 00:55:08', '2021-07-27 00:55:08'),
 (4, '11', '4', 'Impedit Nam eos co', 'Dolores do omnis vel', 'Sint in perspiciati', '1627365447.png', 'sdfghj', 'Nisi dolorum invento', 'Ullam fuga Hic est', 'Et voluptatem aut i', '2021-07-27 00:57:27', '2021-07-27 00:57:27'),
-(5, '11', '3', 'Et libero fugiat co', 'Rerum porro voluptat', 'Dolore dolore repudi', '1627367756.jpg', 'dfdghj', 'Voluptatibus aut sim', 'Tempore repellendus', 'Nostrum fugiat cillu', '2021-07-27 01:35:56', '2021-07-27 01:35:56'),
-(6, '11', '3', 'Delectus tempore f', 'Omnis laboriosam se', 'Ex molestiae ut magn', '1627368116.jpg', 'gfhgh', 'Pariatur Eum anim t', 'Dolorum amet ullam', 'Repellendus Repelle', '2021-07-27 01:41:56', '2021-07-27 01:41:56');
+(6, '11', '3', 'test1486', 'Omnis laboriosam se', 'Ex molestiae ut magn', '1627368116.jpg', 'gfhgh', 'Pariatur Eum anim t', 'Dolorum amet ullam', 'Repellendus Repelle', '2021-07-27 01:41:56', '2021-07-29 02:10:11');
 
 -- --------------------------------------------------------
 
@@ -476,8 +482,8 @@ CREATE TABLE `ourpartners` (
 INSERT INTO `ourpartners` (`id`, `user_id`, `name`, `logo`, `link`, `status`, `created_at`, `updated_at`) VALUES
 (1, '11', 'test1234', '1627218770.jpg', 'test1233', 0, '2021-07-25 07:31:31', '2021-07-27 01:33:44'),
 (2, '11', 'test123', '1627366548.jpg', 'test123', 0, '2021-07-25 07:35:18', '2021-07-27 01:15:48'),
-(3, '11', 'test', '1627216573.jpg', 'test2345yu', 0, '2021-07-25 07:36:13', '2021-07-27 01:16:53'),
-(4, '11', 'Ulysses Hendricks', '1627366507.jpg', 'Perspiciatis corpor', 0, '2021-07-27 01:15:07', '2021-07-27 01:15:07');
+(3, '11', 'test', '1627216573.jpg', 'test2345yu', 1, '2021-07-25 07:36:13', '2021-07-29 04:11:51'),
+(5, '11', 'Neville Wise', '1627549939.png', 'Voluptatibus sunt s', 0, '2021-07-29 04:12:19', '2021-07-29 04:12:19');
 
 -- --------------------------------------------------------
 
@@ -594,7 +600,7 @@ CREATE TABLE `reasons` (
 --
 
 INSERT INTO `reasons` (`id`, `user_id`, `title`, `content`, `status`, `created_at`, `updated_at`) VALUES
-(1, '11', 'test123', 'test123', 0, '2021-07-27 04:40:49', '2021-07-27 04:42:50');
+(2, '11', 'test123', 'tes test', 0, '2021-07-29 03:29:42', '2021-07-29 03:31:53');
 
 -- --------------------------------------------------------
 
@@ -619,6 +625,33 @@ CREATE TABLE `schedules` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `sliders`
+--
+
+CREATE TABLE `sliders` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `overlay` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `hero_text` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `sub_text` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `widget` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` tinyint(4) NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `sliders`
+--
+
+INSERT INTO `sliders` (`id`, `user_id`, `name`, `image`, `overlay`, `hero_text`, `sub_text`, `widget`, `status`, `created_at`, `updated_at`) VALUES
+(3, '11', 'test', '1627461356.PNG', '1', 'test', 'test', '1', 0, '2021-07-28 03:35:56', '2021-07-28 04:38:46');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `taxes`
 --
 
@@ -627,7 +660,7 @@ CREATE TABLE `taxes` (
   `user_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `rate` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -748,7 +781,6 @@ INSERT INTO `users` (`id`, `name`, `title`, `c_person`, `telephone`, `dob`, `sex
 (10, 'Caleb', NULL, 'Dorsey', '+1 (608) 462-2783', NULL, NULL, NULL, 'bubezaro@mailinator.com', '1625341018.jpg', NULL, NULL, 'Qui dolore asperiores quis autem', 'Laboriosam temporibus ipsum veniam sint quam porro', 'Sed soluta aute ex officiis molestias qui proident eum nisi qui nisi magna consequatur iure officiis', 'Maiores pariatur Ullamco velit voluptatem praesentium magni at sed autem sunt aut nemo labore eius', NULL, 'Eum fugiat et quae consectetur id ut consequatur nemo quia quaerat', NULL, NULL, NULL, 'Iona Shaw', 'Optio magni eius libero ex consequuntur molestias provident quia tempora', '927', 1, NULL, '$2y$10$cJoCzEe6uDJ6wUXP1K5WzOKHIZDyBlRigc4y8g.jgnPhPLvmVwcJ2', NULL, '2021-07-03 14:10:38', '2021-07-03 14:40:08'),
 (11, 'Muhammad Usmna', 'Muhammad Usmna', NULL, '+1', '2021-07-18', 'male', 'PK', 'usman.traximtech@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, '$2y$10$ukp7OTZwoa4Vis/BZks8XetJ0HapSeEg0Z71EeqMs.n.pcEG32WFG', NULL, '2021-07-05 13:02:38', '2021-07-05 13:02:38'),
 (14, 'Eden', 'Marshall', NULL, '+1 (298) 749-1701', NULL, 'male', NULL, 'buzajiz@mailinator.com', '', 'b', 'Illum harum ipsam molestiae ex ea mollit dolore qui reprehenderit officia', 'Culpa dicta iure qui commodi ab', 'Itaque cupiditate pariatur Velit optio quod voluptas', 'Eaque nihil distinctio Sed perferendis sit non', 'Quae non est rerum provident placeat', 2, 'Voluptates id eaque non ea qui facilis vel ipsam mollit cum fugiat obcaecati', '1626021793.png', '1626021793.png', '1626021793.pdf', 'Robin Conley', 'Est reprehenderit voluptates laudantium officiis est ex quam velit ut similique qui impedit', '25', 1, NULL, '$2y$10$8FnaBNlf2dWOMsH2sZJQb.CvG9YyCj1MOjlHYKcm/dIMktp4/.5re', NULL, '2021-07-11 11:43:14', '2021-07-11 11:43:14'),
-(15, 'Amir', 'Harvey', NULL, '+1 (701) 577-8017', NULL, 'male', NULL, 'poxigyx@mailinator.com', '', 'm', 'Obcaecati enim facilis dolores ut optio adipisci debitis sint', 'Consectetur illum in itaque eos nostrum assumenda id proident quod vel sint quaerat dolor voluptates cupidatat', 'Proident repudiandae nesciunt adipisicing enim rem officia enim', 'Sit sed at voluptatem numquam', 'Velit et amet corporis praesentium necessitatibus aliqua Explicabo Sint delectus impedit', 2, 'Vel voluptates sunt ad consectetur porro perspiciatis rerum', '1626021888.png', '1626021888.png', '1626021888.pdf', 'Evan Burt', 'Itaque doloribus tempora quis eum laboriosam alias aute adipisci aliqua', '873', 1, NULL, '$2y$10$cH595UvbmFL4YMqaVlHA3eqLb6yDqrM5gO39WDSTq2.1EZUrysZH.', NULL, '2021-07-11 11:44:48', '2021-07-11 11:44:48'),
 (16, 'Quail', NULL, 'Hickman', '+1 (595) 826-4946', NULL, NULL, NULL, 'poso@mailinator.com', NULL, NULL, NULL, '144', 'Voluptate aut quisquam ipsum molestiae molestiae repudiandae', 'In aute eos ipsam quo corporis natus quia qui sit itaque suscipit eum odit repudiandae qui quia ea quo dolorum', 'Exercitation cillum architecto sed doloremque corrupti amet quaerat', 3, 'Ea asperiores dicta eum alias aut deserunt reiciendis ea dolorum ducimus', NULL, NULL, NULL, 'Geraldine Maldonado', 'Ex fugit enim culpa eiusmod minima corrupti ea officiis aliquid ut tempor labore reiciendis qui voluptatem', '195', 1, NULL, '$2y$10$K6LdG7exlQoI1LV3gyDs.OwSw76gs.ech30.KiMLxZIde8pT6Zl0m', NULL, '2021-07-13 12:34:47', '2021-07-13 12:34:47');
 
 --
@@ -884,6 +916,12 @@ ALTER TABLE `schedules`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `sliders`
+--
+ALTER TABLE `sliders`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `taxes`
 --
 ALTER TABLE `taxes`
@@ -946,7 +984,7 @@ ALTER TABLE `contacts`
 -- AUTO_INCREMENT for table `coupons`
 --
 ALTER TABLE `coupons`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `courses`
@@ -976,7 +1014,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `faqs`
 --
 ALTER TABLE `faqs`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `lessons`
@@ -988,7 +1026,7 @@ ALTER TABLE `lessons`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `news`
@@ -1006,13 +1044,13 @@ ALTER TABLE `newsletters`
 -- AUTO_INCREMENT for table `ourpartners`
 --
 ALTER TABLE `ourpartners`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `pagemanagers`
 --
 ALTER TABLE `pagemanagers`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `paytabs_invoices`
@@ -1030,7 +1068,7 @@ ALTER TABLE `quesstions`
 -- AUTO_INCREMENT for table `reasons`
 --
 ALTER TABLE `reasons`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `schedules`
@@ -1039,16 +1077,22 @@ ALTER TABLE `schedules`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `sliders`
+--
+ALTER TABLE `sliders`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT for table `taxes`
 --
 ALTER TABLE `taxes`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `testimonials`
 --
 ALTER TABLE `testimonials`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `tests`
@@ -1066,7 +1110,7 @@ ALTER TABLE `training_needs`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

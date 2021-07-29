@@ -12,7 +12,7 @@
                                     
 <div class="card">
 <div class="card-header">
-                <h3 class="page-title d-inline">create our partners</h3>
+                <h3 class="page-title d-inline">Update our partners</h3>
     <div class="float-right">
         <a data-toggle="" id="createCatBtn" data-target="#createCat" href="{{ route('sponsors') }}" class="btn btn-success collapsed" aria-expanded="false">View</a>
 

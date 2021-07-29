@@ -168,8 +168,9 @@ Route::get('/add-sponsors', [App\Http\Controllers\AdminController::class, 'add_s
 Route::post('/create-sponsors', [App\Http\Controllers\AdminController::class, 'create_sponsors'])->name('create_sponsors');
 Route::get('/edit-sponsors/{id}', [App\Http\Controllers\AdminController::class, 'edit_sponsors'])->name('edit_sponsors');
 Route::post('/update-sponsors/{id}', [App\Http\Controllers\AdminController::class, 'update_sponsors'])->name('update_sponsors');
-Route::get('/delete-sponsors/{id}', [App\Http\Controllers\AdminController::class, 'destroy_sponsors'])->name('destroy_sponsors');
-Route::get('/feature-sponsors/{id}', [App\Http\Controllers\AdminController::class, 'feature_sponsor'])->name('feature_sponsor');
+Route::post('/delete-sponsors', [App\Http\Controllers\AdminController::class, 'destroy_sponsors'])->name('destroy_sponsors');
+Route::post('/feature-sponsors', [App\Http\Controllers\AdminController::class, 'feature_sponsor'])->name('feature_sponsor');
+Route::post('/Sponsors', [App\Http\Controllers\AdminController::class, 'getSponsors'])->name('admin.getSponsors');
 
 ////////// advisory-board //////////
 Route::get('/advisoryboards', [App\Http\Controllers\AdminController::class, 'advisoryboards'])->name('advisoryboards');
@@ -177,8 +178,9 @@ Route::get('/add-advisoryboards', [App\Http\Controllers\AdminController::class, 
 Route::post('/create-advisoryboards', [App\Http\Controllers\AdminController::class, 'create_advisoryboards'])->name('create_advisoryboards');
 Route::get('/edit-advisoryboards/{id}', [App\Http\Controllers\AdminController::class, 'edit_advisoryboards'])->name('edit_advisoryboards');
 Route::post('/update-advisoryboards/{id}', [App\Http\Controllers\AdminController::class, 'update_advisoryboards'])->name('update_advisoryboards');
-Route::get('/delete-advisoryboards/{id}', [App\Http\Controllers\AdminController::class, 'destroy_advisoryboards'])->name('destroy_advisoryboards');
-Route::get('/feature-advisoryboards/{id}', [App\Http\Controllers\AdminController::class, 'feature_advisoryboards'])->name('feature_advisoryboards');
+Route::post('/delete-advisoryboards', [App\Http\Controllers\AdminController::class, 'destroy_advisoryboards'])->name('destroy_advisoryboards');
+Route::post('/feature-advisoryboards', [App\Http\Controllers\AdminController::class, 'feature_advisoryboards'])->name('feature_advisoryboards');
+Route::post('/Advisoryboards', [App\Http\Controllers\AdminController::class, 'getAdvisoryboards'])->name('admin.getAdvisoryboards');
 
 ////////// page-manager //////////
 Route::get('/pages', [App\Http\Controllers\AdminController::class, 'pages'])->name('pages');
@@ -186,7 +188,8 @@ Route::get('/add-pages', [App\Http\Controllers\AdminController::class, 'add_page
 Route::post('/create-pages', [App\Http\Controllers\AdminController::class, 'create_pages'])->name('create_pages');
 Route::get('/edit-pages/{id}', [App\Http\Controllers\AdminController::class, 'edit_pages'])->name('edit_pages');
 Route::post('/update-pages/{id}', [App\Http\Controllers\AdminController::class, 'update_pages'])->name('update_pages');
-Route::get('/delete-pages/{id}', [App\Http\Controllers\AdminController::class, 'destroy_pages'])->name('destroy_pages');
+Route::post('/delete-pages', [App\Http\Controllers\AdminController::class, 'destroy_pages'])->name('destroy_pages');
+Route::post('/page', [App\Http\Controllers\AdminController::class, 'getPage'])->name('admin.getPage');
 
 ////////// news //////////
 Route::get('/news', [App\Http\Controllers\AdminController::class, 'news'])->name('news');
@@ -194,7 +197,8 @@ Route::get('/add-news', [App\Http\Controllers\AdminController::class, 'add_news'
 Route::post('/create-news', [App\Http\Controllers\AdminController::class, 'create_news'])->name('create_news');
 Route::get('/edit-news/{id}', [App\Http\Controllers\AdminController::class, 'edit_news'])->name('edit_news');
 Route::post('/update-news/{id}', [App\Http\Controllers\AdminController::class, 'update_news'])->name('update_news');
-Route::get('/delete-news/{id}', [App\Http\Controllers\AdminController::class, 'destroy_news'])->name('destroy_news');
+Route::post('/delete-news', [App\Http\Controllers\AdminController::class, 'destroy_news'])->name('destroy_news');
+Route::post('/news', [App\Http\Controllers\AdminController::class, 'getNews'])->name('admin.getNews');
 
 ////////// Faqs //////////
 Route::get('/faqs', [App\Http\Controllers\AdminController::class, 'faqs'])->name('faqs');
@@ -202,8 +206,9 @@ Route::get('/add-faqs', [App\Http\Controllers\AdminController::class, 'add_faqs'
 Route::post('/create-faqs', [App\Http\Controllers\AdminController::class, 'create_faqs'])->name('create_faqs');
 Route::get('/edit-faqs/{id}', [App\Http\Controllers\AdminController::class, 'edit_faqs'])->name('edit_faqs');
 Route::post('/update-faqs/{id}', [App\Http\Controllers\AdminController::class, 'update_faqs'])->name('update_faqs');
-Route::get('/delete-faqs/{id}', [App\Http\Controllers\AdminController::class, 'destroy_faqs'])->name('destroy_faqs');
-Route::get('/feature-faqs/{id}', [App\Http\Controllers\AdminController::class, 'feature_faqs'])->name('feature_faqs');
+Route::post('/delete-faqs', [App\Http\Controllers\AdminController::class, 'destroy_faqs'])->name('destroy_faqs');
+Route::post('/feature-faqs', [App\Http\Controllers\AdminController::class, 'feature_faqs'])->name('feature_faqs');
+Route::post('/Faqs', [App\Http\Controllers\AdminController::class, 'getFaqs'])->name('admin.getFaqs');
 
 ////////// testimonials //////////
 Route::get('/testimonials', [App\Http\Controllers\AdminController::class, 'testimonials'])->name('testimonials');
@@ -211,8 +216,9 @@ Route::get('/add-testimonials', [App\Http\Controllers\AdminController::class, 'a
 Route::post('/create-testimonials', [App\Http\Controllers\AdminController::class, 'create_testimonials'])->name('create_testimonials');
 Route::get('/edit-testimonials/{id}', [App\Http\Controllers\AdminController::class, 'edit_testimonials'])->name('edit_testimonials');
 Route::post('/update-testimonials/{id}', [App\Http\Controllers\AdminController::class, 'update_testimonials'])->name('update_testimonials');
-Route::get('/delete-testimonials/{id}', [App\Http\Controllers\AdminController::class, 'destroy_testimonials'])->name('destroy_testimonials');
-Route::get('/feature-testimonials/{id}', [App\Http\Controllers\AdminController::class, 'feature_testimonials'])->name('feature_testimonials');
+Route::post('/delete-testimonials', [App\Http\Controllers\AdminController::class, 'destroy_testimonials'])->name('destroy_testimonials');
+Route::post('/feature-testimonials', [App\Http\Controllers\AdminController::class, 'feature_testimonials'])->name('feature_testimonials');
+Route::post('/Testimonials', [App\Http\Controllers\AdminController::class, 'getTestimonials'])->name('admin.getTestimonials');
 
 ////////// Why a language trainer //////////
 Route::get('/reasons', [App\Http\Controllers\AdminController::class, 'reasons'])->name('reasons');
@@ -220,8 +226,9 @@ Route::get('/add-reasons', [App\Http\Controllers\AdminController::class, 'add_re
 Route::post('/create-reasons', [App\Http\Controllers\AdminController::class, 'create_reasons'])->name('create_reasons');
 Route::get('/edit-reasons/{id}', [App\Http\Controllers\AdminController::class, 'edit_reasons'])->name('edit_reasons');
 Route::post('/update-reasons/{id}', [App\Http\Controllers\AdminController::class, 'update_reasons'])->name('update_reasons');
-Route::get('/delete-reasons/{id}', [App\Http\Controllers\AdminController::class, 'destroy_reasons'])->name('destroy_reasons');
-Route::get('/feature-reasons/{id}', [App\Http\Controllers\AdminController::class, 'feature_reasons'])->name('feature_reasons');
+Route::post('/delete-reasons', [App\Http\Controllers\AdminController::class, 'destroy_reasons'])->name('destroy_reasons');
+Route::post('/feature-reasons', [App\Http\Controllers\AdminController::class, 'feature_reasons'])->name('feature_reasons');
+Route::post('/Reasons', [App\Http\Controllers\AdminController::class, 'getReasons'])->name('admin.getReasons');
 
 ////////// Animated-Sider //////////
 Route::get('/sliders', [App\Http\Controllers\AdminController::class, 'sliders'])->name('sliders');
@@ -240,8 +247,9 @@ Route::get('/add-tax', [App\Http\Controllers\AdminController::class, 'add_tax'])
 Route::post('/create-tax', [App\Http\Controllers\AdminController::class, 'create_tax'])->name('create_tax');
 Route::get('/edit-tax/{id}', [App\Http\Controllers\AdminController::class, 'edit_tax'])->name('edit_tax');
 Route::post('/update-tax/{id}', [App\Http\Controllers\AdminController::class, 'update_tax'])->name('update_tax');
-Route::get('/delete-tax/{id}', [App\Http\Controllers\AdminController::class, 'destroy_tax'])->name('destroy_tax');
-Route::get('/tax-status/{id}', [App\Http\Controllers\AdminController::class, 'tax_status'])->name('tax_status');
+Route::post('/delete-tax', [App\Http\Controllers\AdminController::class, 'destroy_tax'])->name('destroy_tax');
+Route::post('/tax-status', [App\Http\Controllers\AdminController::class, 'tax_status'])->name('tax_status');
+Route::post('/Tax', [App\Http\Controllers\AdminController::class, 'getTax'])->name('admin.getTax');
 
 ////////// Coupon //////////
 Route::get('/coupon', [App\Http\Controllers\AdminController::class, 'coupon'])->name('coupon');
@@ -249,8 +257,9 @@ Route::get('/add-coupon', [App\Http\Controllers\AdminController::class, 'add_cou
 Route::post('/create-coupon', [App\Http\Controllers\AdminController::class, 'create_coupon'])->name('create_coupon');
 Route::get('/edit-coupon/{id}', [App\Http\Controllers\AdminController::class, 'edit_coupon'])->name('edit_coupon');
 Route::post('/update-coupon/{id}', [App\Http\Controllers\AdminController::class, 'update_coupon'])->name('update_coupon');
-Route::get('/delete-coupon/{id}', [App\Http\Controllers\AdminController::class, 'destroy_coupon'])->name('destroy_coupon');
-Route::get('/coupon-status/{id}', [App\Http\Controllers\AdminController::class, 'coupon_status'])->name('coupon_status');
+Route::post('/delete-coupon', [App\Http\Controllers\AdminController::class, 'destroy_coupon'])->name('destroy_coupon');
+Route::post('/coupon-status', [App\Http\Controllers\AdminController::class, 'coupon_status'])->name('coupon_status');
+Route::post('/Coupon', [App\Http\Controllers\AdminController::class, 'getCoupon'])->name('admin.getCoupon');
 
 ////////// Account //////////
 Route::get('/account', [App\Http\Controllers\AdminController::class, 'account'])->name('account');

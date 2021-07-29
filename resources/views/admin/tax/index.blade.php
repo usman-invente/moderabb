@@ -26,122 +26,149 @@
     <div class="col-12">
         <div class="table-responsive">
             <div id="myTable_wrapper" class="dataTables_wrapper no-footer">
-                <table id="myTable" class="table table-bordered table-striped dataTable no-footer" role="grid" aria-describedby="myTable_info">
-                <thead>
-                <tr role="row">
-                    <th >number</th>
-                    <th > Name</th>
-                    <th >Rate</th>
-                    <th >status</th>
-                    <th >Actions</th>
-                </tr>
-            </thead>
-                <tbody>
-                @foreach ($tax as $val)
-                <tr class="row-{{$val->id}}" id="row-{{$val->id}}">
-                    <td>{{ $val->id }}</td>
-                    <td>{{ $val->name }}</td>
-                    <td>{{ $val->rate }}</td>
-                    <td>{{ $val->status }}</td>
-                    <td>
-                        
-                        <a class="btn mb-1 btn-danger" href="javascript:void(0);"data-id="{{ $val->id }}" data-action="{{ route('tax_status',$val->id) }}" onclick="tax_status_Confirmation({{$val->id}})"><i class="fa fa-power-off"></i><a>
-                        <a href="{{route('edit_tax',$val->id)}}" class="btn btn-info mb-1" ><i class="fas fa-edit"></i></a>
-                        <a class="btn btn-danger mb-1" href="javascript:void(0);"data-id="{{ $val->id }}" data-action="{{ route('destroy_tax',$val->id) }}" onclick="deleteConfirmation({{$val->id}})"><i class="fa fa-trash"></i><a>
-                        
-                </tr>
-                @endforeach
-                </tbody>
-            </table></div>
+                <table id="myTable" class="table table-bordered table-striped dataTable no-footer"
+                    role="grid" aria-describedby="myTable_info">
+                    <thead>
+                        <tr role="row">
+                            <th>{{ __('lang.number') }}</th>
+                            <th>{{ __('lang.Name') }}</th>
+                            <th>{{ __('lang.Rate') }}</th>
+                            <th>{{ __('lang.Status') }}</th>
+                            <th>{{ __('lang.Actions') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-</div>
 </div>
 </div>
 
         </div><!--animated-->
     </div><!--container-fluid-->
 </main>
+@endsection
+@section('script')
+    <script>
+        $(document).ready(function() {
+            $('#myTable').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "responsive": true,
+                "ajax": {
+                    "url": "{{ route('admin.getTax') }}",
+                    "dataType": "json",
+                    "type": "POST",
+                    "data": {
+                        _token: "{{ csrf_token() }}"
+                    }
+                },
+                "columns": [{
+                        "data": "number"
+                    },
+                    {
+                        "data": "name"
+                    },
+                    {
+                        "data": "rate"
+                    },
+                    {
+                        "data": "status"
+                    },
+                    {
+                        "data": "actions"
+                    },
 
-<script type="text/javascript">
+                ]
 
-    function deleteConfirmation(id) {
-        swal({
-            title: "Are you sure?",
-            text: "Please ensure and then confirm!",
-            type: "warning",
-            showCancelButton: !0,
-            confirmButtonText: "Yes, delete it!",
-            cancelButtonText: "No, cancel!",
-            reverseButtons: !0
-        }).then(function (e) {
+            });
+        });
+    </script>
+    <script>
+        $(document).on('click', '.delete', function(e) {
+            e.preventDefault();
+            var id = $(this).data('id');
+            var parent = $(this).parent().parent();
 
-            if (e.value === true) {
-                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
-                $.ajax({
-                    type: 'GET',
-                    url: "{{url('/delete-tax')}}/" + id,
-                    data: {_token: CSRF_TOKEN},
-                    dataType: 'JSON',
-                    success: function (results) {
-                        if (results.success === true) {
-                            swal("Done!", results.message, "success");
-                            // toastr.success('Success!', 'Comp deleted successfully');
-                                 $(".row-"+id.toString()).remove();
-                        } else {
-                            swal("Error!", results.message, "error");
-                        }
+            swal({
+                    title: "Are you sure?",
+                    text: "",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, Delete!",
+                    cancelButtonText: "No, cancel please!",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                },
+                function(isConfirm) {
+                    if (isConfirm) {
+                        //console.log("sdsd");
+
+                        $.ajax({
+                            type: "POST",
+                            url: "{{ route('destroy_tax') }}",
+                            data: {
+                                '_token': "{{ csrf_token() }}",
+                                id: id
+                            },
+                            success: function(data) {
+                                // alert(data);
+                                swal("Updated", "", "success");
+                               window.location.href="";
+                            }
+                        }); // submitting the form when user press yes
+                    } else {
+                        swal("Cancelled", "Your record  is safe :)", "info");
                     }
                 });
 
-            } else {
-                e.dismiss;
-            }
+        });
+    </script>
+    <script>
+        $(document).on('click', '.status', function(e) {
+            e.preventDefault();
+            var id = $(this).data('id');
+            var parent = $(this).parent().parent();
 
-        }, function (dismiss) {
-            return false;
-        })
-    }
- </script>
- <script type="text/javascript">
 
-    function tax_status_Confirmation(id) {
-        swal({
-            title: "Are you sure?",
-            text: "Please ensure and then confirm!",
-            type: "warning",
-            showCancelButton: !0,
-            confirmButtonText: "Yes, Enabled it!",
-            cancelButtonText: "No, cancel!",
-            reverseButtons: !0
-        }).then(function (e) {
+            swal({
+                    title: "Are you sure?",
+                    text: "",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes!",
+                    cancelButtonText: "No, cancel please!",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                },
+                function(isConfirm) {
+                    if (isConfirm) {
+                        //console.log("sdsd");
 
-            if (e.value === true) {
-                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-
-                $.ajax({
-                    type: 'GET',
-                    url: "{{url('/tax-status')}}/" + id,
-                    data: {_token: CSRF_TOKEN},
-                    dataType: 'JSON',
-                    success: function (results) {
-                        if (results.success === true) {
-                            {{--  swal("Done!", results.message, "success");  --}}
-                            // toastr.success('Success!', 'Comp deleted successfully');
-                            window.location = '{{ route('tax') }}'
-                        } else {
-                            swal("Error!", results.message, "error");
-                        }
+                        $.ajax({
+                            type: "POST",
+                            url: "{{ route('tax_status') }}",
+                            data: {
+                                '_token': "{{ csrf_token() }}",
+                                id: id
+                            },
+                            success: function(data) {
+                                // alert(data);
+                                swal("Updated", "", "success");
+                               window.location.href="";
+                            }
+                        }); // submitting the form when user press yes
+                    } else {
+                        swal("Cancelled", "Your record  is safe :)", "info");
                     }
                 });
 
-            } else {
-                e.dismiss;
-            }
-
-        }, function (dismiss) {
-            return false;
-        })
-    }
- </script>
+        });
+    </script>
 @endsection
