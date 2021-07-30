@@ -14,7 +14,7 @@ class Course extends Model
         'eccbody_id',
         'category_id',
         'bag_type',
-        'title',
+        'ctitle',
         'slug',
         'description',
         'price',

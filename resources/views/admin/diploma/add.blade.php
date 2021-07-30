@@ -41,7 +41,7 @@
         <label for="teachers" class="control-label">courses *</label>
         <select class="form-control select2 js-example-placeholder-multiple select2bs4" required multiple="multiple" name="courses">
             @foreach ($courses as $cour)
-            <option value="{{ $cour->id }}">{{ $cour->title }}</option>
+            <option value="{{ $cour->id }}">{{ $cour->ctitle }}</option>
             @endforeach
         </select>
         </div>

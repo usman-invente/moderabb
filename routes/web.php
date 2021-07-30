@@ -75,7 +75,7 @@ Route::post('/create-categories', [App\Http\Controllers\AdminController::class, 
 Route::get('/edit-categories/{id}', [App\Http\Controllers\AdminController::class, 'edit_categories'])->name('edit_categories');
 Route::post('/update-categories/{id}', [App\Http\Controllers\AdminController::class, 'update_categories'])->name('update_categories');
 Route::post('/delete-categories', [App\Http\Controllers\AdminController::class, 'destroy_categories'])->name('destroy_categories');
-Route::get('/courses/cat_id/{id}', [App\Http\Controllers\AdminController::class, ' show_courses_categories'])->name('show_courses_categories');
+Route::get('/courses/cat_id/{id}', [App\Http\Controllers\AdminController::class, 'show_courses_categories'])->name('show_courses_categories');
 Route::post('/categories', [App\Http\Controllers\AdminController::class, 'getcategories'])->name('admin.getcategories');
 
 /////// Training Need ///////
@@ -86,15 +86,16 @@ Route::get('/edit-trainings/{id}', [App\Http\Controllers\AdminController::class,
 Route::post('/update-trainings/{id}', [App\Http\Controllers\AdminController::class, 'update_trainings'])->name('update_trainings');
 Route::post('/delete-trainings', [App\Http\Controllers\AdminController::class, 'destroy_trainings'])->name('destroy_trainings');
 Route::post('/training', [App\Http\Controllers\AdminController::class, 'getTrainer'])->name('admin.getTrainer');
-
+ 
 /////// Accrediting Bodies ///////
 Route::get('/accreditation-bodies', [App\Http\Controllers\AdminController::class, 'accreditation_bodies'])->name('accreditation_bodies');
 Route::get('/add-accreditation-bodies', [App\Http\Controllers\AdminController::class, 'add_accreditation_bodies'])->name('add_accreditation_bodies');
 Route::post('/create-accreditation-bodies', [App\Http\Controllers\AdminController::class, 'create_accreditation_bodies'])->name('create_accreditation_bodies');
 Route::get('/edit-accreditation-bodies/{id}', [App\Http\Controllers\AdminController::class, 'edit_accreditation_bodies'])->name('edit_accreditation_bodies');
 Route::post('/update-accreditation-bodies/{id}', [App\Http\Controllers\AdminController::class, 'update_accreditation_bodies'])->name('update_accreditation_bodies');
-Route::get('/delete-accreditation-bodies/{id}', [App\Http\Controllers\AdminController::class, 'destroy_accreditation_bodies'])->name('destroy_accreditation_bodies');
+Route::post('/delete-accreditation-bodies', [App\Http\Controllers\AdminController::class, 'destroy_accreditation_bodies'])->name('destroy_accreditation_bodies');
 Route::get('/courses/acc_body/{id}', [App\Http\Controllers\AdminController::class, 'show_courses_accreditation_bodies'])->name('show_courses_accreditation_bodies');
+Route::post('/accreditation-bodies', [App\Http\Controllers\AdminController::class, 'getAcbody'])->name('admin.getAcbody');
 
 /////// Course ///////
 Route::get('/courses', [App\Http\Controllers\AdminController::class, 'courses'])->name('courses');
@@ -102,8 +103,9 @@ Route::get('/add-courses', [App\Http\Controllers\AdminController::class, 'add_co
 Route::post('/create-courses', [App\Http\Controllers\AdminController::class, 'create_courses'])->name('create_courses');
 Route::get('/edit-courses/{id}', [App\Http\Controllers\AdminController::class, 'edit_courses'])->name('edit_courses');
 Route::post('/update-courses/{id}', [App\Http\Controllers\AdminController::class, 'update_courses'])->name('update_courses');
-Route::get('/delete-courses/{id}', [App\Http\Controllers\AdminController::class, 'destroy_courses'])->name('destroy_courses');
-Route::get('/feature-courses/{id}', [App\Http\Controllers\AdminController::class, 'feature_courses'])->name('feature_courses');
+Route::post('/delete-courses', [App\Http\Controllers\AdminController::class, 'destroy_courses'])->name('destroy_courses');
+Route::post('/feature-courses', [App\Http\Controllers\AdminController::class, 'feature_courses'])->name('feature_courses');
+Route::post('/Courses', [App\Http\Controllers\AdminController::class, 'getCourses'])->name('admin.getCourses');
 
 /////// Diplomas ///////
 Route::get('/bundles', [App\Http\Controllers\AdminController::class, 'diploma'])->name('diploma');
@@ -111,7 +113,8 @@ Route::get('/add-bundles', [App\Http\Controllers\AdminController::class, 'add_di
 Route::post('/create-bundles', [App\Http\Controllers\AdminController::class, 'create_diploma'])->name('create_diploma');
 Route::get('/edit-bundles/{id}', [App\Http\Controllers\AdminController::class, 'edit_diploma'])->name('edit_diploma');
 Route::post('/update-bundles/{id}', [App\Http\Controllers\AdminController::class, 'update_diploma'])->name('update_diploma');
-Route::get('/delete-bundles/{id}', [App\Http\Controllers\AdminController::class, 'destroy_diploma'])->name('destroy_diploma');
+Route::post('/delete-bundles', [App\Http\Controllers\AdminController::class, 'destroy_diploma'])->name('destroy_diploma');
+Route::post('/bundles', [App\Http\Controllers\AdminController::class, 'getbundles'])->name('admin.getbundles');
 
 ////////// Asynchronous Lessons //////////
 Route::get('/lessons', [App\Http\Controllers\AdminController::class, 'lessons'])->name('lessons');

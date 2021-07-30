@@ -85,7 +85,7 @@
 </div>
 <div class="col-12 col-lg-4 form-group">
     <label for="title" class="control-label">title *</label>
-    <input class="form-control" placeholder="title" required="" name="title" type="text" id="title">
+    <input class="form-control" placeholder="title" required="" name="ctitle" type="text" id="title">
 </div>
 <div class="col-12 col-lg-4 form-group">
     <label for="slug" class="control-label">Url</label>

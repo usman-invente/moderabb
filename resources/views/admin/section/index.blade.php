@@ -33,7 +33,7 @@
                                                 <tr role="row">
                                                     <th>{{ __('lang.number') }}</th>
                                                     <th>{{ __('lang.Section') }}</th>
-                                                    <th>{{ __('lang.Course') }}</th>
+                                                    <!-- <th>{{ __('lang.Course') }}</th> -->
                                                     <th>{{ __('lang.Actions') }}</th>
                                                 </tr>
                                             </thead>
@@ -74,9 +74,9 @@
                     {
                         "data": "name"
                     },
-                    {
-                        "data": "course"
-                    },
+                    // {
+                    //     "data": "course"
+                    // },
                     {
                         "data": "actions"
                     },

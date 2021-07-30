@@ -40,7 +40,7 @@
     <div class="col-10 form-group">
         <label for="teachers" class="control-label">trainers *</label>
          
-        <select class="form-control select2 js-example-placeholder-multiple select2bs4" required multiple="multiple" name="teachers[]">
+        <select class="form-control select2 js-example-placeholder-multiple select2bs4" required multiple="multiple" name="teachers">
             @foreach ($trainer as $tran)
             {{--  <option value="{{ $tran->id }}" <?php if (isset($teachers) && in_array($tran->id , $teachers)) echo 'selected'; ?>>{{ $tran->name }}</option>  --}}
             <option value="{{ $tran->id }}" @if($data->teachers == $tran->id) ? selected : null @endif >{{ $tran->name }}</option>
@@ -90,7 +90,7 @@
 </div>
 <div class="col-12 col-lg-4 form-group">
     <label for="title" class="control-label">title *</label>
-    <input class="form-control" placeholder="title" required=""  value="{{$data->title}}" name="title" type="text" id="title">
+    <input class="form-control" placeholder="title" required=""  value="{{$data->ctitle}}" name="ctitle" type="text" id="title">
 </div>
 <div class="col-12 col-lg-4 form-group">
     <label for="slug" class="control-label">Url</label>

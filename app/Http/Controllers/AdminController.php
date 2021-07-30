@@ -24,7 +24,7 @@ use App\Models\Testimonial;
 use App\Models\TrainingNeed;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Auth; 
 use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
@@ -575,9 +575,83 @@ class AdminController extends Controller
 
     public function accreditation_bodies()
     {
-        $data = User::where('roll_id', 3)->get();
-        return view('admin.accreditation-bodies.index', compact('data'));
+        return view('admin.accreditation-bodies.index');
     }
+
+    public function  getAcbody(Request $request)
+    {
+        $columns = array(
+            0 => 'id',
+            1 => 'name',
+            2 => 'email',
+        );
+
+        $totalData =User::where('roll_id', 3)->count();
+
+        $totalFiltered = $totalData;
+
+        $limit = $request->input('length');
+        $start = $request->input('start');
+        $order = $columns[$request->input('order.0.column')];
+        $dir = $request->input('order.0.dir');
+
+        if (empty($request->input('search.value'))) {
+            $posts = User::where('roll_id', 3)->offset($start)
+                ->limit($limit)
+                ->orderBy($order, $dir)
+                ->get();
+        } else {
+            $search = $request->input('search.value');
+
+            $posts = User::where('roll_id', 3)->
+                where('name', 'LIKE', "%{$search}%")
+                ->orwhere('email', 'LIKE', "%{$search}%")
+                ->offset($start)
+                ->limit($limit)
+                ->orderBy($order, $dir)
+                ->get();
+
+            $totalFiltered = User::where('roll_id', 3)->
+                where('name', 'LIKE', "%{$search}%")
+                ->orwhere('email', 'LIKE', "%{$search}%")
+                ->count();
+        }
+
+        $data = array();
+        if (!empty($posts)) {
+            foreach ($posts as $post) {
+                $edit = route('edit_accreditation_bodies',$post->id);
+                $show = route('show_courses_accreditation_bodies',$post->id);
+                $nestedData['number'] = $post->id;
+                $nestedData['name'] = $post->name;
+                $nestedData['c_person'] = $post->c_person;
+                $nestedData['email'] = $post->email;
+                $nestedData['expires_at'] = $post->expires_at;
+                if ($post->status == 1) {
+                    $nestedData['status'] = '<p><span class="right badge badge-success">Enabled</span></p>';
+                } else {
+                    $nestedData['status'] = '<p><span class="right badge badge-danger">Disable</span></p>';
+                }  
+                $nestedData['actions'] = "&emsp;
+                <a href='{$edit}' class='btn btn-xs btn-info mb-1'><i class='fas fa-edit'></i></a>
+                <a href='' class='btn btn-xs btn-danger text-white mb-1'><i  data-id='{$post->id}' class='fa fa-trash delete fa-fw'></i></a>
+                <a href='{$show}' class='btn btn-warning mb-1'>Courses</a>  
+                ";
+                $data[] = $nestedData;
+
+            }
+        }
+
+        $json_data = array(
+            "draw" => intval($request->input('draw')),
+            "recordsTotal" => intval($totalData),
+            "recordsFiltered" => intval($totalFiltered),
+            "data" => $data,
+        );
+
+        echo json_encode($json_data);
+    }
+
     public function add_accreditation_bodies()
     {
         return view('admin.accreditation-bodies.add');
@@ -616,9 +690,9 @@ class AdminController extends Controller
         }
         return redirect()->route('accreditation_bodies')->with('message', 'Data Updated Successfully!');
     }
-    public function destroy_accreditation_bodies($id)
+    public function destroy_accreditation_bodies(Request $request)
     {
-        User::find($id)->delete();
+        User::find($request->id)->delete();
         return response()->json(array('success' => true));
     }
     public function show_courses_accreditation_bodies(Request $request, $id)
@@ -706,15 +780,100 @@ class AdminController extends Controller
 
     public function courses()
     {
-        $data = User::join('courses', 'users.id', '=', 'courses.teachers')
-            ->get();
+        // $data = User::join('courses', 'users.id', '=', 'courses.teachers')
+        //     ->get();
         // $data = Course::join('users', 'courses.teachers', '=', 'users.id')
         // ->join('categories', 'courses.category_id', '=', 'categories.id')
         // ->select('courses.*', 'users.name', 'users.title','categories.name')
         // ->get();
-        $catagory = Category::all();
-        return view('admin.courses.index', compact('data', 'catagory'));
+        // dd($data);
+        // $catagory = Category::all();
+        return view('admin.courses.index');
     }
+
+    public function  getCourses(Request $request)
+    {
+        $columns = array(
+            0 => 'title',
+            1 => 'name',
+            2 => 'ctitle',
+        );
+
+        $totalData =Course::join('users', 'courses.teachers', '=', 'users.id')
+        ->join('categories', 'courses.category_id', '=', 'categories.id')
+        ->select('courses.*', 'users.name', 'users.title','categories.name')->count();
+
+        $totalFiltered = $totalData;
+
+        $limit = $request->input('length');
+        $start = $request->input('start');
+        $order = $columns[$request->input('order.0.column')];
+        $dir = $request->input('order.0.dir');
+
+        if (empty($request->input('search.value'))) {
+            $posts = Course::join('users', 'courses.teachers', '=', 'users.id')
+            ->join('categories', 'courses.category_id', '=', 'categories.id')
+            ->select('courses.*', 'users.name', 'users.title','categories.name')->offset($start)
+                ->limit($limit)
+                ->orderBy($order, $dir)
+                ->get();
+        } else {
+            $search = $request->input('search.value');
+
+            $posts = Course::join('users', 'courses.teachers', '=', 'users.id')
+            ->join('categories', 'courses.category_id', '=', 'categories.id')
+            ->where('name', 'LIKE', "%{$search}%")
+                ->orWhere('ctitle', 'LIKE', "%{$search}%")
+                ->orWhere('title', 'LIKE', "%{$search}%")
+            ->select('courses.*', 'users.name', 'users.title','categories.name')
+                ->offset($start)
+                ->limit($limit)
+                ->orderBy($order, $dir)
+                ->get();
+
+            $totalFiltered = Course::join('users', 'courses.teachers', '=', 'users.id')
+            ->join('categories', 'courses.category_id', '=', 'categories.id')
+            ->where('name', 'LIKE', "%{$search}%")
+                ->orWhere('ctitle', 'LIKE', "%{$search}%")
+                ->orWhere('title', 'LIKE', "%{$search}%")
+            ->select('courses.*', 'users.name', 'users.title','categories.name')
+                ->count();
+        }
+
+        $data = array();
+        if (!empty($posts)) {
+            foreach ($posts as $post) {
+                $edit = route('edit_courses',$post->id);
+                $nestedData['number'] = $post->id;
+                $nestedData['title'] = $post->title;
+                $nestedData['ctitle'] = $post->ctitle;
+                $nestedData['name'] = $post->name;
+                $nestedData['price'] = $post->price;
+                if ($post->featured == 1) {
+                    $nestedData['featured'] = '<p><span class="right badge badge-success">Featured</span></p>';
+                } else {
+                    $nestedData['featured'] = '<p><span class="right badge badge-danger">Not featured</span></p>';
+                }
+                $nestedData['actions'] = "&emsp;
+                <a href='{$edit}' class='btn btn-xs btn-info mb-1'><i class='fas fa-edit'></i></a>
+                <a href='' class='btn btn-xs btn-danger text-white mb-1'><i  data-id='{$post->id}' class='fa fa-trash delete fa-fw'></i></a>
+                <a href='' class='btn btn-xs btn-dark mb-1 status' data-id='{$post->id}'><i class='fa fa fa-upload'></i></a>  
+                ";
+                $data[] = $nestedData;
+
+            }
+        }
+
+        $json_data = array(
+            "draw" => intval($request->input('draw')),
+            "recordsTotal" => intval($totalData),
+            "recordsFiltered" => intval($totalFiltered),
+            "data" => $data,
+        );
+
+        echo json_encode($json_data);
+    }
+
     public function add_courses()
     {
         $trainer = User::where('roll_id', 2)->get();
@@ -743,8 +902,6 @@ class AdminController extends Controller
         }
         $user = Auth::user()->id;
         $inputs["user_id"] = $user;
-        // $teacher = serialize($inputs['teachers']);
-        // $inputs["teachers"] = $teacher;
         Course::create($inputs);
         return redirect()->route('courses')->with('message', 'Data Created Successfully!');
     }
@@ -777,24 +934,22 @@ class AdminController extends Controller
             $inputs['certificate'] = $name;
 
         }
-        $teacher = serialize($inputs['teachers']);
-        $inputs["teachers"] = $teacher;
         Course::where('id', $id)->update($inputs);
         return redirect()->route('courses')->with('message', 'Data Updated Successfully!');
     }
-    public function destroy_courses($id)
+    public function destroy_courses(Request $request)
     {
-        Course::find($id)->delete();
+        Course::find($request->id)->delete();
         return response()->json(array('success' => true));
     }
-    public function feature_courses($id)
+    public function feature_courses(Request $request)
     {
-        $data = Course::where('id', $id)->first();
+        $data = Course::where('id', $request->id)->first();
         // dd($data);
-        if (isset($data) && $data->published == 0) {
-            Course::where('id', $id)->update(['published' => 1]);
+        if (isset($data) && $data->featured == 0) {
+            Course::where('id', $request->id)->update(['featured' => 1]);
         } else {
-            Course::where('id', $id)->update(['published' => 0]);
+            Course::where('id', $request->id)->update(['featured' => 0]);
         }
         return response()->json(array('success' => true));
     }
@@ -805,6 +960,78 @@ class AdminController extends Controller
             ->get();
         return view('admin.diploma.index', compact('data'));
     }
+
+
+    public function  getbundles(Request $request)
+    {
+        $columns = array(
+            0 => 'title',
+            1 => 'name',
+        );
+
+        $totalData =  Diploma::join('categories', 'diplomas.category_id', '=', 'categories.id')->count();
+
+        $totalFiltered = $totalData;
+
+        $limit = $request->input('length');
+        $start = $request->input('start');
+        $order = $columns[$request->input('order.0.column')];
+        $dir = $request->input('order.0.dir');
+
+        if (empty($request->input('search.value'))) {
+            $posts =  Diploma::join('categories', 'diplomas.category_id', '=', 'categories.id')->offset($start)
+                ->limit($limit)
+                ->orderBy($order, $dir)
+                ->get();
+        } else {
+            $search = $request->input('search.value');
+
+            $posts =  Diploma::join('categories', 'diplomas.category_id', '=', 'categories.id')
+            ->where('name', 'LIKE', "%{$search}%")
+                ->orWhere('title', 'LIKE', "%{$search}%")
+                ->offset($start)
+                ->limit($limit)
+                ->orderBy($order, $dir)
+                ->get();
+
+            $totalFiltered =  Diploma::join('categories', 'diplomas.category_id', '=', 'categories.id')
+            ->where('name', 'LIKE', "%{$search}%")
+                ->orWhere('title', 'LIKE', "%{$search}%")
+                ->count();
+        }
+
+        $data = array();
+        if (!empty($posts)) {
+            foreach ($posts as $post) {
+                $edit = route('edit_diploma',$post->id);
+                $nestedData['number'] = $post->id;
+                $nestedData['title'] = $post->title;
+                $nestedData['name'] = $post->name;
+                $nestedData['price'] = $post->price;
+                if ($post->published == 1) {
+                    $nestedData['published'] = '<p><span class="right badge badge-success">published</span></p>';
+                } else {
+                    $nestedData['published'] = '<p><span class="right badge badge-danger">Not published</span></p>';
+                }
+                $nestedData['actions'] = "&emsp;
+                <a href='{$edit}' class='btn btn-xs btn-info mb-1'><i class='fas fa-edit'></i></a>
+                <a href='' class='btn btn-xs btn-danger text-white mb-1'><i  data-id='{$post->id}' class='fa fa-trash delete fa-fw'></i></a>
+                ";
+                $data[] = $nestedData;
+
+            }
+        }
+
+        $json_data = array(
+            "draw" => intval($request->input('draw')),
+            "recordsTotal" => intval($totalData),
+            "recordsFiltered" => intval($totalFiltered),
+            "data" => $data,
+        );
+
+        echo json_encode($json_data);
+    }
+
     public function add_diploma()
     {
         $courses = Course::all();
@@ -840,9 +1067,9 @@ class AdminController extends Controller
         Diploma::where('id', $id)->update($inputs);
         return redirect()->route('diploma')->with('message', 'Data Updated Successfully!');
     }
-    public function destroy_diploma($id)
+    public function destroy_diploma(Request $request)
     {
-        Course::find($id)->delete();
+        Diploma::find($request->id)->delete();
         return response()->json(array('success' => true));
     }
 
