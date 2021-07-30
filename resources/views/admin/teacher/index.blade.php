@@ -81,15 +81,6 @@
                         "data": "name"
                     },
                     {
-                        "data": "title"
-                    },
-                    {
-                        "data": "email"
-                    },
-                    {
-                        "data": "status"
-                    },
-                    {
                         "data": "actions"
                     },
 

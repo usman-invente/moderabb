@@ -31,69 +31,65 @@ class AdminController extends Controller
 {
     public function newsletter()
     {
-        $data = Newsletter::all();
         // dd($data);
-        return view('admin.news-letter.index', compact('data'));
+        return view('admin.news-letter.index');
     }
-    public function get_news_data(Request $request)
+    public function  get_news_data(Request $request)
     {
         $columns = array(
-            0 => 'ID',
-            1 => 'Email',
-            2 => 'Created_at',
+            0 => 'email',
         );
-        $totalData = Newsletter::all();
+
+        $totalData = Newsletter::all()->count();
+
         $totalFiltered = $totalData;
+
         $limit = $request->input('length');
         $start = $request->input('start');
         $order = $columns[$request->input('order.0.column')];
         $dir = $request->input('order.0.dir');
+
         if (empty($request->input('search.value'))) {
-            $posts = Newsletter::all()
-                ->offset($start)
+            $posts = Newsletter::offset($start)
                 ->limit($limit)
                 ->orderBy($order, $dir)
                 ->get();
         } else {
             $search = $request->input('search.value');
-            $posts = Newsletter::all()
+
+            $posts = Newsletter::
+                where('email', 'LIKE', "%{$search}%")
                 ->offset($start)
                 ->limit($limit)
                 ->orderBy($order, $dir)
                 ->get();
-            $totalFiltered = Newsletter::all()
-                ->offset($start)
-                ->limit($limit)
-                ->orderBy($order, $dir)
+
+            $totalFiltered = Newsletter::
+                where('email', 'LIKE', "%{$search}%")
                 ->count();
         }
+
         $data = array();
         if (!empty($posts)) {
             foreach ($posts as $post) {
-                // $edit = route('site_edit_news', $post->id);
-                //  $delete =  route('site_delete_news',$post->id);
-                $nestedData['id'] = $post->id;
+                $nestedData['number'] = $post->id;
                 $nestedData['email'] = $post->email;
-                // $nestedData['status'] = $post->status;
-                // $nestedData['name'] = $post->name;
-                $nestedData['created_at'] = date('d-m-Y', strtotime($post->created_at));
-                /* $nestedData['industry'] = $post->industry;*/
-                // $nestedData['created_at'] = date('d-m-Y', strtotime($post->created_at));
-                // $nestedData['action'] = "&emsp;
-                // <a class='mr-1 delcomp'  href='{$delete}'> <i class='feather icon-trash text-primary'></i><a>
-                // <a class='mr-1 delcomp'  href='{$edit}'> <i class='m-1 feather icon-edit-2 text-primary'></i><a>
-                //  ";
+                $nestedData['expires_at'] = $post->expires_at;  $nestedData['actions'] = "&emsp;
+                    <a href= ''class='btn btn-primary' data-id='{$post->id}'>Message</a>
+                    ";
                 $data[] = $nestedData;
+
             }
         }
+
         $json_data = array(
             "draw" => intval($request->input('draw')),
             "recordsTotal" => intval($totalData),
             "recordsFiltered" => intval($totalFiltered),
             "data" => $data,
         );
-        echo json_encode($json_data);
 
+        echo json_encode($json_data);
     }
 
     public function teacher()
@@ -325,19 +321,86 @@ class AdminController extends Controller
         User::find($request->id)->delete();
         return response()->json(array('success' => true));
     }
-    public function teacher_courses($id)
+    public function teacher_courses(Request $request, $id)
     {
         $data = User::join('courses', 'users.id', '=', 'courses.teachers')
-            ->where('users.id', $id)
-            ->get();
-        // dd($data);
-        return response()->json(array('success' => true));
+        ->where('courses.teachers', $id)
+        ->get();
+    $trainer = User::all();
+    $catagory = Category::all();
+    return view('admin.courses.index', compact('data', 'trainer', 'catagory'));
     }
     public function categories()
     {
         $data = Category::all();
         return view('admin.section.index', compact('data'));
     }
+
+    public function  getcategories(Request $request)
+    {
+        $columns = array(
+            0 => 'id',
+            1 => 'name',
+        );
+
+        $totalData = Category::all()->count();
+
+        $totalFiltered = $totalData;
+
+        $limit = $request->input('length');
+        $start = $request->input('start');
+        $order = $columns[$request->input('order.0.column')];
+        $dir = $request->input('order.0.dir');
+
+        if (empty($request->input('search.value'))) {
+            $posts = Category::offset($start)
+                ->limit($limit)
+                ->orderBy($order, $dir)
+                ->get();
+        } else {
+            $search = $request->input('search.value');
+
+            $posts = Category::
+                where('id', 'LIKE', "%{$search}%")
+                ->orwhere('name', 'LIKE', "%{$search}%")
+                ->offset($start)
+                ->limit($limit)
+                ->orderBy($order, $dir)
+                ->get();
+
+            $totalFiltered = Category::
+                where('id', 'LIKE', "%{$search}%")
+                ->orwhere('name', 'LIKE', "%{$search}%")
+                ->count();
+        }
+
+        $data = array();
+        if (!empty($posts)) {
+            foreach ($posts as $post) {
+                $edit = route('edit_categories',$post->id);
+                $show = route('show_courses_categories',$post->id);
+                $nestedData['number'] = $post->id;
+                $nestedData['name'] = $post->name;
+                $nestedData['expires_at'] = $post->expires_at;  $nestedData['actions'] = "&emsp;
+                <a href='{$edit}' class='btn btn-xs btn-info mb-1'><i class='fas fa-edit'></i></a>
+                <a href='' class='btn btn-xs btn-danger text-white mb-1'><i  data-id='{$post->id}' class='fa fa-trash delete fa-fw'></i></a>
+                <a href='{$show}' class='btn btn-warning mb-1'>Courses</a>  
+                ";
+                $data[] = $nestedData;
+
+            }
+        }
+
+        $json_data = array(
+            "draw" => intval($request->input('draw')),
+            "recordsTotal" => intval($totalData),
+            "recordsFiltered" => intval($totalFiltered),
+            "data" => $data,
+        );
+
+        echo json_encode($json_data);
+    }
+
     public function add_categories()
     {
         return view('admin.section.add');
@@ -389,9 +452,9 @@ class AdminController extends Controller
         return redirect()->route('categories')->with('message', 'Data Updated Successfully!');
     }
 
-    public function destroy_categories($id)
+    public function destroy_categories(Request $request)
     {
-        Category::find($id)->delete();
+        Category::find($request->id)->delete();
         return response()->json(array('success' => true));
     }
 
@@ -410,6 +473,74 @@ class AdminController extends Controller
         $data = TrainingNeed::all();
         return view('admin.trainingNeed.index', compact('data'));
     }
+
+    public function  getTrainer(Request $request)
+    {
+        $columns = array(
+            0 => 'id',
+            1 => 'title',
+        );
+
+        $totalData = TrainingNeed::all()->count();
+
+        $totalFiltered = $totalData;
+
+        $limit = $request->input('length');
+        $start = $request->input('start');
+        $order = $columns[$request->input('order.0.column')];
+        $dir = $request->input('order.0.dir');
+
+        if (empty($request->input('search.value'))) {
+            $posts = TrainingNeed::offset($start)
+                ->limit($limit)
+                ->orderBy($order, $dir)
+                ->get();
+        } else {
+            $search = $request->input('search.value');
+
+            $posts = TrainingNeed::
+                where('id', 'LIKE', "%{$search}%")
+                ->orwhere('title', 'LIKE', "%{$search}%")
+                ->offset($start)
+                ->limit($limit)
+                ->orderBy($order, $dir)
+                ->get();
+
+            $totalFiltered = TrainingNeed::
+                where('id', 'LIKE', "%{$search}%")
+                ->orwhere('title', 'LIKE', "%{$search}%")
+                ->count();
+        }
+
+        $data = array();
+        if (!empty($posts)) {
+            foreach ($posts as $post) {
+                $edit =  route('edit_trainings',$post->id);
+                $nestedData['number'] = $post->id;
+                $nestedData['title'] = $post->title;
+                $nestedData['categorie_id'] = $post->categorie_id;
+                $nestedData['course_field'] = $post->course_field;
+                $nestedData['idea'] = $post->idea;
+                $nestedData['axes'] = $post->axes;
+                $nestedData['expires_at'] = $post->expires_at;  $nestedData['actions'] = "&emsp;
+                <a href='{$edit}' class='btn btn-xs btn-info mb-1'><i class='fas fa-edit'></i></a>
+                <a href='' class='btn btn-xs btn-danger text-white mb-1'><i  data-id='{$post->id}' class='fa fa-trash delete fa-fw'></i></a>
+                    ";
+                $data[] = $nestedData;
+
+            }
+        }
+
+        $json_data = array(
+            "draw" => intval($request->input('draw')),
+            "recordsTotal" => intval($totalData),
+            "recordsFiltered" => intval($totalFiltered),
+            "data" => $data,
+        );
+
+        echo json_encode($json_data);
+    }
+
     public function add_trainings()
     {
         $data = Category::all();
@@ -423,9 +554,9 @@ class AdminController extends Controller
         TrainingNeed::create($inputs);
         return redirect()->route('trainings')->with('message', 'Data Created Successfully!');
     }
-    public function destroy_trainings($id)
+    public function destroy_trainings(Request $request)
     {
-        TrainingNeed::find($id)->delete();
+        TrainingNeed::find($request->id)->delete();
         return response()->json(array('success' => true));
     }
     public function edit_trainings(Request $request, $id)
@@ -506,6 +637,73 @@ class AdminController extends Controller
         $data = Contact::all();
         return view('admin.contact.index', compact('data'));
     }
+
+
+    public function  getContact(Request $request)
+    {
+        $columns = array(
+            0 => 'name',
+            1 => 'email',
+            2 => 'phone',
+        );
+
+        $totalData = Contact::all()->count();
+
+        $totalFiltered = $totalData;
+
+        $limit = $request->input('length');
+        $start = $request->input('start');
+        $order = $columns[$request->input('order.0.column')];
+        $dir = $request->input('order.0.dir');
+
+        if (empty($request->input('search.value'))) {
+            $posts = Contact::offset($start)
+                ->limit($limit)
+                ->orderBy($order, $dir)
+                ->get();
+        } else {
+            $search = $request->input('search.value');
+
+            $posts = Contact::
+                where('name', 'LIKE', "%{$search}%")
+                ->orWhere('email', 'LIKE', "%{$search}%")
+                ->orWhere('phone', 'LIKE', "%{$search}%")
+                ->offset($start)
+                ->limit($limit)
+                ->orderBy($order, $dir)
+                ->get();
+
+            $totalFiltered = Contact::
+                where('name', 'LIKE', "%{$search}%")
+                ->orWhere('email', 'LIKE', "%{$search}%")
+                ->orWhere('phone', 'LIKE', "%{$search}%")
+                ->count();
+        }
+
+        $data = array();
+        if (!empty($posts)) {
+            foreach ($posts as $post) {
+                $nestedData['number'] = $post->id;
+                $nestedData['name'] = $post->name;
+                $nestedData['email'] = $post->email;
+                $nestedData['phone'] = $post->phone;
+                $nestedData['message'] = $post->message;
+                $nestedData['created_at'] = date('d-m-Y', strtotime($post->created_at));
+                $data[] = $nestedData;
+
+            }
+        }
+
+        $json_data = array(
+            "draw" => intval($request->input('draw')),
+            "recordsTotal" => intval($totalData),
+            "recordsFiltered" => intval($totalFiltered),
+            "data" => $data,
+        );
+
+        echo json_encode($json_data);
+    }
+
     public function courses()
     {
         $data = User::join('courses', 'users.id', '=', 'courses.teachers')
@@ -951,11 +1149,10 @@ class AdminController extends Controller
     }
     public function coupon(Request $request)
     {
-        $tax = Coupon::all();
-        return view('admin.coupon.index', compact('tax'));
+        return view('admin.coupon.index');
     }
 
-    public function getCoupon(Request $request)
+    public function  getCoupon(Request $request)
     {
         $columns = array(
             0 => 'name',
@@ -2609,10 +2806,8 @@ class AdminController extends Controller
         $data = array();
         if (!empty($posts)) {
             foreach ($posts as $post) {
-                //$show =  route('posts.show',$post->id);
-                //$edit =  route('posts.edit',$post->id);
-                //$enable = route('enable', $post->id);
-                //$disable = route('disable', $post->id);
+                $show =  route('teacher_courses',$post->id);
+                $edit =  route('edit_teacher',$post->id);
                 $nestedData['number'] = $post->id;
                 $nestedData['name'] = $post->name;
                 $nestedData['title'] = $post->email;
@@ -2622,19 +2817,13 @@ class AdminController extends Controller
                 } else {
                     $nestedData['status'] = '<p><span class="right badge badge-danger">Disable</span></p>';
                 }
-
-                if ($post->status ==   0) {
                     $nestedData['actions'] = "&emsp;
-                    <a href='#'><i  data-id='{$post->id}' class='fa fa-trash delete fa-fw'></i></a>
-                    <a   ><i class='fa fa-check' style='color:green' data-tooltip='tooltip' title='allow publish content' aria-hidden='true'></i></a>
+                    <a href='{$edit}' class='btn btn-xs btn-info mb-1'><i class='fas fa-edit'></i></a>
+                    <a href='' class='btn btn-xs btn-danger text-white mb-1'><i  data-id='{$post->id}' class='fa fa-trash delete fa-fw'></i></a>
+                    <a href='{$show}' class='btn btn-warning mb-1'>Courses</a>
+                    
 
                     ";
-                } else {
-                    $nestedData['actions'] = "&emsp;
-                    <a href=''><i  data-id='{$post->id}' class='fa fa-trash delete fa-fw'></i></a>
-                    <a  ><i  style='color:red' class='fa fa-ban' data-tooltip='tooltip' title='disable publish content'  aria-hidden='true'></i></a>
-                    ";
-                }
 
                 $data[] = $nestedData;
 

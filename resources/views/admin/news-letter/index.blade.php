@@ -21,30 +21,56 @@
     <div class="col-12">
         <div class="table-responsive">
             <div id="myTable_wrapper" class="dataTables_wrapper no-footer">
-                <table id="myTable" class="table table-bordered table-striped dataTable no-footer" role="grid" aria-describedby="myTable_info">
-                <thead>
-                <tr role="row">
-                    <th class="sorting_asc" tabindex="0" aria-controls="myTable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="number: activate to sort column descending">{{ __('lang.number') }}</th>
-                    <th class="sorting" tabindex="0" aria-controls="myTable" rowspan="1" colspan="1" aria-label="email: activate to sort column ascending" style="width: 526.266px;">{{ __('lang.email address') }}</th>
-                    <th class="sorting" tabindex="0" aria-controls="myTable" rowspan="1" colspan="1" aria-label="Actions: activate to sort column ascending" style="width: 241.109px;">{{ __('lang.Actions') }}</th>
-                </tr></thead>
-                <tbody>
-                @foreach ($data as $val)
-                <tr>
-                    <td>{{ $val->id }}</td>
-                    <td>{{ $val->email }}</td>
-                    <td><a href=""
-                        class="btn btn-primary">{{ __('lang.Message') }}</a></td>
-                </tr>
-                @endforeach
-                </tbody>
-            </table></div>
+                <table id="myTable" class="table table-bordered table-striped dataTable no-footer"
+                    role="grid" aria-describedby="myTable_info">
+                    <thead>
+                        <tr role="row">
+                            <th>{{ __('lang.number') }}</th>
+                            <th>{{ __('lang.Emai') }}</th>
+                            <th>{{ __('lang.Message') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+    
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-</div>
 </div>
 </div>   
 
         </div><!--animated-->
     </div><!--container-fluid-->
 </main>
+@endsection
+@section('script')
+    <script>
+        $(document).ready(function() {
+            $('#myTable').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "responsive": true,
+                "ajax": {
+                    "url": "{{ route('get_news_data') }}",
+                    "dataType": "json",
+                    "type": "POST",
+                    "data": {
+                        _token: "{{ csrf_token() }}"
+                    }
+                },
+                "columns": [{
+                        "data": "number"
+                    },
+                    {
+                        "data": "email"
+                    },
+                    {
+                        "data": "actions"
+                    },
+                ]
+
+            });
+        });
+    </script>
 @endsection

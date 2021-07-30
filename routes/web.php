@@ -55,7 +55,7 @@ Route::post('/news/Mvodata', [App\Http\Controllers\AdminController::class, 'get_
 
 ////////// contact us ////////////////
 Route::get('/contact_us', [App\Http\Controllers\AdminController::class, 'contact'])->name('contact');
-
+Route::post('/Contact', [App\Http\Controllers\AdminController::class, 'getContact'])->name('admin.getContact');
 
 
 ////////  teacher /////////
@@ -65,8 +65,8 @@ Route::post('/create-teachers', [App\Http\Controllers\AdminController::class, 'c
 Route::get('/edit-teachers/{id}', [App\Http\Controllers\AdminController::class, 'edit_teacher'])->name('edit_teacher');
 Route::post('/update-teachers/{id}', [App\Http\Controllers\AdminController::class, 'update_teacher'])->name('update_teacher');
 Route::post('/delete-teachers', [App\Http\Controllers\AdminController::class, 'destroy_teacher'])->name('destroy_teacher');
+Route::get('/courses-teacher_id/{id}', [App\Http\Controllers\AdminController::class, 'teacher_courses'])->name('teacher_courses');
 Route::post('/teacher', [App\Http\Controllers\AdminController::class, 'getTeacher'])->name('admin.getTeacher');
-
 
 ////////// section /////////
 Route::get('/categories', [App\Http\Controllers\AdminController::class, 'categories'])->name('categories');
@@ -74,8 +74,9 @@ Route::get('/add-categories', [App\Http\Controllers\AdminController::class, 'add
 Route::post('/create-categories', [App\Http\Controllers\AdminController::class, 'create_categories'])->name('create_categories');
 Route::get('/edit-categories/{id}', [App\Http\Controllers\AdminController::class, 'edit_categories'])->name('edit_categories');
 Route::post('/update-categories/{id}', [App\Http\Controllers\AdminController::class, 'update_categories'])->name('update_categories');
-Route::get('/delete-categories/{id}', [App\Http\Controllers\AdminController::class, 'destroy_categories'])->name('destroy_categories');
-Route::get('/courses/cat_id/{id}', [App\Http\Controllers\AdminController::class, 'show_courses_categories'])->name('show_courses_categories');
+Route::post('/delete-categories', [App\Http\Controllers\AdminController::class, 'destroy_categories'])->name('destroy_categories');
+Route::get('/courses/cat_id/{id}', [App\Http\Controllers\AdminController::class, ' show_courses_categories'])->name('show_courses_categories');
+Route::post('/categories', [App\Http\Controllers\AdminController::class, 'getcategories'])->name('admin.getcategories');
 
 /////// Training Need ///////
 Route::get('/trainings', [App\Http\Controllers\AdminController::class, 'trainings'])->name('trainings');
@@ -83,8 +84,8 @@ Route::get('/add-trainings', [App\Http\Controllers\AdminController::class, 'add_
 Route::post('/create-trainings', [App\Http\Controllers\AdminController::class, 'create_trainings'])->name('create_trainings');
 Route::get('/edit-trainings/{id}', [App\Http\Controllers\AdminController::class, 'edit_trainings'])->name('edit_trainings');
 Route::post('/update-trainings/{id}', [App\Http\Controllers\AdminController::class, 'update_trainings'])->name('update_trainings');
-Route::get('/delete-trainings/{id}', [App\Http\Controllers\AdminController::class, 'destroy_trainings'])->name('destroy_trainings');
-Route::get('/courses-teacher_id/{id}', [App\Http\Controllers\AdminController::class, 'teacher_courses'])->name('teacher_courses');
+Route::post('/delete-trainings', [App\Http\Controllers\AdminController::class, 'destroy_trainings'])->name('destroy_trainings');
+Route::post('/training', [App\Http\Controllers\AdminController::class, 'getTrainer'])->name('admin.getTrainer');
 
 /////// Accrediting Bodies ///////
 Route::get('/accreditation-bodies', [App\Http\Controllers\AdminController::class, 'accreditation_bodies'])->name('accreditation_bodies');
