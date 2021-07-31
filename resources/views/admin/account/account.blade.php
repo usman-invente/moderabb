@@ -14,7 +14,7 @@
 </div>
 @endif
 <div class="card-header">
-<h3 class="page-title d-inline">Edit Account</h3>
+<h3 class="page-title d-inline">My Account</h3>
 <div class="float-right">
     
 </div>

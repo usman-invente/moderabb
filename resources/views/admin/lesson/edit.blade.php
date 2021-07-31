@@ -44,7 +44,7 @@
     <select class="form-control select2 js-example-placeholder-multiple select2bs4" id="course_id" name="course_id" tabindex="-1" aria-hidden="true">
         @foreach ($course as $cour)
         {{--  <option value="{{ $cour->id }}">{{ $cour->title }}</option>  --}}
-        <option value="{{ $cour->id }}" @if($data->course_id == $cour->id) ? selected : null @endif >{{ $cour->title }}</option>
+        <option value="{{ $cour->id }}" @if($data->course_id == $cour->id) ? selected : null @endif >{{ $cour->ctitle }}</option>
         @endforeach
     </select>
 </div>

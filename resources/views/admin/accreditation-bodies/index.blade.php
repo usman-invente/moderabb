@@ -59,6 +59,19 @@
                 "processing": true,
                 "serverSide": true,
                 "responsive": true,
+                "bStateSave": true,
+                "retrieve": true,
+                dom: 'Bfrtip',
+                order: [
+                    [0, "desc"]
+                ],
+                dom: 'lfBrtip',
+                buttons: [
+                        'excelHtml5',
+                        'csvHtml5',
+                        'pdfHtml5',
+                        'selectAll',
+                        ],
                 "ajax": {
                     "url": "{{ route('admin.getAcbody') }}",
                     "dataType": "json",

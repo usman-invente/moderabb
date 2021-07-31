@@ -123,6 +123,7 @@ Route::post('/create-lessons', [App\Http\Controllers\AdminController::class, 'cr
 Route::get('/edit-lessons/{id}', [App\Http\Controllers\AdminController::class, 'edit_lessons'])->name('edit_lessons');
 Route::post('/update-lessons/{id}', [App\Http\Controllers\AdminController::class, 'update_lessons'])->name('update_lessons');
 Route::get('/delete-lessons/{id}', [App\Http\Controllers\AdminController::class, 'destroy_lessons'])->name('destroy_lessons');
+Route::post('/lessons', [App\Http\Controllers\AdminController::class, 'c'])->name('admin.getlessons');
 
 //front end routes
 Route::get('course/{slug}', [App\Http\Controllers\WebSiteController::class, 'singleCourse'])->name('singlecourse');

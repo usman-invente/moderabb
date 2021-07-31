@@ -39,7 +39,7 @@
     <span class="{{ session('error') ? 'error':'success' }}">{{ session('error') ?? session('message') }}</span>
 </div>
 @endif
-<div class="col-12 col-lg-6 form-group">
+<div  class="col-12 col-lg-3 form-group" style="margin-left: 17px">
     <label for="course_id" class="control-label">test</label>
     <select class="form-control select2 js-example-placeholdere-single select2bs4" id="course_id" name="course_id" tabindex="-1" aria-hidden="true">
         @foreach ($gettest as $cour)

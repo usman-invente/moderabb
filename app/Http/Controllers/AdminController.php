@@ -326,9 +326,8 @@ class AdminController extends Controller
         $data = User::join('courses', 'users.id', '=', 'courses.teachers')
         ->where('courses.teachers', $id)
         ->get();
-    $trainer = User::all();
-    $catagory = Category::all();
-    return view('admin.courses.index', compact('data', 'trainer', 'catagory'));
+        // dd($data);
+    return view('admin.courses.index', compact('data'));
     }
     public function categories()
     {
@@ -460,9 +459,9 @@ class AdminController extends Controller
 
     public function show_courses_categories(Request $request, $id)
     {
-        // $data = Category::find($id);
+         $data = Category::find($id);
         $data = Category::join('courses', 'categories.id', '=', 'courses.category_id')
-            ->where('courses.category_id', $id)
+            ->where('courses.category_id', $data)
             ->get();
         $trainer = User::where('roll_id', 2)->get();
         $catagory = Category::all();
@@ -1085,6 +1084,79 @@ class AdminController extends Controller
         //  dd($lesson);
         $course = Course::all();
         return view('admin.lesson.index', compact('course', 'lesson'));
+    }
+    public function  getlessons(Request $request)
+    {
+        $data = $request->all();
+        $columns = array(
+            0 => 'title',
+        );
+
+        $totalData = Course::join('lessons', 'courses.id', '=', 'lessons.course_id')
+        ->where('courses.id', $data)
+        ->where('lessons.live_lesson', 0)->count();
+
+        $totalFiltered = $totalData;
+
+        $limit = $request->input('length');
+        $start = $request->input('start');
+        $data = $request->input('course_id');
+        $order = $columns[$request->input('order.0.column')];
+        $dir = $request->input('order.0.dir');
+
+        if (empty($request->input('search.value'))) {
+            $posts =  Course::join('lessons', 'courses.id', '=', 'lessons.course_id')
+            ->where('courses.id', $data)
+            ->where('lessons.live_lesson', 0)->offset($start)
+                ->limit($limit)
+                ->orderBy($order, $dir)
+                ->get();
+        } else {
+            $search = $request->input('search.value');
+
+            $posts = Course::join('lessons', 'courses.id', '=', 'lessons.course_id')
+            ->where('courses.id', $data)
+            ->where('lessons.live_lesson', 0)
+                ->orWhere('title', 'LIKE', "%{$search}%")
+                ->offset($start)
+                ->limit($limit)
+                ->orderBy($order, $dir)
+                ->get();
+
+            $totalFiltered =  Course::join('lessons', 'courses.id', '=', 'lessons.course_id')
+            ->where('courses.id', $data)
+            ->where('lessons.live_lesson', 0)
+                ->orWhere('title', 'LIKE', "%{$search}%")
+                ->count();
+        }
+
+        $data = array();
+        if (!empty($posts)) {
+            foreach ($posts as $post) {
+                $edit = route('edit_lessons',$post->id);
+                $nestedData['title'] = $post->title;
+                if ($post->published == 1) {
+                    $nestedData['published'] = '<p><span class="right badge badge-success">published</span></p>';
+                } else {
+                    $nestedData['published'] = '<p><span class="right badge badge-danger">Not published</span></p>';
+                }
+                $nestedData['actions'] = "&emsp;
+                <a href='{$edit}' class='btn btn-xs btn-info mb-1'><i class='fas fa-edit'></i></a>
+                <a href='' class='btn btn-xs btn-danger text-white mb-1'><i  data-id='{$post->id}' class='fa fa-trash delete fa-fw'></i></a>
+                ";
+                $data[] = $nestedData;
+
+            }
+        }
+
+        $json_data = array(
+            "draw" => intval($request->input('draw')),
+            "recordsTotal" => intval($totalData),
+            "recordsFiltered" => intval($totalFiltered),
+            "data" => $data,
+        );
+
+        echo json_encode($json_data);
     }
     public function add_lessons()
     {
@@ -3037,7 +3109,7 @@ class AdminController extends Controller
                 $edit =  route('edit_teacher',$post->id);
                 $nestedData['number'] = $post->id;
                 $nestedData['name'] = $post->name;
-                $nestedData['title'] = $post->email;
+                $nestedData['title'] = $post->title;
                 $nestedData['email'] = $post->email;
                 if ($post->status == 1) {
                     $nestedData['status'] = '<p><span class="right badge badge-success">Enabled</span></p>';

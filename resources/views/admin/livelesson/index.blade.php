@@ -39,12 +39,12 @@
     <span class="{{ session('error') ? 'error':'success' }}">{{ session('error') ?? session('message') }}</span>
 </div>
 @endif
-<div class="col-12 col-lg-6 form-group">
+<div  class="col-12 col-lg-3 form-group" style="margin-left: 17px">
     <label for="course_id" class="control-label">course</label>
     <select class="form-control select2 js-example-placeholdere-single select2bs4" id="course_id" name="course_id" tabindex="-1" aria-hidden="true">
         @foreach ($course as $cour)
             <option value="">please select one....</option>
-            <option value="{{ $cour->id }}">{{ $cour->title }}</option>
+            <option value="{{ $cour->id }}">{{ $cour->ctitle }}</option>
         @endforeach
     </select>
     </div>
@@ -78,7 +78,8 @@
                 </tr>
                 @endforeach
                 </tbody>
-            </table></div>
+            </table>
+        </div>
     </div>
 </div>
 

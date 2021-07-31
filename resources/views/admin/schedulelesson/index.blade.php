@@ -1,6 +1,24 @@
 @extends('layouts.app')
 
 @section('content')
+<style>
+    .select2-container .select2-selection--single {
+        box-sizing: border-box;
+        cursor: pointer;
+        display: block;
+        height: 39px !important;
+        user-select: none;
+        -webkit-user-select: none;
+    }
+    .select2-selection--multiple .select2-selection__rendered {
+        box-sizing: border-box;
+        list-style: none;
+        margin: 0;
+        padding: 0 5px;
+        width: 100%;
+        height: 38px !important;
+    }
+</style>
 <div class="container-fluid" style="padding-top: 30px">
     <div class="animated fadeIn">
         <div class="content-header">
@@ -21,9 +39,9 @@
     <span class="{{ session('error') ? 'error':'success' }}">{{ session('error') ?? session('message') }}</span>
 </div>
 @endif
-<div class="col-12 col-lg-6 form-group">
+<div  class="col-12 col-lg-3 form-group" style="margin-left: 17px">
     <label for="lesson_id" class="control-label">lesson</label>
-    <select class="form-control select2 js-example-placeholdere-single1 select2bs4" id="lesson_id" name="lesson_id" tabindex="-1" aria-hidden="true">
+    <select class="form-control select2 js-example-placeholdere-single select2bs4" id="lesson_id" name="lesson_id" tabindex="-1" aria-hidden="true">
         @foreach ($getlesson as $cour)
             <option value="">please select one....</option>
             <option value="{{ $cour->id }}">{{ $cour->title }}</option>
