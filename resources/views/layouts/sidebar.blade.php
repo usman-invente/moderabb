@@ -186,6 +186,18 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="{{ route('blog-category') }}" class="nav-link">
+
+                                <p>Blog Category</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('blog-topic') }}" class="nav-link">
+
+                                <p>Blog Topic</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{ route('advisoryboards') }}" class="nav-link">
 
                                 <p>Advisory Body</p>

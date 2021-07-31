@@ -206,7 +206,8 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/img/flags.png"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/img/flags@2x.png"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.js" ></script>
-
+	<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+	
     <script>
          /*// Vanilla Javascript
         var input = document.querySelector("#telephone");
@@ -265,6 +266,11 @@
         )
 
     </script>
+	    <script>
+			$(document).ready(function() {
+				$('.summernote').summernote();
+			});
+		</script>
     @yield('script')
 </body>
 </html>

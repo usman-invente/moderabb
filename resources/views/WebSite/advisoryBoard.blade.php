@@ -30,7 +30,9 @@
                     @foreach($boards as $board)
                     <div class="col-xs-12 col-sm-6 col-lg-4">
                         <!-- popular post -->
+                      
                         <article class="popular-post" style="padding:100px">
+                                <img src="{{asset('upload/advisory/'.$board->logo)}}" alt="image description" >
                             <p class="post-heading">{{$board->name}}</p>
                         </article>
                     </div>
