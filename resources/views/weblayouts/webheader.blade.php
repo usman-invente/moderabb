@@ -28,6 +28,7 @@
 	<link rel="stylesheet" href="{{asset('css/responsive.css')}}">
 	<link rel="stylesheet" href="{{asset('js/build/intlTelInput.css')}}">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.css" rel="stylesheet">
 </head>
 <body>
 	

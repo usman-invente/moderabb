@@ -17,7 +17,7 @@ class PaytabsController extends Controller
         try {
              $order = new Order;
              $order->reference_no = mt_rand(100000,999999);;
-             $order->course_id = $request->course_id;
+             $order->course_id = 8;
              $order->name = Auth::user()->name;;
              $order->user_id = Auth::user()->id;
              $order->price =   $request->session()->get('total');
@@ -26,7 +26,7 @@ class PaytabsController extends Controller
              return redirect()->back()->with('message','Your Order Completd Successfully');
              
         } catch (\Throwable $th) {
-            //return $th->getMessage();
+            return $th->getMessage();
             return redirect()->back()->with('error','Some Thing Wrong');
         }
       

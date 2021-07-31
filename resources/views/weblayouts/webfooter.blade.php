@@ -205,6 +205,7 @@
 	<script type="text/javascript" src="{{asset('js/build/intlTelInput-jquery.min.js')}}"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/img/flags.png"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/img/flags@2x.png"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.js" ></script>
 
     <script>
          /*// Vanilla Javascript

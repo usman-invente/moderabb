@@ -123,7 +123,7 @@ Route::get('/delete-lessons/{id}', [App\Http\Controllers\AdminController::class,
 //front end routes
 Route::get('course/{slug}', [App\Http\Controllers\WebSiteController::class, 'singleCourse'])->name('singlecourse');
 //checkout
-Route::get('course/checkout/{id}', [App\Http\Controllers\WebSiteController::class, 'checkout'])->name('checkout');
+Route::get('checkout', [App\Http\Controllers\WebSiteController::class, 'checkout'])->name('checkout');
 //cart
 Route::get('course/cart/{slug}', [App\Http\Controllers\WebSiteController::class, 'cart'])->name('cart');
 Route::get('delete/cart/product/{id}', [App\Http\Controllers\WebSiteController::class, 'deletecartproduct'])->name('deletecartproduct');

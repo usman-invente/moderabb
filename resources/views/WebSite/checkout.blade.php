@@ -33,7 +33,7 @@
             </div>
         @endif
         <form action="{{route('paymentform')}}"  method="post" class="checkout-form">
-            <input type="hidden" name="course_id" value="{{$id}}">
+            {{-- <input type="hidden" name="course_id" value="{{$id}}"> --}}
             @csrf
             <div class="row">
                 <div class="col-xs-12 col-md-6">

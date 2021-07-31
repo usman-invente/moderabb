@@ -49,10 +49,10 @@
                     <td>{{ $val->category_id }}</td>
                     <td>{{ $val->price }}</td>
                     <td>@if($val->published == 1)
-                        <p class="text-white mb-1 font-weight-bold text-center bg-dark p-1 mr-1">published</p>
+                        <p class="text-white mb-1 font-weight-bold text-center bg-success p-1 mr-1">published</p>
                         @endif
                         @if($val->featured == 1)
-                        <p class="text-white mb-1 font-weight-bold text-center bg-warning p-1 mr-1">featured</p>
+                        <p class="text-white mb-1 font-weight-bold text-center bg-danger p-1 mr-1">featured</p>
                         @endif
                     </td>
                     <td>

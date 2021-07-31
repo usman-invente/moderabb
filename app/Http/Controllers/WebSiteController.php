@@ -109,9 +109,10 @@ class WebSiteController extends Controller
             ->get();
         return view('WebSite.singlecourse', compact('course','course_reviews'));
     }
-    public function checkout($id)
+    public function checkout()
     {
-        return view('Website.checkout',compact('id'));
+       
+        return view('Website.checkout');
     }
     public function cart(Request $request, $slug)
     {
@@ -140,14 +141,14 @@ class WebSiteController extends Controller
             $cart->certificate_price = $course->price_certificate;
             $cart->course_image = $course->course_image;
             $cart->save();
-            return view('Website.cart',compact('cart_course','percentage','sum','certificate_price'));
+            return view('Website.cart',compact('cart_course','percentage','sum','certificate_price','total'));
         }
 
     }
     public function deletecartproduct($id){
         try {
             Cart::find($id)->delete();
-            return redirect()->back()->with('message','Product Remove From Cart Successfully');
+            return redirect()->back()->with('message','sewsee');
         } catch (\Throwable $th) {
             return redirect()->back()->with('error','SomeThing Wrong');
         }

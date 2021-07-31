@@ -97,7 +97,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <a href="{{route('checkout',$course->id)}}" class="btn btn-warning btn-theme font-lato fw-bold text-uppercase element-block">Proceed to checkout</a>
+                    <a href="{{route('checkout')}}" class="btn btn-warning btn-theme font-lato fw-bold text-uppercase element-block">Proceed to checkout</a>
                 </div>
             </div>
         </form>
