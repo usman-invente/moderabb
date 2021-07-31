@@ -42,9 +42,9 @@ Route::get('forum', [App\Http\Controllers\WebSiteController::class, 'Forum'])->n
 Route::get('discussion/form', [App\Http\Controllers\ForumController::class, 'discussion_form'])->name('discussion-form');
 Route::get('/contact-us', [App\Http\Controllers\WebSiteController::class, 'contact_us'])->name('contact_us');
 Route::post('/create-contact-us', [App\Http\Controllers\WebSiteController::class, 'create_contact_us'])->name('create_contact_us');
-
-
-
+Route::post('/create/discussion', [App\Http\Controllers\ForumController::class, 'create_discussion'])->name('create_discussion');
+Route::get('singleforum/{id}', [App\Http\Controllers\ForumController::class, 'singleforum'])->name('singleforum');
+Route::post('/reply/discussion', [App\Http\Controllers\ForumController::class, 'replyDiscussion'])->name('reply-discussion');
 
 
 Route::group(['middleware' => 'admin'], function()
@@ -245,6 +245,20 @@ Route::post('/delete-sliders', [App\Http\Controllers\AdminController::class, 'de
 Route::post('/status-slider', [App\Http\Controllers\AdminController::class, 'status_slider'])->name('status_slider');
 Route::post('/slider', [App\Http\Controllers\AdminController::class, 'getSlider'])->name('admin.getSlider');
 
+//Blog Category
+Route::get('/blog/category', [App\Http\Controllers\AdminController::class, 'blogCategory'])->name('blog-category');
+Route::get('/add/blog/category', [App\Http\Controllers\AdminController::class, 'add_blogcategory'])->name('add_blogcategory');
+Route::post('/create/blog/category', [App\Http\Controllers\AdminController::class, 'create_blogcategory'])->name('create_blogcategory');
+Route::post('/get/blog/category', [App\Http\Controllers\AdminController::class, 'getBlogCategory'])->name('getBlogCategory');
+Route::get('/edit/blog/category{id}', [App\Http\Controllers\AdminController::class, 'editblogcategory'])->name('edit_blogcategory');
+Route::get('/edit/delete/category{id}', [App\Http\Controllers\AdminController::class, 'deleteblogcategory'])->name('delete-blogcategory');
+
+//blog topics
+Route::get('/blog/topic', [App\Http\Controllers\AdminController::class, 'blogTopic'])->name('blog-topic');
+Route::get('/add/blog/category', [App\Http\Controllers\AdminController::class, 'add_blogcategory'])->name('add_blogcategory');
+Route::post('/get/blog/topic', [App\Http\Controllers\AdminController::class, 'getBlogTopic'])->name('getBlogTopic');
+Route::get('delete-blogtopic/{id}', [App\Http\Controllers\AdminController::class, 'deleteblogtopic'])->name('delete-blogtopic');
+Route::get('editblogtopic', [App\Http\Controllers\AdminController::class, 'editblogtopic'])->name('edit_blogtopic');
 
 ////////// Tax //////////
 Route::get('/tax', [App\Http\Controllers\AdminController::class, 'tax'])->name('tax');

@@ -7,6 +7,9 @@ use App\Models\Contact;
 use App\Models\Course;
 use App\Models\Newsletter;
 use App\Models\User;
+use App\Models\Forum;
+
+use App\Models\Advisory;
 use App\Models\CourseReview;
 use Auth;
 use DB;
@@ -175,12 +178,13 @@ class WebSiteController extends Controller
     }
 
     public function advisoryBoard(){
-        $boards = User::where('roll_id',3)->paginate(2);
+        $boards = Advisory::paginate(2);
         return view('Website.advisoryBoard',compact('boards'));
     }
 
     public function Forum(){
-        return view('Website.forum');
+        $forums = Forum::join('users', 'users.id', '=', 'forums.user_id')->select('forums.id as fid','forums.title as title','forums.descripption as descripption','users.*')->orderBy('forums.id','DESC')->paginate(20);
+        return view('Website.forum',compact('forums'));
     }
     
 }
