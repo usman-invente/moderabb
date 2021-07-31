@@ -12,7 +12,7 @@
                                         <div class="card">
 <div class="card-header">
 <h3 class="page-title float-left d-inline">Contact Us</h3>
-    
+
 </div>
 <div class="card-body">
 <div class="row">
@@ -21,34 +21,28 @@
     <span class="{{ session('error') ? 'error':'success' }}">{{ session('error') ?? session('message') }}</span>
 </div>
 @endif
-    <div class="col-12">
-        <div class="table-responsive">
-            <div id="myTable_wrapper" class="dataTables_wrapper no-footer">
-                <table id="myTable" class="table table-bordered table-striped dataTable no-footer" role="grid" aria-describedby="myTable_info">
+<div class="col-12">
+    <div class="table-responsive">
+        <div id="myTable_wrapper" class="dataTables_wrapper no-footer">
+            <table id="myTable" class="table table-bordered table-striped dataTable no-footer"
+                role="grid" aria-describedby="myTable_info">
                 <thead>
-                <tr role="row">
-                    <th >number</th>
-                    <th >Name</th>
-                    <th >Email</th>
-                    <th >Phone</th>
-                    <th >Message</th>
-                    <th >Time</th>
-                </tr>
-            </thead>
+                    <tr role="row">
+                        <th>{{ __('lang.number') }}</th>
+                        <th>{{ __('lang.Name') }}</th>
+                        <th>{{ __('lang.Email') }}</th>
+                        <th>{{ __('lang.Phone') }}</th>
+                        <th>{{ __('lang.Message') }}</th>
+                        <th>{{ __('lang.Actions') }}</th>
+                    </tr>
+                </thead>
                 <tbody>
-                @foreach ($data as $val)
-                <tr class="row-{{$val->id}}" id="row-{{$val->id}}">
-                    <td>{{ $val->id }}</td>
-                    <td>{{ $val->name }}</td>
-                    <td>{{ $val->email }}</td>
-                    <td>{{ $val->phone }}</td>
-                    <td>{{ $val->message }}</td>
-                    <td>{{ $val->created_at }}</td>
-                </tr>
-                @endforeach
+
                 </tbody>
-            </table></div>
+            </table>
+        </div>
     </div>
+</div>
 </div>
 </div>
 </div>
@@ -56,46 +50,43 @@
         </div><!--animated-->
     </div><!--container-fluid-->
 </main>
-
-<script type="text/javascript">
-
-    function deleteConfirmation(id) {
-        swal({
-            title: "Are you sure?",
-            text: "Please ensure and then confirm!",
-            type: "warning",
-            showCancelButton: !0,
-            confirmButtonText: "Yes, delete it!",
-            cancelButtonText: "No, cancel!",
-            reverseButtons: !0
-        }).then(function (e) {
- 
-            if (e.value === true) {
-                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
- 
-                $.ajax({
-                    type: 'GET',
-                    url: "{{url('/delete-teachers')}}/" + id,
-                    data: {_token: CSRF_TOKEN},
-                    dataType: 'JSON',
-                    success: function (results) {
-                        if (results.success === true) {
-                            swal("Done!", results.message, "success");
-                            // toastr.success('Success!', 'Comp deleted successfully');
-                                 $(".row-"+id.toString()).remove();
-                        } else {
-                            swal("Error!", results.message, "error");
-                        }
+@endsection
+@section('script')
+    <script>
+        $(document).ready(function() {
+            $('#myTable').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "responsive": true,
+                "ajax": {
+                    "url": "{{ route('admin.getContact') }}",
+                    "dataType": "json",
+                    "type": "POST",
+                    "data": {
+                        _token: "{{ csrf_token() }}"
                     }
-                });
- 
-            } else {
-                e.dismiss;
-            }
- 
-        }, function (dismiss) {
-            return false;
-        })
-    }
- </script>
+                },
+                "columns": [{
+                        "data": "number"
+                    },
+                    {
+                        "data": "name"
+                    },
+                    {
+                        "data": "email"
+                    },
+                    {
+                        "data": "phone"
+                    },
+                    {
+                        "data": "message"
+                    },
+                    {
+                        "data": "created_at"
+                    },
+                ]
+
+            });
+        });
+    </script>
 @endsection

@@ -180,6 +180,12 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="{{ route('sliders') }}" class="nav-link">
+
+                                <p>Animated Slide</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{ route('advisoryboards') }}" class="nav-link">
 
                                 <p>Advisory Body</p>

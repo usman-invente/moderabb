@@ -71,87 +71,132 @@
         </div><!--animated-->
     </div><!--container-fluid-->
 </main>
-
-<script type="text/javascript">
-
-    function deleteConfirmation(id) {
-        swal({
-            title: "Are you sure?",
-            text: "Please ensure and then confirm!",
-            type: "warning",
-            showCancelButton: !0,
-            confirmButtonText: "Yes, delete it!",
-            cancelButtonText: "No, cancel!",
-            reverseButtons: !0
-        }).then(function (e) {
-
-            if (e.value === true) {
-                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-
-                $.ajax({
-                    type: 'GET',
-                    url: "{{url('/delete-courses')}}/" + id,
-                    data: {_token: CSRF_TOKEN},
-                    dataType: 'JSON',
-                    success: function (results) {
-                        if (results.success === true) {
-                            swal("Done!", results.message, "success");
-                            // toastr.success('Success!', 'Comp deleted successfully');
-                                 $(".row-"+id.toString()).remove();
-                        } else {
-                            swal("Error!", results.message, "error");
-                        }
-                    }
-                });
-
-            } else {
-                e.dismiss;
-            }
-
-        }, function (dismiss) {
-            return false;
-        })
-    }
- </script>
- <script type="text/javascript">
-
-    function featureConfirmation(id) {
-        swal({
-            title: "Are you sure?",
-            text: "Please ensure and then confirm!",
-            type: "warning",
-            showCancelButton: !0,
-            confirmButtonText: "Yes, Feature it!",
-            cancelButtonText: "No, cancel!",
-            reverseButtons: !0
-        }).then(function (e) {
-
-            if (e.value === true) {
-                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-
-                $.ajax({
-                    type: 'GET',
-                    url: "{{url('/feature-courses')}}/" + id,
-                    data: {_token: CSRF_TOKEN},
-                    dataType: 'JSON',
-                    success: function (results) {
-                        if (results.success === true) {
-                            {{--  swal("Done!", results.message, "success");  --}}
-                            // toastr.success('Success!', 'Comp deleted successfully');
-                            window.location = '{{ route('courses') }}'
-                        } else {
-                            swal("Error!", results.message, "error");
-                        }
-                    }
-                });
-
-            } else {
-                e.dismiss;
-            }
-
-        }, function (dismiss) {
-            return false;
-        })
-    }
- </script>
 @endsection
+@section('script')
+    <script>
+        $(document).ready(function() {
+            $('#myTable').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "responsive": true,
+                "ajax": {
+                    "url": "{{ route('admin.getCourses') }}",
+                    "dataType": "json",
+                    "type": "POST",
+                    "data": {
+                        _token: "{{ csrf_token() }}"
+                    }
+                },
+                "columns": [{
+                        "data": "number"
+                    },
+                    {
+                        "data": "title"
+                    },
+                    {
+                        "data": "ctitle"
+                    },
+                    {
+                        "data": "name"
+                    },
+                    {
+                        "data": "price"
+                    },
+                    {
+                        "data": "featured"
+                    },
+                    {
+                        "data": "actions"
+                    },
+
+                ]
+
+            });
+        });
+    </script>
+    <script>
+        $(document).on('click', '.delete', function(e) {
+            e.preventDefault();
+            var id = $(this).data('id');
+            var parent = $(this).parent().parent();
+
+
+            swal({
+                    title: "Are you sure?",
+                    text: "",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, Delete!",
+                    cancelButtonText: "No, cancel please!",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                },
+                function(isConfirm) {
+                    if (isConfirm) {
+                        //console.log("sdsd");
+
+                        $.ajax({
+                            type: "POST",
+                            url: "{{ route('destroy_courses') }}",
+                            data: {
+                                '_token': "{{ csrf_token() }}",
+                                id: id
+                            },
+                            success: function(data) {
+                                // alert(data);
+                                swal("Updated", "", "success");
+                               window.location.href="";
+                            }
+                        }); // submitting the form when user press yes
+                    } else {
+                        swal("Cancelled", "Your record  is safe :)", "info");
+                    }
+                });
+
+        });
+    </script>
+    <script>
+        $(document).on('click', '.status', function(e) {
+            e.preventDefault();
+            var id = $(this).data('id');
+            var parent = $(this).parent().parent();
+
+
+            swal({
+                    title: "Are you sure?",
+                    text: "",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes!",
+                    cancelButtonText: "No, cancel please!",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                },
+                function(isConfirm) {
+                    if (isConfirm) {
+                        //console.log("sdsd");
+
+                        $.ajax({
+                            type: "POST",
+                            url: "{{ route('feature_courses') }}",
+                            data: {
+                                '_token': "{{ csrf_token() }}",
+                                id: id
+                            },
+                            success: function(data) {
+                                // alert(data);
+                                swal("Updated", "", "success");
+                               window.location.href="";
+                            }
+                        }); // submitting the form when user press yes
+                    } else {
+                        swal("Cancelled", "Your record  is safe :)", "info");
+                    }
+                });
+
+        });
+    </script>
+@endsection
+

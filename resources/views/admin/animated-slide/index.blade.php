@@ -7,48 +7,53 @@
     <div class="container-fluid" style="padding-top: 30px">
         <div class="animated fadeIn">
             <div class="content-header">
-                                        </div><!--content-header-->
-
-                                        <div class="card">
-<div class="card-header">
-<h3 class="page-title float-left d-inline">Tax</h3>
-    <div class="float-right">
-        <a href="{{ route('add_test')}}" class="btn btn-success"><i class="fas fa-plus"></i> Add tax</a>
-    </div>
-</div>
-<div class="card-body">
-<div class="row">
-    @if (session('error') || session('message'))
-    <div class="alert alert-success" style=" width: 100%;">
-    <span class="{{ session('error') ? 'error':'success' }}">{{ session('error') ?? session('message') }}</span>
-</div>
-@endif
-    <div class="col-12">
-        <div class="table-responsive">
-            <div id="myTable_wrapper" class="dataTables_wrapper no-footer">
-                <table id="myTable" class="table table-bordered table-striped dataTable no-footer"
-                    role="grid" aria-describedby="myTable_info">
-                    <thead>
-                        <tr role="row">
-                            <th>{{ __('lang.number') }}</th>
-                            <th>{{ __('lang.Name') }}</th>
-                            <th>{{ __('lang.Rate') }}</th>
-                            <th>{{ __('lang.Status') }}</th>
-                            <th>{{ __('lang.Actions') }}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-
-                    </tbody>
-                </table>
             </div>
-        </div>
-    </div>
-</div>
-</div>
+            <!--content-header-->
+            @if (session('error') || session('message'))
+            <div class="alert alert-success" style=" width: 100%;">
+                <span
+                    class="{{ session('error') ? 'error' : 'success' }}">{{ session('error') ?? session('message') }}</span>
+            </div>
+            @endif
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="page-title float-left d-inline">{{ __('lang.Slider') }}</h3>
+                    <div class="float-right">
+                        <a href="{{ route('add_sliders') }}" class="btn btn-success"><i class="fas fa-plus"></i>
+                            {{ __('lang.Add Slider') }}</a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                     
+                        <div class="col-12">
+                            <div class="table-responsive">
+                                <div id="myTable_wrapper" class="dataTables_wrapper no-footer">
+                                    <table id="myTable" class="table table-bordered table-striped dataTable no-footer"
+                                        role="grid" aria-describedby="myTable_info">
+                                        <thead>
+                                            <tr role="row">
+                                                <th>{{ __('lang.number') }}</th>
+                                                <th>{{ __('lang.name') }}</th>
+                                                <th>{{ __('lang.image') }}</th>
+                                                <th>{{ __('lang.Status') }}</th>
+                                                <th>{{ __('lang.Actions') }}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
 
-        </div><!--animated-->
-    </div><!--container-fluid-->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!--animated-->
+        </div>
+        <!--container-fluid-->
 </main>
 @endsection
 @section('script')
@@ -59,7 +64,7 @@
                 "serverSide": true,
                 "responsive": true,
                 "ajax": {
-                    "url": "{{ route('admin.getTax') }}",
+                    "url": "{{ route('admin.getSlider') }}",
                     "dataType": "json",
                     "type": "POST",
                     "data": {
@@ -73,7 +78,7 @@
                         "data": "name"
                     },
                     {
-                        "data": "rate"
+                        "data": "image"
                     },
                     {
                         "data": "status"
@@ -81,6 +86,9 @@
                     {
                         "data": "actions"
                     },
+
+
+
 
                 ]
 
@@ -111,7 +119,7 @@
 
                         $.ajax({
                             type: "POST",
-                            url: "{{ route('destroy_tax') }}",
+                            url: "{{ route('destroy_sliders') }}",
                             data: {
                                 '_token': "{{ csrf_token() }}",
                                 id: id
@@ -153,7 +161,7 @@
 
                         $.ajax({
                             type: "POST",
-                            url: "{{ route('tax_status') }}",
+                            url: "{{ route('status_slider') }}",
                             data: {
                                 '_token': "{{ csrf_token() }}",
                                 id: id

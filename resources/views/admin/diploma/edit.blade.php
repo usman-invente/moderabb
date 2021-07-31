@@ -39,22 +39,11 @@
             <div class="row">
     <div class="col-10 form-group">
         <label for="teachers" class="control-label">courses *</label>
-         <?php
-                  $courses=array();
-                  $newdata = unserialize($data->courses);
-
-              if ($newdata == true) {
-                $courses=unserialize($data->courses);
-                {{--  print_r($courses);  --}}
-              } else {
-                array_push($courses,$data->courses);
-
-              }
-        ?>
+         <!--  -->
 
         <select class="form-control select2 js-example-placeholder-multiple select2bs4" required multiple="multiple" name="courses[]">
             @foreach ($cour as $tran)
-            <option value="{{ $tran->id }}" <?php if (isset($courses) && in_array($tran->id , $courses)) echo 'selected'; ?>>{{ $tran->title }}</option>
+            <option value="{{ $tran->id }}" @if($data->courses == $tran->id) ? selected : null @endif >{{ $tran->ctitle }}</option>
             @endforeach
         </select>
         </div>

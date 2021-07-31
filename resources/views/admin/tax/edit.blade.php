@@ -48,7 +48,7 @@
 <div class="col-4">
     <a class="btn btn-danger" href="{{ route('tax') }}">Cancel</a>
 
-    <button class="btn btn-success pull-right" type="submit">Create</button>
+    <button class="btn btn-success pull-right" type="submit">update</button>
 </div>
 </div><!--col-->
 </div>

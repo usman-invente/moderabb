@@ -23,84 +23,120 @@
     <span class="{{ session('error') ? 'error':'success' }}">{{ session('error') ?? session('message') }}</span>
 </div>
 @endif
-    <div class="col-12">
-        <div class="table-responsive">
-            <div id="myTable_wrapper" class="dataTables_wrapper no-footer">
-                <table id="myTable" class="table table-bordered table-striped dataTable no-footer" role="grid" aria-describedby="myTable_info">
-                <thead>
-                <tr role="row">
-                    <th >{{ __('lang.number') }}</th>
-                    <th >{{ __('lang.Authorizing authority') }}</th>
-                    <th >{{ __('lang.Responsible Person') }}</th>
-                    <th >{{ __('lang.email address') }}</th>
-                    <th >{{ __('lang.status') }}</th>
-                    <th >{{ __('lang.Actions') }}</th>
-                </tr>
-            </thead>
-                <tbody>
-                @foreach ($data as $val)
-                <tr class="row-{{$val->id}}" id="row-{{$val->id}}">
-                    <td>{{ $val->id }}</td>
-                    <td>{{ $val->name }}</td>
-                    <td>{{ $val->c_person }}</td>
-                    <td>{{ $val->email }}</td>
-                    <td>{{ $val->status }}</td>
-                    <td>
-                        <a href="{{route('edit_accreditation_bodies',$val->id)}}" class="btn btn-info mb-1" ><i class="fas fa-edit"></i></a>
-                        <a class="btn btn-danger mb-1" href="javascript:void(0);"data-id="{{ $val->id }}" data-action="{{ route('destroy_accreditation_bodies',$val->id) }}" onclick="deleteConfirmation({{$val->id}})"><i class="fa fa-trash"></i><a>
-                        <a class="btn btn-warning mb-1" href="{{route('show_courses_accreditation_bodies',$val->id)}}">Courses</a></td>
-                </tr>
-                @endforeach
-                </tbody>
-            </table></div>
-    </div>
-</div>
-</div>
-</div>
+            <div class="col-12">
+                                <div class="table-responsive">
+                                    <div id="myTable_wrapper" class="dataTables_wrapper no-footer">
+                                        <table id="myTable" class="table table-bordered table-striped dataTable no-footer"
+                                            role="grid" aria-describedby="myTable_info">
+                                            <thead>
+                                                <tr role="row">
+                                                    <th >{{ __('lang.number') }}</th>
+                                                    <th >{{ __('lang.Authorizing authority') }}</th>
+                                                    <th >{{ __('lang.Responsible Person') }}</th>
+                                                    <th >{{ __('lang.email address') }}</th>
+                                                    <th >{{ __('lang.status') }}</th>
+                                                    <th >{{ __('lang.Actions') }}</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
 
-        </div><!--animated-->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+</div>
+</div>
+</div>
+   </div><!--animated-->
     </div><!--container-fluid-->
 </main>
+@endsection
+@section('script')
+    <script>
+        $(document).ready(function() {
+            $('#myTable').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "responsive": true,
+                "ajax": {
+                    "url": "{{ route('admin.getAcbody') }}",
+                    "dataType": "json",
+                    "type": "POST",
+                    "data": {
+                        _token: "{{ csrf_token() }}"
+                    }
+                },
+                "columns": [{
+                        "data": "number"
+                    },
+                    {
+                        "data": "name"
+                    },
+                    {
+                        "data": "c_person"
+                    },
+                    {
+                        "data": "email"
+                    },
+                    {
+                        "data": "status"
+                    },
+                    {
+                        "data": "actions"
+                    },
 
-<script type="text/javascript">
 
-    function deleteConfirmation(id) {
-        swal({
-            title: "Are you sure?",
-            text: "Please ensure and then confirm!",
-            type: "warning",
-            showCancelButton: !0,
-            confirmButtonText: "Yes, delete it!",
-            cancelButtonText: "No, cancel!",
-            reverseButtons: !0
-        }).then(function (e) {
 
-            if (e.value === true) {
-                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
-                $.ajax({
-                    type: 'GET',
-                    url: "{{url('/delete-accreditation-bodies')}}/" + id,
-                    data: {_token: CSRF_TOKEN},
-                    dataType: 'JSON',
-                    success: function (results) {
-                        if (results.success === true) {
-                            swal("Done!", results.message, "success");
-                            // toastr.success('Success!', 'Comp deleted successfully');
-                                 $(".row-"+id.toString()).remove();
-                        } else {
-                            swal("Error!", results.message, "error");
-                        }
+                ]
+
+            });
+        });
+    </script>
+    <script>
+        $(document).on('click', '.delete', function(e) {
+            e.preventDefault();
+            var id = $(this).data('id');
+            var parent = $(this).parent().parent();
+
+
+            swal({
+                    title: "Are you sure?",
+                    text: "",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, Delete!",
+                    cancelButtonText: "No, cancel please!",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                },
+                function(isConfirm) {
+                    if (isConfirm) {
+                        //console.log("sdsd");
+
+                        $.ajax({
+                            type: "POST",
+                            url: "{{ route('destroy_accreditation_bodies') }}",
+                            data: {
+                                '_token': "{{ csrf_token() }}",
+                                id: id
+                            },
+                            success: function(data) {
+                                // alert(data);
+                                swal("Updated", "", "success");
+                               window.location.href="";
+                            }
+                        }); // submitting the form when user press yes
+                    } else {
+                        swal("Cancelled", "Your record  is safe :)", "info");
                     }
                 });
 
-            } else {
-                e.dismiss;
-            }
+        });
+    </script>
 
-        }, function (dismiss) {
-            return false;
-        })
-    }
- </script>
+
 @endsection
+
