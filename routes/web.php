@@ -3,6 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Course;
+use App\Models\Testimonial;
+use App\Models\Slider;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -22,7 +25,9 @@ Route::get('/', function () {
     $featured_courses = Course::join('users', 'users.id', '=', 'courses.teachers')
     ->where('courses.featured',1)
     ->get();
-    return view('WebSite.home',compact('featured_courses'));
+    $testimonial = Testimonial::where('status',1)->get();
+    $slides = Slider::orderBy('sort_id','asc')->get();
+    return view('WebSite.home',compact('featured_courses','testimonial','slides'));
 });
 
 Auth::routes();
@@ -413,3 +418,4 @@ Route::get('/student/courses-teacher_id/{id}', [App\Http\Controllers\StudentCont
 });
 
 Route::post('payment/form', [App\Http\Controllers\PaytabsController::class, 'index'])->name('paymentform');
+Route::post('menu/update-order', [App\Http\Controllers\AdminController::class, 'updateOrder'])->name('paymentform');

@@ -27,10 +27,26 @@
 	<link rel="stylesheet" href="{{asset('js/style.css')}}">
 	<!-- include the site responsive stylesheet -->
 	<link rel="stylesheet" href="{{asset('css/responsive.css')}}">
-
+	@if(app()->getLocale() == 'ar')
+	<link rel="stylesheet" href="{{asset('css/frontrtl/arabic.css')}}">
+	@else
+	<link rel="stylesheet" href="{{asset('css/frontrtl/english.css')}}">
+	@endif
 	<link rel="stylesheet" href="{{asset('js/build/intlTelInput.css')}}">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.css" rel="stylesheet">
+	<style>
+		ul.nav.navbar-nav.navbar-right.main-navigation.text-uppercase.font-lato li a {
+          color: #fff !important;
+    }
+	.main-navigation .dropdown-menu, .main-navigation.nav .dropdown-menu, .main-navigation.navbar-nav .dropdown-menu, .main-navigation.navbar-right .dropdown-menu{
+		background-color: #000;
+	}
+	.header-holder{
+		background-color:rgba(0,0,0,0.2);
+	}
+
+	</style>
 </head>
 <body>
 	

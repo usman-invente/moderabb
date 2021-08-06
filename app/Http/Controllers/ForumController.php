@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\BlogTopic;
+use App\Models\BlogCategory;
 use App\Models\Forum;
 use App\Models\DicussionReply;
 
@@ -16,7 +16,7 @@ class ForumController extends Controller
     }
 
     public function discussion_form(){
-        $topics = BlogTopic::all();
+        $topics = BlogCategory::all();
         return view('Website.add_discussion',compact('topics'));
     }
 
@@ -44,6 +44,7 @@ class ForumController extends Controller
         $reply->forum_id = $request->forum_id;
         $reply->comment = $request->comment;
         $reply->save();
+        return redirect()->to('forum');
     
     }
 

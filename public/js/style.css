@@ -7434,6 +7434,7 @@ form .star-rating .customFormReset:checked+label {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
+	align-items: center;
 }
 
 .header-holder .row:after,

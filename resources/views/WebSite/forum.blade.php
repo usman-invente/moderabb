@@ -1,26 +1,9 @@
 @extends('weblayouts.webapp')
 @section('content')
 <main id="main">
-    <!-- heading banner -->
-    <header class="heading-banner text-white bgCover" style="background-image: url(http://placehold.it/1920x181);">
-        <div class="container holder">
-            <div class="align">
-                <h1>Forum</h1>
-            </div>
-        </div>
-    </header>
-    <!-- breadcrumb nav -->
-    <nav class="breadcrumb-nav">
-        <div class="container">
-            <!-- breadcrumb -->
-            <ol class="breadcrumb">
-                <li><a href="home.html">Home</a></li>
-                <li class="active">Forum</li>
-            </ol>
-        </div>
-    </nav>
+
     <!-- two columns -->
-    <div id="two-columns" class="container">
+    <div id="two-columns" class="container" style="margin-top:150px;">
         <div class="row">
             <div class="col-md-12">
                 <a  href="{{route('discussion-form')}}" class="btn btn-theme btn-warning text-uppercase font-lato fw-bold pull-right">New Discussion</a>
@@ -36,7 +19,7 @@
                         <thead class="bg-dark text-uppercase hidden-xs">
                             <tr>
                                 <th class="col01">Forum</th>
-                                <th class="col02">Topics</th>
+                                <th class="col02">Category</th>
                                 <th class="col03">Comments</th>
                                 <th class="col04">freshness</th>
                             </tr>
@@ -50,8 +33,8 @@
                                         <p>{{$forum->descripption}}</p>
                                     </div>
                                 </td>
-                                <td class="col02 text-small" data-title="Topics"><span>{{$forum->category}}</span></td>
-                                <td class="col03 text-small" data-title="posts"><span>10</span></td>
+                                <td class="col02 text-small" data-title="Topics"><span>{{$forum->category_name}}</span></td>
+                                <td class="col03 text-small" data-title="posts"><span>{{$forum->reply}}</span></td>
                                 <td class="col04 text-small" data-title="posts">
                                     <div>
                                         <p><time datetime="2011-01-12">{{ \Carbon\Carbon::parse($forum->created_at)->diffForHumans() }}</time></p>

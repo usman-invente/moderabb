@@ -26,7 +26,11 @@
     <link rel="stylesheet" href="{{ asset('asset/plugins/daterangepicker/daterangepicker.css') }}">
     <!-- summernote -->
     <link rel="stylesheet" href="{{ asset('asset/plugins/summernote/summernote-bs4.min.css') }}">
-
+    @if(app()->getLocale() == 'ar')
+    <link rel="stylesheet" href="{{ asset('css/arabic.css') }}">
+    @else
+    <link rel="stylesheet" href="{{ asset('css/english.css') }}">
+    @endif
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{ asset('asset/plugins/fontawesome-free/css/all.min.css') }}">
     <!-- DataTables -->
@@ -44,6 +48,6 @@
     <link rel="stylesheet" href="{{asset('asset/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/css/intlTelInput.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-iconpicker/1.10.0/js/bootstrap-iconpicker.min.js" rel="stylesheet">
-    
+    <link href="https://code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css"/>
 
 </head>

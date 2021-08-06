@@ -51,8 +51,10 @@
                         <thead>
                             <tr role="row">
                                 <th>{{ __('lang.number') }}</th>
-                                <th>{{ __('lang.Question') }}</th>
-                                <th>{{ __('lang.Answer') }}</th>
+                                <th>{{ __('lang.Name') }}</th>
+                                <th>{{ __('lang.Title') }}</th>
+                                <th>{{ __('lang.Content') }}</th>
+                                <th>{{ __('lang.Image') }}</th>
                                 <th>{{ __('lang.Status') }}</th>
                                 <th>{{ __('lang.Actions') }}</th>
                             </tr>
@@ -92,10 +94,16 @@
                         "data": "number"
                     },
                     {
-                        "data": "question"
+                        "data": "name"
+                    },
+                    {
+                        "data": "title"
                     },
                     {
                         "data": "answer"
+                    },
+                    {
+                        "data": "image"
                     },
                     {
                         "data": "status"

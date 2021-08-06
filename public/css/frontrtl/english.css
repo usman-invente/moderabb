@@ -1,0 +1,13 @@
+.main-footer{
+	float: left;
+    width: 100%;
+    clear: both;
+    margin-right: 0;
+    margin-left: 0 !important;
+}
+.main-footer .d-none.d-sm-inline-block{
+	float: right;
+}
+ul.navbar-nav.ml-auto-{
+	margin-left:auto;
+}

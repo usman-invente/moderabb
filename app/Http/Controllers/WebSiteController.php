@@ -183,7 +183,13 @@ class WebSiteController extends Controller
     }
 
     public function Forum(){
-        $forums = Forum::join('users', 'users.id', '=', 'forums.user_id')->select('forums.id as fid','forums.title as title','forums.descripption as descripption','users.*')->orderBy('forums.id','DESC')->paginate(20);
+        $forums = Forum::join('users', 'users.id', '=', 'forums.user_id')
+        ->join('blog_categories', 'blog_categories.id', '=', 'forums.category')
+        ->select('forums.id as fid','forums.title as title','forums.descripption as descripption','users.*','blog_categories.name as category_name',
+         DB::raw("(SELECT COUNT(*) FROM dicussion_replies  where dicussion_replies.forum_id = forums.id )as reply")
+        )
+        ->orderBy('forums.id','DESC')->paginate(20);
+        
         return view('Website.forum',compact('forums'));
     }
     

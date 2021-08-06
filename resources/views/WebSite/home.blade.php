@@ -5,16 +5,18 @@
 			<!-- intro block -->
 			<section class="intro-block">
 				<div class="slider fade-slider">
+					@foreach($slides as $slide)
 					<div>
 						<!-- intro block slide -->
-						<article class="intro-block-slide overlay bg-cover" style="background-image:  url({{asset('image/img01.jpg')}});">
+						
+						<article class="intro-block-slide overlay bg-cover" style="background-image:  url({{asset('/upload/slider/'.$slide->image)}});">
 							<div class="align-wrap container">
 								<div class="align">
 									<div class="anim">
-										<h1 class="intro-block-heading">Education &amp; Training Organization</h1>
+										<h1 class="intro-block-heading">{{$slide->hero_text}}</h1>
 									</div>
 									<div class="anim delay1">
-										<p>We offer the most complete course pakage in the country, for the research, design and development of Education.</p>
+										<p>{{$slide->sub_text}}</p>
 									</div>
 									<div class="anim delay2">
 										<div class="btns-wrap">
@@ -25,49 +27,9 @@
 								</div>
 							</div>
 						</article>
+					
 					</div>
-					<div>
-						<!-- intro block slide -->
-						<article class="intro-block-slide overlay bg-cover" style="background-image: url(http://placehold.it/1920x823);">
-							<div class="align-wrap container">
-								<div class="align">
-									<div class="anim">
-										<h1 class="intro-block-heading">Education Organization</h1>
-									</div>
-									<div class="anim delay1">
-										<p>We offer the most complete course pakage in the country, for the research, design and development of Education.</p>
-									</div>
-									<div class="anim delay2">
-										<div class="btns-wrap">
-											<a href="courses-list.html" class="btn btn-warning btn-theme text-uppercase">Our Courses</a>
-											<a href="contact.html" class="btn btn-white text-uppercase">Contact us</a>
-										</div>
-									</div>
-								</div>
-							</div>
-						</article>
-					</div>
-					<div>
-						<!-- intro block slide -->
-						<article class="intro-block-slide overlay bg-cover" style="background-image:url(http://placehold.it/1920x823);">
-							<div class="align-wrap container">
-								<div class="align">
-									<div class="anim">
-										<h1 class="intro-block-heading">Training Organization</h1>
-									</div>
-									<div class="anim delay1">
-										<p>We offer the most complete course pakage in the country, for the research, design and development of Education.</p>
-									</div>
-									<div class="anim delay2">
-										<div class="btns-wrap">
-											<a href="courses-list.html" class="btn btn-warning btn-theme text-uppercase">Our Courses</a>
-											<a href="contact.html" class="btn btn-white text-uppercase">Contact us</a>
-										</div>
-									</div>
-								</div>
-							</div>
-						</article>
-					</div>
+					@endforeach
 				</div>
 				<div class="container">
 					<!-- features aside -->
@@ -396,54 +358,21 @@
 							<h2>What People Say</h2>
 							<!-- testimonail slider -->
 							<div class="slick-slider slider testimonail-slider">
+								@foreach($testimonial as $testimonial)
 								<div>
 									<!-- testimonial quote -->
 									<blockquote class="testimonial-quote font-roboto">
-										<p>“ Trent from punchy rollie grab us a waggin school. Flat out like a bludger where he hasn't got a damper. As stands out like brass razoo heaps it'll be relo. As busy as a paddock.”</p>
+										<p>{{$testimonial->content}}</p>
 										<cite class="element-block font-lato">
 											<span class="avatar rounded-circle element-block">
-												<img class="rounded-circle" src="{{asset('image/img16.jpg')}}" alt="Nethor Doct -Developer">
+												<img class="rounded-circle" src="{{asset('/upload/testimonials/'.$testimonial->image)}}" alt="Nethor Doct -Developer">
 											</span>
-											<strong class="element-block h5 h">Nethor Doct -<span class="text-gray">Developer</span></strong>
+											
 										</cite>
 									</blockquote>
 								</div>
-								<div>
-									<!-- testimonial quote -->
-									<blockquote class="testimonial-quote font-roboto">
-										<p>“ Trent from punchy rollie grab us a waggin school. Flat out like a bludger where he hasn't got a damper. As stands out like brass razoo heaps it'll be relo. As busy as a paddock.”</p>
-										<cite class="element-block font-lato">
-											<span class="avatar rounded-circle element-block">
-												<img class="rounded-circle" src="{{asset('image/img12.jpg')}}" alt="Nethor Doct -Developer">
-											</span>
-											<strong class="element-block h5 h">Nethor Doct -<span class="text-gray">Developer</span></strong>
-										</cite>
-									</blockquote>
-								</div>
-								<div>
-									<!-- testimonial quote -->
-									<blockquote class="testimonial-quote font-roboto">
-										<p>“ Trent from punchy rollie grab us a waggin school. Flat out like a bludger where he hasn't got a damper. As stands out like brass razoo heaps it'll be relo. As busy as a paddock.”</p>
-										<cite class="element-block font-lato">
-											<span class="avatar rounded-circle element-block">
-												<img class="rounded-circle" src="{{asset('image/img12.jpg')}}" alt="Nethor Doct -Developer">
-											</span>
-											<strong class="element-block h5 h">Nethor Doct -<span class="text-gray">Developer</span></strong>
-										</cite>
-									</blockquote>
-								</div>
-								<div>
-									testimonial quote
-									<blockquote class="testimonial-quote font-roboto">
-										<p>“ Trent from punchy rollie grab us a waggin school. Flat out like a bludger where he hasn't got a damper. As stands out like brass razoo heaps it'll be relo. As busy as a paddock.”</p>
-										<cite class="element-block font-lato">
-											<span class="avatar rounded-circle element-block">
-												<img class="rounded-circle" src="{{asset('image/img12.jpg')}}" alt="Nethor Doct -Developer">
-											</span>
-											<strong class="element-block h5 h">Nethor Doct -<span class="text-gray">Developer</span></strong>
-										</cite>
-									</blockquote>
-								</div>
+								@endforeach
+								
 							</div>
 						</div>
 					</div>
@@ -488,6 +417,28 @@
 							<p>Areas tackled in the most fundamental part of medical research include cellu lar and molecular biology&hellip;</p>
 							<time datetime="2011-01-12" class="time text-uppercase text-gray">Mar 05,2017  by <a href="blog-single.html">andrew caset</a></time>
 						</article>
+					</div>
+				</div>
+			</section>
+			<section class="partner-block">
+				<div class="container">
+					<div class="row">
+						<header class="col-xs-12 popular-posts-head">
+							<h2 class="popular-head-heading">Trusted Partners</h2>
+						</header>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<ul class="list-unstyled partner-list">
+								<li><a href="#"><img src="http://placehold.it/165x90" alt="partner logo"></a></li>
+								<li><a href="#"><img src="http://placehold.it/165x90" alt="partner logo"></a></li>
+								<li><a href="#"><img src="http://placehold.it/165x90" alt="partner logo"></a></li>
+								<li><a href="#"><img src="http://placehold.it/165x90" alt="partner logo"></a></li>
+								<li><a href="#"><img src="http://placehold.it/165x90" alt="partner logo"></a></li>
+								<li><a href="#"><img src="http://placehold.it/165x90" alt="partner logo"></a></li>
+								<li><a href="#"><img src="http://placehold.it/165x90" alt="partner logo"></a></li>
+							</ul>
+						</div>
 					</div>
 				</div>
 			</section>

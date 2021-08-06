@@ -7,7 +7,7 @@
             @csrf
             <div class="row">
                 <div class="col-xs-12 col-md-12">
-                    <h2>Billing Details</h2>
+                    <h2>Add Forum</h2>
                     <div class="row">
                         <div class="col-xs-12 col-sm-6">
                             <div class="form-group">
@@ -23,7 +23,7 @@
                                     <span class="element-block">category <span class="required">*</span></span>
                                     <select class="form-control"  name="category">
                                         @foreach($topics as $topic)
-                                        <option>{{$topic->category}}</option>
+                                        <option value="{{$topic->id}}">{{$topic->name}}</option>
                                         @endforeach
                                     </select>
                                 </label>
@@ -36,7 +36,7 @@
                             <textarea type="text" class="element-block form-control" name="descripption"></textarea>
                         </label>
                     </div>
-                    <button type="submit" >ADD</button>
+                    <button type="submit" class="btn btn-warning" >ADD</button>
                 </div>
               
             </div>

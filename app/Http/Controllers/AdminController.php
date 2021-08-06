@@ -22,6 +22,8 @@ use App\Models\Tax;
 use App\Models\Test;
 use App\Models\Testimonial;
 use App\Models\TrainingNeed;
+use App\Models\BlogTopic;
+use App\Models\BlogCategory;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth; 
@@ -602,8 +604,8 @@ class AdminController extends Controller
         } else {
             $search = $request->input('search.value');
 
-            $posts = User::where('roll_id', 3)->
-                where('name', 'LIKE', "%{$search}%")
+            $posts = User::where('roll_id', 3)
+            ->where('name', 'LIKE', "%{$search}%")
                 ->orwhere('email', 'LIKE', "%{$search}%")
                 ->offset($start)
                 ->limit($limit)
@@ -702,7 +704,7 @@ class AdminController extends Controller
             ->get();
         $trainer = User::all();
         $catagory = Category::all();
-        return view('admin.courses.index', compact('data', 'trainer', 'catagory'));
+        return view('admin.accreditation-bodies.index', compact('data', 'trainer', 'catagory'));
     }
 
     public function contact()
@@ -2825,8 +2827,20 @@ class AdminController extends Controller
 
     public function sliders(Request $request)
     {
-        $testi = Slider::all();
-        return view('admin.animated-slide.index', compact('testi'));
+        $slides = Slider::orderBy('sort_id','asc')->get();
+        return view('admin.animated-slide.index', compact('slides'));
+    }
+    public function updateOrder(Request $request){
+        if($request->has('ids')){
+            $arr = explode(',',$request->input('ids'));
+            
+            foreach($arr as $sortOrder => $id){
+                $menu = Slider::find($id);
+                $menu->sort_id = $sortOrder;
+                $menu->save();
+            }
+            return ['success'=>true,'message'=>'Updated'];
+        }
     }
 
     public function getSlider(Request $request)
@@ -2973,96 +2987,6 @@ class AdminController extends Controller
         return response()->json(array('success' => true));
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     public function getTeacher(Request $request)
     {
         $columns = array(
@@ -3138,4 +3062,193 @@ class AdminController extends Controller
 
         echo json_encode($json_data);
     }
+	 public function blogCategory(){
+        return view('admin.forum.blogcategory');
+    }
+
+    public function add_blogcategory(){
+        return view('admin.forum.addblogcateory');
+    }
+
+    public function create_blogcategory( Request $request){
+         $caregory =  new BlogCategory;
+         $caregory->name = $request->name;
+         $caregory->maincategory = $request->maincategory;
+         $caregory->color = $request->color;
+         $caregory->order = $request->order;
+         $caregory->status = 1;
+         $caregory->save();
+         return redirect()->back()->with('message','Category Added');
+    }
+    public function blogTopic(){
+        return view('admin.blogtopic.index');
+    }
+    public function getBlogTopic(Request $request){
+        $columns = array(
+            0 => 'category',
+            1 => 'title',
+            2 => 'subject',
+            3 => 'comments',
+        );
+
+        $totalData = BlogTopic::count();
+
+        $totalFiltered = $totalData;
+
+        $limit = $request->input('length');
+        $start = $request->input('start');
+        $order = $columns[$request->input('order.0.column')];
+        $dir = $request->input('order.0.dir');
+
+        if (empty($request->input('search.value'))) {
+            $posts = BlogTopic::offset($start)
+                ->limit($limit)
+                ->orderBy($order, $dir)
+                ->get();
+        } else {
+            $search = $request->input('search.value');
+
+            $posts = BlogTopic::where('name', 'LIKE', "%{$search}%")
+                ->orWhere('title', 'LIKE', "%{$search}%")
+                ->orWhere('category', 'LIKE', "%{$search}%")
+                ->orWhere('subject', 'LIKE', "%{$search}%")
+                ->offset($start)
+                ->limit($limit)
+                ->orderBy($order, $dir)
+                ->get();
+
+            $totalFiltered = BlogTopic::where('name', 'LIKE', "%{$search}%")
+               ->orWhere('title', 'LIKE', "%{$search}%")
+                ->orWhere('category', 'LIKE', "%{$search}%")
+                ->orWhere('subject', 'LIKE', "%{$search}%")
+                ->count();
+        }
+
+        $data = array();
+        if (!empty($posts)) {
+            foreach ($posts as $post) {
+                $delete =  route('delete-blogtopic',$post->id);
+                $edit =  route('edit_blogtopic',$post->id);
+                $nestedData['category'] = $post->category;
+                $nestedData['title'] = $post->title;
+                $nestedData['subject'] = $post->subject;
+                $nestedData['comments'] = $post->comments;
+                if ($post->status == 1) {
+                    $nestedData['status'] = '<p><span class="right badge badge-success">Enabled</span></p>';
+                } else {
+                    $nestedData['status'] = '<p><span class="right badge badge-danger">Disable</span></p>';
+                }
+                if ($post->status == 1) {
+                    $nestedData['actions'] = "&emsp;
+                    <a href='{$edit}' class='btn btn-xs btn-info mb-1'><i class='fas fa-edit'></i></a>
+                    <a href='' class='btn btn-xs btn-danger text-white mb-1'><i  data-id='{$post->id}' class='fa fa-trash delete fa-fw'></i></a>
+                   
+                    ";
+                } else {
+                    $nestedData['actions'] = "&emsp;
+                    <a href='{$edit}' class='btn btn-xs btn-info mb-1'><i class='fas fa-edit'></i></a>
+                    <a href='' class='btn btn-xs btn-danger text-white mb-1'><i  data-id='{$post->id}' class='fa fa-trash delete fa-fw'></i></a>
+                  
+                    ";
+                }
+
+                $data[] = $nestedData;
+
+            }
+        }
+
+        $json_data = array(
+            "draw" => intval($request->input('draw')),
+            "recordsTotal" => intval($totalData),
+            "recordsFiltered" => intval($totalFiltered),
+            "data" => $data,
+        );
+
+        echo json_encode($json_data);
+    }
+    public function getBlogCategory(Request $request){
+        $columns = array(
+            0 => 'name',
+            1 => 'title',
+            2 => 'email',
+            1 => 'maincategory',
+            2 => 'color',
+            3 => 'order',
+        );
+
+        $totalData = BlogCategory::count();
+
+        $totalFiltered = $totalData;
+        $limit = $request->input('length');
+        $start = $request->input('start');
+        $order = $columns[$request->input('order.0.column')];
+        $dir = $request->input('order.0.dir');
+
+
+        if (empty($request->input('search.value'))) {
+            $posts = BlogCategory::offset($start)
+                ->limit($limit)
+                ->orderBy($order, $dir)
+                ->get();
+        } else {
+            $search = $request->input('search.value');
+
+            $posts = BlogCategory::where('title', 'LIKE', "%{$search}%")
+                ->orWhere('maincategory', 'LIKE', "%{$search}%")
+                ->orWhere('color', 'LIKE', "%{$search}%")
+                ->orWhere('order', 'LIKE', "%{$search}%")
+                ->offset($start)
+                ->limit($limit)
+                ->orderBy($order, $dir)
+                ->get();
+
+            $totalFiltered = BlogCategory::where('title', 'LIKE', "%{$search}%")
+            ->orWhere('maincategory', 'LIKE', "%{$search}%")
+            ->orWhere('color', 'LIKE', "%{$search}%")
+            ->orWhere('order', 'LIKE', "%{$search}%")
+            ->count();
+        }
+
+        $data = array();
+        if (!empty($posts)) {
+            foreach ($posts as $post) {
+                $delete =  route('delete-blogcategory',$post->id);
+                $edit =  route('edit_blogcategory',$post->id);
+                $nestedData['name'] = $post->name;
+                $nestedData['maincategory'] = $post->maincategory;
+                $nestedData['color'] = $post->color;
+                $nestedData['order'] = $post->order;
+              
+                if ($post->status == 1) {
+                    $nestedData['status'] = '<p><span class="right badge badge-success">Enabled</span></p>';
+                    $nestedData['actions'] = "&emsp;
+                    <a href='{$edit}' class='btn btn-xs btn-info mb-1'><i class='fas fa-edit'></i></a>
+                    <a href='{$delete}' class='btn btn-xs btn-danger text-white mb-1'><i  data-id='{$post->id}' class='fa fa-trash delete fa-fw'></i></a>
+                   
+                    ";
+                } else {
+                    $nestedData['status'] = '<p><span class="right badge badge-danger">Disable</span></p>';
+                }
+                    $nestedData['actions'] = "&emsp;
+                    <a href='{$edit}' class='btn btn-xs btn-info mb-1'><i class='fas fa-edit'></i></a>
+                    <a href='' class='btn btn-xs btn-danger text-white mb-1'><i  data-id='{$post->id}' class='fa fa-trash delete fa-fw'></i></a>
+        
+                    ";
+                }
+
+                $data[] = $nestedData;
+    
+            }
+        
+
+        $json_data = array(
+            "draw" => intval($request->input('draw')),
+            "recordsTotal" => intval($totalData),
+            "recordsFiltered" => intval($totalFiltered),
+            "data" => $data,
+        );
+
+        echo json_encode($json_data);
+    }
+    
 }
